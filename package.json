@@ -1,0 +1,28 @@
+{
+  "name": "letterboxd-client",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node node_modules/jest/bin/jest.js --config jest.config.js src/tests/",
+    "build": "npm install && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dashron/letterboxd-client.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Dashron/letterboxd-client/issues"
+  },
+  "homepage": "https://github.com/Dashron/letterboxd-client#readme",
+  "private": true,
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/node": "^12.12.14",
+    "jest": "^25.3.0",
+    "ts-jest": "^25.5.1",
+    "typescript": "^3.9.5"
+  }
+}
