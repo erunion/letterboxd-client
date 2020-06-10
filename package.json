@@ -24,5 +24,10 @@
     "jest": "^25.3.0",
     "ts-jest": "^25.5.1",
     "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "@types/uuid": "^8.0.0",
+    "axios": "^0.19.2",
+    "uuid": "^8.1.0"
   }
 }
