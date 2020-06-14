@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "npm install && tsc",
     "test": "node node_modules/jest/bin/jest.js --config jest.config.js src/tests/",
-    "build": "npm install && tsc"
+    "watch": "tsc --watch"
   },
   "repository": {
     "type": "git",
