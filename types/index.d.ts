@@ -6,11 +6,11 @@ export default class Client {
     constructor(apiKey: string, apiSecret: string, accessToken?: string);
     private requireAccessToken;
     private request;
-    get(path: string): any;
-    post(path: string, body: object, headers?: object): any;
-    patch(path: string, body: object): any;
-    delete(path: string): any;
+    get(path: string, params?: object): Promise<import("axios").AxiosResponse<any>>;
+    post(path: string, body: object, headers?: object): Promise<import("axios").AxiosResponse<any>>;
+    patch(path: string, body: object): Promise<import("axios").AxiosResponse<any>>;
+    delete(path: string): Promise<import("axios").AxiosResponse<any>>;
     private params;
     private buildUrl;
-    requestToken(username: string, password: string): any;
+    requestToken(username: string, password: string): Promise<import("axios").AxiosResponse<any>>;
 }

@@ -35,20 +35,35 @@ export default class Client {
         }
     }
 
-    private request(method: Method, path: string, params?: object, body?: {[x: string]: any}, headers?: object) {
+    private request(method: Method, path: string, params?: object, body?: {[x: string]: any}, headers?: {[x: string]: any}, form?: boolean) {
         // this.requireAccessToken();
+
+        if (form) {
+            let form = new URLSearchParams();
+            for (const key in body) {
+                form.set(key, body[key]);
+            }
+
+            body = form;
+        }
+
+        let requestParams = this.params(method, path, body, params);
 
         // TODO: What does this return? Maybe we can have it use the objects below somehow. How do we identify the object type from just the object?
         return this.req.request({
             method: method,
             url: path,
-            params: this.params(method, path, body, params),
-            headers
+            params: requestParams,
+            data: (form) ? body : null,
+            headers: {
+                ...headers,
+                ...(form ? {Authorization: `Signature ${requestParams.signature}`} : {})
+            }
         });
     }
 
-    get(path: string) {
-        return this.request('GET', path);
+    get(path: string, params?: object) {
+        return this.request('GET', path, params);
     }
 
     post(path: string, body: object, headers?: object) {
@@ -96,14 +111,16 @@ export default class Client {
         params.nonce = uuidv4();
         params.timestamp = timestamp();
 
-        let sigBase = method.toUpperCase() + '\u0000' + this.buildUrl(url, params) + '\u0000' + (body ? JSON.stringify(body): '');
+        let sigBase = [
+            method.toUpperCase(),
+            this.buildUrl(url, params),
+            (body ? ((body instanceof URLSearchParams) ? body : JSON.stringify(body)) : '')
+        ].join('\u0000')
 
-        let signature = crypto.createHmac("sha256", this.apiSecret)
+        params.signature = crypto.createHmac("sha256", this.apiSecret)
             .update(sigBase)
             .digest("hex")
             .toLowerCase();
-
-        params.signature = signature;
 
         return params;
     }
@@ -145,14 +162,14 @@ export default class Client {
             If the access token expires, you’ll need to use the member’s credentials to generate a new token.
         */
 
-        return this.post('/auth/token', {
+        return this.request('POST', '/auth/token', {}, {
             grant_type: 'password',
             username: username,
             password: password
         }, {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Accept': 'application/json'
-        });
+        }, true);
     }
 }
 
