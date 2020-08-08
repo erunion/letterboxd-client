@@ -6,3 +6,4 @@ node_modules
 */*.js
 !src
 !jest.config.js
+src/tests/config.json

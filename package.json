@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "npm install && tsc",
     "test": "node node_modules/jest/bin/jest.js --config jest.config.js src/tests/",
-    "build": "npm install && tsc"
+    "watch": "tsc --watch"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,7 @@
   },
   "dependencies": {
     "@types/uuid": "^8.0.0",
-    "axios": "^0.19.2",
+    "node-fetch": "3.0.0-beta.7",
     "uuid": "^8.1.0"
   }
 }
