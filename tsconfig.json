@@ -1,28 +1,10 @@
 {
-    "compilerOptions": {
-        "outDir": "./",
-        "target": "es2015",
-        "module": "CommonJS",
-        "moduleResolution": "node",
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "noImplicitThis": true,
-        "alwaysStrict": true,
-        "baseUrl": ".",
-        "paths": {
-            "*": [
-                "node_modules/*",
-                "src/types/*"
-            ]
-        },
-        "allowSyntheticDefaultImports": true,
-        "declaration": true,
-        "declarationDir": "./types"
-    },
-    "exclude": [
-        "./types"
-    ],
-    "include": [
-        "./src/**/*.ts"
-    ]
+  "compilerOptions": {
+    "baseUrl": "./src/",
+    "declaration": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "outDir": "./dist",
+  },
+  "include": ["./src/**/*.ts"]
 }
