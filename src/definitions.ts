@@ -2547,29 +2547,29 @@ export type LogEntryUpdateRequest = {
    * Information about this log entry if adding to the member’s diary. Set to `null` to remove this
    * log entry from the diary.
    */
-  diaryDetails: LogEntryUpdateRequestDiaryDetails | null;
+  diaryDetails?: LogEntryUpdateRequestDiaryDetails | null;
 
   /**
    * Information about the review. Set to `null` to remove the review from this log entry.
    */
-  review: LogEntryUpdateRequestReview | null;
+  review?: LogEntryUpdateRequestReview | null;
 
   /**
    * The tags for the log entry.
    */
-  tags: string[];
+  tags?: string[];
 
   /**
    * Accepts values between `0.5` and `5.0`, with increments of `0.5`, or null (to remove the
    * rating).
    */
-  rating: number;
+  rating?: number;
 
   /**
    * Set to `true` if the member likes the review (via the ‘heart’ icon). A member may not like
    * their own review.
    */
-  like: boolean;
+  like?: boolean;
 
   /**
    * The policy determining who can post comments to the log entry. `You` in this context refers to
@@ -2578,20 +2578,20 @@ export type LogEntryUpdateRequest = {
    *
    * @see ListRelationship.commentThreadState
    */
-  commentPolicy: 'Anyone' | 'Friends' | 'You';
+  commentPolicy?: 'Anyone' | 'Friends' | 'You';
 };
 
 export type LogEntryUpdateRequestDiaryDetails = {
   /**
    * The date the film was watched, if specified, in ISO 8601 format, i.e. `YYYY-MM-DD`
    */
-  diaryDate: string;
+  diaryDate?: string;
 
   /**
    * Set to `true` if the member has indicated (or it can be otherwise determined) that the member
    * has seen the film prior to this date.
    */
-  rewatch: boolean;
+  rewatch?: boolean;
 };
 
 export type LogEntryUpdateRequestReview = {
@@ -2599,13 +2599,13 @@ export type LogEntryUpdateRequestReview = {
    * The review text in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
    * `<i>` `<a href="">` `<blockquote>`.
    */
-  text: string;
+  text?: string;
 
   /**
    * Set to `true` if the member has indicated that the `review` field contains plot spoilers for
    * the film.
    */
-  containsSpoilers: boolean;
+  containsSpoilers?: boolean;
 
   /**
    * The third-party service or services to which this review should be shared. Valid options are
@@ -2615,7 +2615,7 @@ export type LogEntryUpdateRequestReview = {
    * @deprecated No longer supported by Facebook.
    * @see ReviewRelationship.canShareOn
    */
-  share: 'Facebook';
+  share?: 'Facebook';
 };
 
 export type LoginTokenResponse = {
@@ -3925,7 +3925,7 @@ export type ReportReviewRequest = {
    * An optional, explanatory message to accompany the report. Required if the `reason` is
    * `Plagiarism` or `Other`.
    */
-  message: string;
+  message?: string;
 };
 
 export type Review = {
@@ -4189,14 +4189,14 @@ export type ReviewRelationshipUpdateRequest = {
    * Set to `true` if the member likes the review (via the ‘heart’ icon). A member may not like
    * their own review.
    */
-  liked: boolean;
+  liked?: boolean;
 
   /**
    * Set to `true` to subscribe the member to comment notifications for the review, or `false` to
    * unsubscribe them. A value of `true` will be ignored if the member has disabled comment
    * notifications in their profile settings.
    */
-  subscribed: boolean;
+  subscribed?: boolean;
 };
 
 export type ReviewRelationshipUpdateResponse = {

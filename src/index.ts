@@ -119,7 +119,601 @@ export default class Client {
   // public filmCollection = {};
   // public film = {};
   // public list = {};
-  // public logEntry = {};
+
+  public logEntry = {
+    /**
+     * A cursored window over the log entries for a film or member. A log entry is either a diary
+     * entry (must have a date) or a review (must have review text). Log entries can be both a
+     * diary entry and a review if they satisfy both criteria.
+     *
+     * Use the ‘next’ cursor to move through the list.
+     *
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--log-entries}
+     */
+    getEntries: (params?: {
+      /**
+       * The pagination cursor.
+       */
+      cursor?: string;
+
+      /**
+       * The number of items to include per page (default is `20`, maximum is `100`).
+       */
+      perPage?: number;
+
+      /**
+       * The order in which the log entries should be returned. Defaults to `WhenAdded`, which
+       * orders by creation date, unless you specify `where=HasDiaryDate` in which case the default
+       * is `Date`.
+       *
+       * The `AuthenticatedMember*` values are only available to signed-in members.
+       *
+       * The `MemberRating` values must be used in conjunction with `member` and are only available
+       * when specifying a single member (i.e. `IncludeFriends=None`).
+       *
+       * The `ReviewPopularity` values return reviews with more activity (likes/comments) first,
+       * and imply `where=HasReview`.
+       *
+       * The `FilmPopularity` values return reviews for films with more combined activity first.
+       *
+       * The `*WithFriends` values are only available to signed-in members and consider popularity
+       * amongst the signed-in member’s friends.
+       *
+       * The `Date` value sorts by the diary date, and implies `where=HasDiaryDate`
+       *
+       * If a film is specified, the only applicable sort orders are `WhenAdded`, `Date`,
+       * `EntryRating*` or `ReviewPopularity*`.
+       *
+       * DEPRECATED The `Rating*` options are deprecated in favor of `EntryRating*`.
+       */
+      sort?:
+        | 'WhenAdded'
+        | 'Date'
+        | 'DiaryCount'
+        | 'ReviewCount'
+        | 'WhenLiked'
+        | 'EntryRatingHighToLow'
+        | 'EntryRatingLowToHigh'
+        | 'RatingHighToLow'
+        | 'RatingLowToHigh'
+        | 'AuthenticatedMemberRatingHighToLow'
+        | 'AuthenticatedMemberRatingLowToHigh'
+        | 'MemberRatingHighToLow'
+        | 'MemberRatingLowToHigh'
+        | 'AverageRatingHighToLow'
+        | 'AverageRatingLowToHigh'
+        | 'ReleaseDateLatestFirst'
+        | 'ReleaseDateEarliestFirst'
+        | 'FilmName'
+        | 'FilmDurationShortestFirst'
+        | 'FilmDurationLongestFirst'
+        | 'ReviewPopularity'
+        | 'ReviewPopularityThisWeek'
+        | 'ReviewPopularityThisMonth'
+        | 'ReviewPopularityThisYear'
+        | 'ReviewPopularityWithFriends'
+        | 'ReviewPopularityWithFriendsThisWeek'
+        | 'ReviewPopularityWithFriendsThisMonth'
+        | 'ReviewPopularityWithFriendsThisYear'
+        | 'FilmPopularity'
+        | 'FilmPopularityThisWeek'
+        | 'FilmPopularityThisMonth'
+        | 'FilmPopularityThisYear'
+        | 'FilmPopularityWithFriends'
+        | 'FilmPopularityWithFriendsThisWeek'
+        | 'FilmPopularityWithFriendsThisMonth'
+        | 'FilmPopularityWithFriendsThisYear';
+
+      /**
+       * Specify the LID of a film to return log entries for that film. Must not be included if the `sort` value is one of `FilmName`, `ReleaseDate*`, `FilmDuration*` or any of the `FilmPopularity` options.
+       */
+      film?: string;
+
+      /**
+       * Specify the LID of a member to limit the returned log entries according to the value set
+       * in `memberRelationship` or to access the `MemberRating*` sort options.
+       */
+      member?: string;
+
+      /**
+       * Must be used in conjunction with `member`. Use `Owner` to limit the returned log entries
+       * to those created by the specified member. Use `Liked` to limit the returned reviews to
+       * those liked by the specified member (implies `where=HasReview`).
+       */
+      memberRelationship?: 'Ignore' | 'Owner' | 'Liked';
+
+      /**
+       * Must be used in conjunction with `member`. Specify the type of relationship to limit the
+       * returned films accordingly. e.g. Use `Liked` to limit the returned reviews to those for
+       * films liked by the member.
+       */
+      filmMemberRelationship?:
+        | 'Ignore'
+        | 'Watched'
+        | 'NotWatched'
+        | 'Liked'
+        | 'NotLiked'
+        | 'Rated'
+        | 'NotRated'
+        | 'InWatchlist'
+        | 'NotInWatchlist'
+        | 'Favorited';
+
+      /**
+       * Must be used in conjunction with `member`. Defaults to `None`, which only returns log
+       * entries created or liked by the member. Use `Only` to return log entries created or liked
+       * by the member’s friends, and All to return log entries created or liked by both the member
+       * and their friends.
+       */
+      includeFriends?: 'None' | 'All' | 'Only';
+
+      /**
+       * If set, limits the returned log entries to those with date that falls during the specified
+       * year.
+       */
+      year?: number;
+
+      /**
+       * Accepts values of `1` through `12`. Must be used with year. If set, limits the returned
+       * log entries to those with a date that falls during the specified month and year.
+       */
+      month?: number;
+
+      /**
+       * Accepts values of `1` through `52`. Must be used with year. If set, limits the returned
+       * log entries to those with a date that falls during the specified week and year.
+       */
+      week?: number;
+
+      /**
+       * Accepts values of `1` through `31`. Must be used with month and `year`. If set, limits the
+       * returned log entries to those with a date that falls on the specified day, month and year.
+       */
+      day?: number;
+
+      /**
+       * Allowable values are between `0.5` and `5.0`, with increments of `0.5`. If set, limits the
+       * returned log entries to those with a rating equal to or higher than the specified rating.
+       */
+      minRating?: number;
+
+      /**
+       * Allowable values are between `0.5` and `5.0`, with increments of `0.5`. If set, limits the
+       * returned log entries to those with a rating equal to or lower than the specified rating.
+       */
+      maxRating?: number;
+
+      /**
+       * Specify the starting year of a decade (must end in `0`) to limit films to those released
+       * during the decade.
+       */
+      filmDecade?: number;
+
+      /**
+       * Specify a year to limit films to those released during that year.
+       */
+      filmYear?: number;
+
+      /**
+       * The LID of the genre. If set, limits the returned log entries to those for films that
+       * match the specified genre.
+       */
+      genre?: string;
+
+      /**
+       * Specify the LID of up to 100 genres to limit the returned log entries to those for films
+       * within all of the specified genres.
+       */
+      includeGenre?: string[];
+
+      /**
+       * Specify the LID of up to 100 genres to limit the returned log entries to those for films
+       * within none of the specified genres.
+       */
+      excludeGenre?: string[];
+
+      /**
+       * Specify the ISO 3166-1 defined code of the country to limit films to those produced in the
+       * specified country.
+       */
+      country?: string;
+
+      /**
+       * Specify the ISO 639-1 defined code of the language to limit films to those using the
+       * specified spoken language.
+       */
+      language?: string;
+
+      /**
+       * @deprecated Use `tagCode` instead.
+       * @see params.tagCode
+       */
+      tag?: string;
+
+      /**
+       * Specify a tag code to limit the returned log entries to those tagged accordingly.
+       */
+      tagCode?: string;
+
+      /**
+       * Must be used with `tagCode`. Specify the LID of a member to focus the tag filter on the
+       * member.
+       */
+      tagger?: string;
+
+      /**
+       * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
+       * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter
+       * tags set by both the member and their friends.
+       */
+      includeTaggerFriends?: 'None' | 'All' | 'Only';
+
+      /**
+       * Specify the ID of a supported service to limit films to those available from that service.
+       * The list of available services can be found by using the
+       * [/films/film-services](https://api-docs.letterboxd.com/#path--films-film-services)
+       * endpoint.
+       */
+      service?: string;
+
+      /**
+       * Specify one or more values to limit the returned log entries accordingly.
+       *
+       *  - `Released`, `NotReleased`, `FeatureLength` and `NotFeatureLength` refer to properties
+       *    of the associated film rather than to the relevant log entry.
+       *  - Use `InWatchlist` or `NotInWatchlist` to limit the returned log entries based on the
+       *    contents of the authenticated member’s watchlist. Use `Watched` and `NotWatched` to
+       *    limit the returned log entries based on the authenticated member’s list of watched
+       *    films. (Note: you can specify `member` and `filmMemberRelationship` to further limit
+       *    returned entries based on another  member’s films or watchlist.)
+       *  - Use `HasDiaryDate` to limit the returned log entries to those that appear in a member’s
+       *    diary.
+       *  - Use `HasReview` to limit the returned log entries to those containing a review.
+       *  - Use `Clean` to exclude reviews that contain profane language.
+       *  - Use `NoSpoilers` to exclude reviews where the owner has indicated that the review text
+       *    contains plot spoilers for the film.
+       *  - Use `Rated` to limit the returned log entries to those that have a rating (use
+       *    `minRating` and `maxRating` for more control).
+       *  - Use `NotRated` to limit the returned log entries to those that do not have a rating.
+       *  - Use `Fiction` to exclude log entries of documentaries.
+       *  - Use `Film` to exclude log entries of tv shows. Use `TV` to only return log entries of
+       *    tv shows.
+       */
+      where?:
+        | 'HasDiaryDate'
+        | 'HasReview'
+        | 'Clean'
+        | 'NoSpoilers'
+        | 'Released'
+        | 'NotReleased'
+        | 'FeatureLength'
+        | 'NotFeatureLength'
+        | 'InWatchlist'
+        | 'NotInWatchlist'
+        | 'Watched'
+        | 'NotWatched'
+        | 'Rated'
+        | 'NotRated'
+        | 'Logged'
+        | 'NotLogged'
+        | 'Rewatched'
+        | 'NotRewatched'
+        | 'Reviewed'
+        | 'NotReviewed'
+        | 'Owned'
+        | 'NotOwned'
+        | 'Customised'
+        | 'NotCustomised'
+        | 'Liked'
+        | 'NotLiked'
+        | 'Fiction'
+        | 'Film'
+        | 'TV';
+
+      /**
+       * Specify `NoDuplicateMembers` to return only the first log entry for each member. If `film`
+       * is not provided, only recent Log Entries will be returned (i.e. entries logged in the past
+       * 30 days). `NoDuplicateMembers` is only available when using these sort orders: `WhenAdded`,
+       * `Date`, `ReviewPopularity*`. You may not use `NoDuplicateMembers` with
+       * `filmMemberRelationship`, `filmDecade`, `filmYear`, `genre`, `tagCode`, `service`, or
+       * `where` except `HasDiaryDate`, `HasReview`, `Clean`, and/or `NoSpoilers`.
+       */
+      filter?: 'NoDuplicateMembers';
+    }) => {
+      return request<
+        | { status: 200; data: defs.LogEntriesResponse }
+        | { status: 404; data: never; reason: 'Film or Member not found' }
+      >({
+        method: 'get',
+        path: '/log-entries',
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Create a log entry. A log entry is either a diary entry (must have a date) or a review (must
+     * have review text). Log entries can be both a diary entry and a review if they satisfy both
+     * criteria.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--log-entries}
+     */
+    create: (params: defs.LogEntryCreationRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 201; data: defs.LogEntry }
+        | { status: 204; data: never; reason: 'No action was taken, as the log entry already exists' }
+        | { status: 400; data: never; reason: 'Bad request' }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | { status: 404; data: never; reason: 'The film was not found' }
+      >({
+        method: 'post',
+        path: '/log-entries',
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Get details about a log entry by ID.
+     *
+     * @param id The LID of the log entry.
+     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id-}
+     */
+    get: (id: string) => {
+      return request<
+        | { status: 200; data: defs.LogEntry }
+        | { status: 404; data: never; reason: 'No log entry matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/log-entry/${id}`,
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * Update a log entry by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the log entry.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id-}
+     */
+    update: (id: string, params: defs.LogEntryUpdateRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 200; data: defs.ReviewUpdateResponse }
+        | { status: 400; data: never; reason: 'Bad request' }
+        | {
+            status: 401;
+            data: never;
+            reason: 'There is no authenticated member, or the authenticated member does not own the resource';
+          }
+        | { status: 404; data: never; reason: 'No log entry matches the specified ID' }
+      >({
+        method: 'patch',
+        path: `/log-entry/${id}`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Delete a log entry by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the log entry.
+     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id-}
+     */
+    delete: (id: string) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 204; data: never }
+        | { status: 400; data: never; reason: 'Bad request' }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | { status: 403; data: never; reason: 'The authenticated member is not authorized to delete this log entry' }
+        | { status: 404; data: never; reason: 'No log entry matches the specified ID' }
+      >({
+        method: 'delete',
+        path: `/log-entry/${id}`,
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * A cursored window over the comments for a log entry’s review.
+     *
+     * Use the ‘next’ cursor to move through the comments.
+     *
+     * @param id The LID of the log entry.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id--comments}
+     */
+    getComments: (
+      id: string,
+      params?: {
+        /**
+         * The pagination cursor.
+         */
+        cursor: string;
+
+        /**
+         * The number of items to include per page (default is `20`, maximum is `100`).
+         */
+        perPage: number;
+
+        /**
+         * Defaults to `Date`. The `Updates` sort order returns newest content first. Use this to
+         * get the most recently posted or edited comments, and pass `includeDeletions=true` to
+         * remain consistent in the case where a comment has been deleted.
+         */
+        sort: 'Date' | 'DateLatestFirst' | 'Updates';
+
+        /**
+         * Use this to discover any comments that were deleted.
+         */
+        includeDeletions: boolean;
+      }
+    ) => {
+      return request<
+        | { status: 200; data: defs.ReviewCommentsResponse }
+        | { status: 404; data: never; reason: 'No log entry matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/log-entry/${id}/comments`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Create a comment on a review.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see Authentication).
+     *
+     * @param id The LID of the log entry.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id--comments}
+     */
+    createComment: (id: string, params: defs.CommentCreationRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 201; data: defs.ReviewComment }
+        | { status: 204; data: never; reason: 'A comment with the same message already exists (no action was taken)' }
+        | { status: 400; data: never; reason: 'Bad request' }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | { status: 403; data: never; reason: 'The authenticated member is not authorized to comment on this review' }
+        | { status: 404; data: never; reason: 'No film matches the specified ID' }
+      >({
+        method: 'post',
+        path: `/log-entry/${id}/comments`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Get details of the authenticated member’s relationship with a log entry’s review by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the log entry.
+     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id--me}
+     */
+    getRelationship: (id: string) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 200; data: defs.ReviewRelationship }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | { status: 404; data: never; reason: 'No log entry matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/log-entry/${id}/me`,
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * Update the authenticated member’s relationship with a log entry’s review by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the log entry.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id--me}
+     */
+    updateRelationship: (id: string, params?: defs.ReviewRelationshipUpdateRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 200; data: defs.ReviewRelationshipUpdateResponse }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | {
+            status: 403;
+            data: never;
+            reason: 'The authenticated member is not authorized to like or subscribe to this review';
+          }
+        | { status: 404; data: never; reason: 'No log entry matches the specified ID' }
+      >({
+        method: 'patch',
+        path: `/log-entry/${id}/me`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Report a log entry’s review by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the log entry.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id--report}
+     */
+    report: (id: string, params: defs.ReportReviewRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 204; data: never }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | { status: 404; data: never; reason: 'No log entry matches the specified ID' }
+      >({
+        method: 'post',
+        path: `/log-entry/${id}/report`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Get statistical data about a log-entry’s review by ID.
+     *
+     * @param id The LID of the log entry.
+     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id--statistics}
+     */
+    getStatistics: (id: string) => {
+      return request<
+        | { status: 200; data: defs.ReviewStatistics }
+        | { status: 404; data: never; reason: 'No log entry matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/log-entry/${id}/statistics`,
+        auth: this.credentials,
+      });
+    },
+  };
 
   public me = {
     /**
@@ -151,8 +745,8 @@ export default class Client {
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
-     * @see {@link https://api-docs.letterboxd.com/#path--me}
      * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--me}
      */
     update: (params: defs.MemberSettingsUpdateRequest) => {
       if (!this.credentials.accessToken) {
@@ -177,8 +771,8 @@ export default class Client {
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
-     * @see {@link https://api-docs.letterboxd.com/#path--me-deregister-push-notifications}
      * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--me-deregister-push-notifications}
      */
     deregisterPushNotifications: (params: defs.DeregisterPushNotificationsRequest) => {
       if (!this.credentials.accessToken) {
@@ -201,8 +795,8 @@ export default class Client {
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
-     * @see {@link https://api-docs.letterboxd.com/#path--me-disable}
      * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--me-disable}
      */
     deactivate: (params: defs.DisableAccountRequest) => {
       if (!this.credentials.accessToken) {
@@ -227,6 +821,7 @@ export default class Client {
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
      * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--me-register-push-notifications}
      */
     registerPushNotifications: (params: defs.RegisterPushNotificationsRequest) => {
       if (!this.credentials.accessToken) {
@@ -250,6 +845,8 @@ export default class Client {
      * [Authentication](https://api-docs.letterboxd.com/#auth)). If the email address associated
      * with a member’s account has not been validated and the validation link has expired or been
      * lost, use this endpoint to request a new validation link.
+     *
+     * @see {@link https://api-docs.letterboxd.com/#path--me-validation-request}
      */
     validationRequest: () => {
       if (!this.credentials.accessToken) {
@@ -282,6 +879,8 @@ export default class Client {
      * A cursored window over the list of members.
      *
      * Use the ‘next’ cursor to move through the list.
+     *
+     * @param params
      * @see {@link https://api-docs.letterboxd.com/#path--members}
      */
     get: (params?: {
@@ -402,8 +1001,8 @@ export default class Client {
      * must be between 2 and 15 characters long and may only contain upper or lowercase letters,
      * numbers or the underscore (`_`) character.
      *
-     * @see {@link https://api-docs.letterboxd.com/#path--members-register}
      * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--members-register}
      */
     register: (params: defs.RegisterRequest) => {
       return request<
@@ -420,8 +1019,8 @@ export default class Client {
     /**
      * Get details about a member by ID.
      *
-     * @see {@link https://api-docs.letterboxd.com/#path--member--id-}
      * @param id The LID of the member.
+     * @see {@link https://api-docs.letterboxd.com/#path--member--id-}
      */
     getMember: (id: string) => {
       return request<
@@ -443,9 +1042,9 @@ export default class Client {
      *
      * Use the ‘next’ cursor to move through the list.
      *
-     * @see {@link https://api-docs.letterboxd.com/#path--member--id--activity}
      * @param id The LID of the member.
      * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--member--id--activity}
      */
     getMemberActivity: (
       id: string,
@@ -554,9 +1153,9 @@ export default class Client {
      * The tags will be returned in order of relevance. All tags previously used by the member will
      * be returned if no search prefix is specified.
      *
-     * @see {@link https://api-docs.letterboxd.com/#path--member--id--list-tags-2}
      * @param id The LID of the member.
      * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--member--id--list-tags-2}
      */
     getMemberListTags: (
       id: string,
@@ -589,9 +1188,9 @@ export default class Client {
      * The tags will be returned in order of relevance. All tags previously used by the member will
      * be returned if no search prefix is specified.
      *
-     * @see {@link https://api-docs.letterboxd.com/#path--member--id--log-entry-tags}
      * @param id The LID of the member.
      * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--member--id--log-entry-tags}
      */
     getMemberLogEntryTags: (
       id: string,
@@ -624,8 +1223,8 @@ export default class Client {
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
-     * @see {@link https://api-docs.letterboxd.com/#path--member--id--me}
      * @param id The LID of the other member.
+     * @see {@link https://api-docs.letterboxd.com/#path--member--id--me}
      */
     getMemberRelationship: (id: string) => {
       if (!this.credentials.accessToken) {
@@ -655,6 +1254,7 @@ export default class Client {
      *
      * @param id The LID of the member.
      * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--member--id--report}
      */
     reportMember: (id: string, params: defs.ReportMemberRequest) => {
       if (!this.credentials.accessToken) {
@@ -681,6 +1281,7 @@ export default class Client {
      * Get statistical data about a member by ID.
      *
      * @param id The LID of the member.
+     * @see {@link https://api-docs.letterboxd.com/#path--member--id--statistics}
      */
     getMemberStatistics: (id: string) => {
       return request<
@@ -707,9 +1308,9 @@ export default class Client {
      * [/film/{id}/me](https://api-docs.letterboxd.com/#path--film--id--me) endpoint to add or
      * remove films from a member’s watchlist.
      *
-     * @see {@link https://api-docs.letterboxd.com/#path--member--id--watchlist}
      * @param id The LID of the member.
      * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--member--id--watchlist}
      */
     getMemberWatchlist: (
       id: string,
@@ -954,8 +1555,8 @@ export default class Client {
   /**
    * Get recent news from the Letterboxd editors.
    *
-   * @see {@link https://api-docs.letterboxd.com/#path--news}
    * @param params
+   * @see {@link https://api-docs.letterboxd.com/#path--news}
    */
   public news = (params?: {
     /**
@@ -976,8 +1577,8 @@ export default class Client {
   };
 
   /**
-   * @see {@link https://api-docs.letterboxd.com/#path--search}
    * @param params
+   * @see {@link https://api-docs.letterboxd.com/#path--search}
    */
   public search = (params: {
     /**
@@ -1055,8 +1656,8 @@ export default class Client {
      *
      * Use the ‘next’ cursor to move through the list.
      *
-     * @see {@link https://api-docs.letterboxd.com/#path--stories}
      * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--stories}
      */
     getStories: (params?: {
       /**
@@ -1110,8 +1711,8 @@ export default class Client {
     /**
      * Get details of a story by ID.
      *
-     * @see {@link https://api-docs.letterboxd.com/#path--story--id-}
      * @param id The LID of the story.
+     * @see {@link https://api-docs.letterboxd.com/#path--story--id-}
      */
     getStory: (id: string) => {
       return request<
