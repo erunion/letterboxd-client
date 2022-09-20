@@ -1637,12 +1637,12 @@ export type ListAdditionRequest = {
   /**
    * Specify the LIDs of lists to be added to.
    */
-  lists: string[];
+  lists?: string[];
 
   /**
    * Specify the LIDs of films to be added to each of the specified lists.
    */
-  films: string[];
+  films?: string[];
 };
 
 export type ListAdditionResponse = {
@@ -1837,7 +1837,7 @@ export type ListCreationRequest = {
    *
    * @see ListRelationship
    */
-  commentPolicy: 'Anyone' | 'Friends' | 'You';
+  commentPolicy?: 'Anyone' | 'Friends' | 'You';
 
   /**
    * Set to `true` if the owner has elected to make this a ranked list.
@@ -1848,22 +1848,22 @@ export type ListCreationRequest = {
    * The list description in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>`
    * `<b>` `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000 characters.
    */
-  description: string;
+  description?: string;
 
   /**
    * The LID of a list to clone from. Only supported for paying members.
    */
-  clonedFrom: string;
+  clonedFrom?: string;
 
   /**
    * The tags for the list.
    */
-  tags: string[];
+  tags?: string[];
 
   /**
    * The films that comprise the list. Required unless `source` is set.
    */
-  entries: ListCreateEntry[];
+  entries?: ListCreateEntry[];
 
   /**
    * The third-party service or services to which this list should be shared. Valid options are
@@ -1873,7 +1873,7 @@ export type ListCreationRequest = {
    * @deprecated No longer supported by Facebook.
    * @see MemberAccount
    */
-  share: 'Facebook';
+  share?: 'Facebook';
 };
 
 export type ListEntriesResponse = {
@@ -2043,14 +2043,14 @@ export type ListRelationshipUpdateRequest = {
    * Set to `true` if the member likes the list (via the ‘heart’ icon). A member may not like their
    * own list.
    */
-  liked: boolean;
+  liked?: boolean;
 
   /**
    * Set to `true` to subscribe the member to comment notifications for the list, or `false` to
    * unsubscribe them. A value of `true` will be ignored if the member has disabled comment
    * notifications in their profile settings.
    */
-  subscribed: boolean;
+  subscribed?: boolean;
 };
 
 export type ListRelationshipUpdateResponse = {
@@ -2187,20 +2187,20 @@ export type ListUpdateEntry = {
    * list (if not in the list). If set, any entries at or after this position will be incremented
    * by one. Sending two or more `ListUpdateEntry`s with the same rank will return an error.
    */
-  rank: number;
+  rank?: number;
 
   /**
    * The notes for the list entry in LBML. May contain the following HTML tags: `<br>` `<strong>`
    * `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000
    * characters.
    */
-  notes: string;
+  notes?: string;
 
   /**
    * Set to `true` if the member has indicated that the `notes` field contains plot spoilers for
    * the film.
    */
-  containsSpoilers: boolean;
+  containsSpoilers?: boolean;
 };
 
 export type ListUpdateMessage = {
@@ -2233,12 +2233,12 @@ export type ListUpdateRequest = {
   /**
    * Set to `true` if the owner has elected to publish the list for other members to see.
    */
-  published: boolean;
+  published?: boolean;
 
   /**
    * The name of the list.
    */
-  name: string;
+  name?: string;
 
   /**
    * The policy determining who can post comments to the list. `You` in this context refers to the
@@ -2247,34 +2247,34 @@ export type ListUpdateRequest = {
    *
    * @see ListRelationship
    */
-  commentPolicy: 'Anyone' | 'Friends' | 'You';
+  commentPolicy?: 'Anyone' | 'Friends' | 'You';
 
   /**
    * Set to `true` if the owner has elected to make this a ranked list.
    */
-  ranked: boolean;
+  ranked?: boolean;
 
   /**
    * The list description in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>`
    * `<b>` `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000 characters.
    */
-  description: string;
+  description?: string;
 
   /**
    * The tags for the list.
    */
-  tags: string[];
+  tags?: string[];
 
   /**
    * Specify the LIDs of films to be removed from the list.
    */
-  filmsToRemove: string[];
+  filmsToRemove?: string[];
 
   /**
    * The specified entries will be inserted/appended to the list if they are not already present,
    * or updated if they are present.
    */
-  entries: ListUpdateEntry[];
+  entries?: ListUpdateEntry[];
 
   /**
    * The third-party service or services to which this list should be shared. Valid options are
@@ -2284,7 +2284,7 @@ export type ListUpdateRequest = {
    * @deprecated No longer supported by Facebook.
    * @see ListRelationship
    */
-  share: 'Facebook';
+  share?: 'Facebook';
 };
 
 export type ListUpdateResponse = {
@@ -3890,7 +3890,7 @@ export type ReportListRequest = {
    * An optional, explanatory message to accompany the report. Required if the `reason` is
    * `Plagiarism` or `Other`.
    */
-  message: string;
+  message?: string;
 };
 
 export type ReportMemberRequest = {

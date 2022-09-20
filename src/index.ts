@@ -114,11 +114,715 @@ export default class Client {
     },
   };
 
-  // public comment = {};
-  // public contributor = {};
-  // public filmCollection = {};
-  // public film = {};
-  // public list = {};
+  public comment = {
+    // /comment/{id}
+    // /comment/{id}/report
+  };
+
+  public contributor = {
+    // /contributor/{id}
+    // /contributor/{id}/contributions
+  };
+
+  public filmCollection = {
+    // /film-collection/{id}
+  };
+
+  public film = {
+    // /films
+    // /films/autocomplete
+    // /films/countries
+    // /films/film-services
+    // /films/genres
+    // /films/languages
+    // /film/{id}
+    // /film/{id}/availability
+    // /film/{id}/friends
+    // /film/{id}/me
+    // /film/{id}/members
+    // /film/{id}/report
+    // /film/{id}/statistics
+  };
+
+  public list = {
+    /**
+     * A cursored window over a list of lists.
+     *
+     * Use the ‘next’ cursor to move through the list.
+     *
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--lists}
+     */
+    getLists: (params: {
+      /**
+       * The pagination cursor.
+       */
+      cursor: string;
+
+      /**
+       * The number of items to include per page (default is `20`, maximum is `100`).
+       */
+      perPage: number;
+
+      /**
+       * Defaults to `Date`, which returns lists that were most recently created/updated first. The
+       * `*WithFriends` values are only available to signed-in members and consider popularity
+       * amongst the signed-in member’s friends.
+       */
+      sort:
+        | 'Date'
+        | 'WhenPublishedLatestFirst'
+        | 'WhenPublishedEarliestFirst'
+        | 'WhenCreatedLatestFirst'
+        | 'WhenCreatedEarliestFirst'
+        | 'ListName'
+        | 'ListPopularity'
+        | 'ListPopularityThisWeek'
+        | 'ListPopularityThisMonth'
+        | 'ListPopularityThisYear'
+        | 'ListPopularityWithFriends'
+        | 'ListPopularityWithFriendsThisWeek'
+        | 'ListPopularityWithFriendsThisMonth'
+        | 'ListPopularityWithFriendsThisYear';
+
+      /**
+       * Specify the LID of a film to return lists that include that film.
+       */
+      film: string;
+
+      /**
+       * Specify the LID of a list to return lists that were cloned from that list.
+       */
+      clonedFrom: string;
+
+      /**
+       * @deprecated Use `tagCode` instead.
+       * @use params.tagCode
+       */
+      tag: string;
+
+      /**
+       * Specify a tag code to limit the returned lists to those tagged accordingly.
+       */
+      tagCode: string;
+
+      /**
+       * Must be used with `tagCode`. Specify the LID of a member to focus the tag filter on the
+       * member.
+       */
+      tagger: string;
+
+      /**
+       * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
+       * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter
+       * tags set by both the member and their friends.
+       */
+      includeTaggerFriends: 'None' | 'All' | 'Only';
+
+      /**
+       * Specify the LID of a member to return lists that are owned or liked by the member (or
+       * their friends, when used with `includeFriends`).
+       */
+      member: string;
+
+      /**
+       * Must be used in conjunction with `member`. Defaults to `Owner`, which returns lists owned
+       * by the specified member. Use `Liked` to return lists liked by the member.
+       */
+      memberRelationship: 'Owner' | 'Liked';
+
+      /**
+       * Must be used in conjunction with `member`. Defaults to `None`, which only returns lists
+       * from the member’s account. Use `Only` to return lists from the member’s friends, and `All`
+       * to return lists from both the member and their friends.
+       */
+      includeFriends: 'None' | 'All' | 'Only';
+
+      /**
+       * Specify `Clean` to return lists that do not contain profane language. Specify `Published`
+       * to return the member’s lists that have been made public. Note that unpublished lists for
+       * members other than the authenticated member are never returned. Specify NotPublished to
+       * return the authenticated member’s lists that have not been made public.
+       */
+      where: 'Clean' | 'Published' | 'NotPublished';
+
+      /**
+       * Specify `NoDuplicateMembers` to limit the list to only the first list for each member.
+       * `NoDuplicateMembers` is only available when using these sort orders: `Date`,
+       * `WhenPublishedLatestFirst`, `WhenCreatedLatestFirst`.
+       */
+      filter: 'NoDuplicateMembers';
+
+      /**
+       * Specify the LIDs of any film(s) you wish to see the status for in respect of the returned
+       * list(s). For each nominated film, the response will indicate (for each returned list)
+       * whether the list contains the film, and if so, its rank position.
+       */
+      filmsOfNote: string[];
+    }) => {
+      return request<
+        | { status: 200; data: defs.ListsResponse }
+        | { status: 400; data: never; reason: 'Bad request' }
+        | {
+            status: 403;
+            data: never;
+            reason: 'There is no authenticated member, or the authenticated member does not own the resource (when requesting where=NotPublished)';
+          }
+        | { status: 404; data: never; reason: 'No film, member, tag or list matches the specified ID.' }
+      >({
+        method: 'get',
+        path: '/lists',
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Create a list.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--lists}
+     */
+    create: (params: defs.ListCreationRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 200; data: defs.ListCreateResponse }
+        | { status: 400; data: never; reason: 'Bad request' }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+      >({
+        method: 'post',
+        path: '/lists',
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Add one or more films to one or more lists.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--lists}
+     */
+    updateLists: (params?: defs.ListAdditionRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 200; data: defs.ListAdditionResponse }
+        | { status: 400; data: never; reason: 'Bad request' }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+      >({
+        method: 'patch',
+        path: '/lists',
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Get a list of featured topics/lists (e.g. for display in the Browse tab of our apps).
+     *
+     * @see {@link https://api-docs.letterboxd.com/#path--lists-topics}
+     */
+    getTopics: () => {
+      return request<{ status: 200; data: defs.TopicsResponse }>({
+        method: 'get',
+        path: '/lists/topics',
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * Get details of a list by ID.
+     *
+     * @param id The LID of the list.
+     * @see {@link https://api-docs.letterboxd.com/#path--list--id-}
+     */
+    get: (id: string) => {
+      return request<
+        { status: 200; data: defs.List } | { status: 404; data: never; reason: 'No list matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/list/${id}`,
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * Update a list by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the list.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--list--id-}
+     */
+    update: (id: string, params?: defs.ListUpdateRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 200; data: defs.ListUpdateResponse }
+        | { status: 400; data: never; reason: 'Bad request' }
+        | {
+            status: 401;
+            data: never;
+            reason: 'There is no authenticated member, or the authenticated member does not own the resource';
+          }
+        | { status: 404; data: never; reason: 'No list matches the specified ID' }
+      >({
+        method: 'patch',
+        path: `/list/${id}`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Delete a list by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the list.
+     * @see {@link https://api-docs.letterboxd.com/#path--list--id-}
+     */
+    delete: (id: string) => {
+      return request<
+        | { status: 204; data: never }
+        | { status: 400; data: never; reason: 'Bad request' }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | { status: 403; data: never; reason: 'The authenticated member does not own the specified list' }
+        | { status: 404; data: never; reason: 'No list matches the specified ID' }
+      >({
+        method: 'delete',
+        path: `/list/${id}`,
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * A cursored window over the comments for a list.
+     *
+     * Use the ‘next’ cursor to move through the comments.
+     *
+     * @param id The LID of the list.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--list--id--comments}
+     */
+    getComments: (
+      id: string,
+      params?: {
+        /**
+         * The pagination cursor.
+         */
+        cursor?: string;
+
+        /**
+         * The number of items to include per page (default is `20`, maximum is `100`).
+         */
+        perPage?: number;
+
+        /**
+         * Defaults to `Date`. The Updates sort order returns newest content first. Use this to get
+         * the most recently posted or edited comments, and pass `includeDeletions=true` to remain
+         * consistent in the case where a comment has been deleted.
+         */
+        sort?: 'Date' | 'DateLatestFirst' | 'Updates';
+
+        /**
+         * Use this to discover any comments that were deleted.
+         */
+        includeDeletions?: boolean;
+      }
+    ) => {
+      return request<
+        | { status: 200; data: defs.ListCommentsResponse }
+        | { status: 404; data: never; reason: 'No list matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/list/${id}/comments`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Create a comment on a list.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--list--id--comments}
+     */
+    createComment: (id: string, params: defs.CommentCreationRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 201; data: defs.ListComment }
+        | { status: 204; data: never; reason: 'A comment with the same message already exists (no action was taken)' }
+        | { status: 400; data: never; reason: 'Bad request' }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | { status: 403; data: never; reason: 'The authenticated member is not authorized to comment on this list' }
+        | { status: 404; data: never; reason: 'No list matches the specified ID' }
+      >({
+        method: 'post',
+        path: `/list/${id}/comments`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Get entries for a list by ID.
+     *
+     * @param id The LID of the list.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--list--id--entries}
+     */
+    getEntries: (
+      id: string,
+      params: {
+        /**
+         * The pagination cursor.
+         */
+        cursor: string;
+
+        /**
+         * The number of items to include per page (default is `20`, maximum is `100`).
+         */
+        perPage: number;
+
+        /**
+         * Specify up to 100 Letterboxd IDs or TMDB IDs prefixed with `tmdb:`, or IMDB IDs prefixed
+         * with `imdb:`
+         */
+        filmId: string[];
+
+        /**
+         * Specify the LID of a genre to limit films to those within the specified genre.
+         */
+        genre: string;
+
+        /**
+         * Specify the LID of a film to limit films to those similar to the specified film.
+         *
+         * @private First party API clients only
+         */
+        similarTo: string;
+
+        /**
+         * Specify the code of a theme to limit films to those within the specified theme.
+         *
+         * @private First party API clients only
+         */
+        theme: string;
+
+        /**
+         * Specify the code of a minigenre to limit films to those within the specified minigenre.
+         *
+         * @private First party API clients only
+         */
+        minigenre: string;
+
+        /**
+         * Specify the code of a nanogenre to limit films to those within the specified nanogenre.
+         *
+         * @private First party API clients only
+         */
+        nanogenre: string;
+
+        /**
+         * Specify the LID of up to 100 genres to limit films to those within all of the specified
+         * genres.
+         */
+        includeGenre: string[];
+
+        /**
+         * Specify the LID of up to 100 genres to limit films to those within none of the specified
+         * genres.
+         */
+        excludeGenre: string[];
+
+        /**
+         * Specify the ISO 3166-1 defined code of the country to limit films to those produced in
+         * the specified country.
+         */
+        country: string;
+
+        /**
+         * Specify the ISO 639-1 defined code of the language to limit films to those using the
+         * specified spoken language.
+         */
+        language: string;
+
+        /**
+         * Specify the starting year of a decade (must end in `0`) to limit films to those released
+         * during the decade.
+         */
+        decade: number;
+
+        /**
+         * Specify a year to limit films to those released during that year.
+         */
+        year: number;
+
+        /**
+         * Specify the ID of a supported service to limit films to those available from that
+         * service. The list of available services can be found by using the
+         * [/films/film-services](https://api-docs.letterboxd.com/#path--films-film-services)
+         * endpoint.
+         */
+        service: string;
+
+        /**
+         * Specify one or more values to limit the list of films accordingly.
+         */
+        where:
+          | 'Released'
+          | 'NotReleased'
+          | 'InWatchlist'
+          | 'NotInWatchlist'
+          | 'Logged'
+          | 'NotLogged'
+          | 'Rewatched'
+          | 'NotRewatched'
+          | 'Reviewed'
+          | 'NotReviewed'
+          | 'Owned'
+          | 'NotOwned'
+          | 'Customised'
+          | 'NotCustomised'
+          | 'Rated'
+          | 'NotRated'
+          | 'Liked'
+          | 'NotLiked'
+          | 'WatchedFromWatchlist'
+          | 'Watched'
+          | 'NotWatched'
+          | 'FeatureLength'
+          | 'NotFeatureLength'
+          | 'Fiction'
+          | 'Film'
+          | 'TV';
+
+        /**
+         * Specify the LID of a member to limit the returned films according to the value set in
+         * `memberRelationship` or to access the `MemberRating*` sort options.
+         */
+        member: string;
+
+        /**
+         * Must be used in conjunction with `member`. Defaults to `Watched`. Specify the type of
+         * relationship to limit the returned films accordingly. Use `Ignore` if you only intend to
+         * specify the member for use with `sort=MemberRating*`.
+         */
+        memberRelationship:
+          | 'Ignore'
+          | 'Watched'
+          | 'NotWatched'
+          | 'Liked'
+          | 'NotLiked'
+          | 'Rated'
+          | 'NotRated'
+          | 'InWatchlist'
+          | 'NotInWatchlist'
+          | 'Favorited';
+
+        /**
+         * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
+         * from the member’s account. Use `Only` to return films from the member’s friends, and
+         * `All` to return films from both the member and their friends.
+         */
+        includeFriends: 'None' | 'All' | 'Only';
+
+        /**
+         * @deprecated Use `tagCode` instead.
+         * @see params.tagCode
+         */
+        tag: string;
+
+        /**
+         * Specify a tag code to limit the returned films to those tagged accordingly.
+         */
+        tagCode: string;
+
+        /**
+         * Must be used with `tagCode`. Specify the LID of a member to focus the tag filter on the
+         * member.
+         */
+        tagger: string;
+
+        /**
+         * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
+         * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter
+         * tags set by both the member and their friends.
+         */
+        includeTaggerFriends: 'None' | 'All' | 'Only';
+
+        /**
+         * The order in which the entries should be returned. Defaults to `ListRanking`, which is
+         * the order specified by the list owner.
+         *
+         * The `AuthenticatedMember*` values are only available to signed-in members.
+         *
+         * The `MemberRating` values must be used in conjunction with `member` and are only
+         * available when specifying a single member (i.e. `IncludeFriends=None`).
+         *
+         * DEPRECATED The `FilmPopularityThisWeek`, `FilmPopularityThisMonth` and
+         * `FilmPopularityThisYear` options are deprecated, and have never worked.
+         *
+         * The `Rating*` options are deprecated in favor of `AverageRating*`.
+         */
+        sort:
+          | 'ListRanking'
+          | 'WhenAddedToList'
+          | 'WhenAddedToListEarliestFirst'
+          | 'Shuffle'
+          | 'FilmName'
+          | 'OwnerRatingHighToLow'
+          | 'OwnerRatingLowToHigh'
+          | 'AuthenticatedMemberRatingHighToLow'
+          | 'AuthenticatedMemberRatingLowToHigh'
+          | 'MemberRatingHighToLow'
+          | 'MemberRatingLowToHigh'
+          | 'AverageRatingHighToLow'
+          | 'AverageRatingLowToHigh'
+          | 'RatingHighToLow'
+          | 'RatingLowToHigh'
+          | 'ReleaseDateLatestFirst'
+          | 'ReleaseDateEarliestFirst'
+          | 'FilmDurationShortestFirst'
+          | 'FilmDurationLongestFirst'
+          | 'FilmPopularity'
+          | 'FilmPopularityThisWeek'
+          | 'FilmPopularityThisMonth'
+          | 'FilmPopularityThisYear';
+      }
+    ) => {
+      return request<
+        | { status: 200; data: defs.ListEntriesResponse }
+        | { status: 404; data: never; reason: 'No list matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/list/${id}/entries`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Get details of the authenticated member’s relationship with a list by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the list.
+     * @see {@link https://api-docs.letterboxd.com/#path--list--id--me}
+     */
+    getRelationship: (id: string) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 200; data: defs.ListRelationship }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | { status: 404; data: never; reason: 'No list matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/list/${id}/me`,
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * Update the authenticated member’s relationship with a list by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the list.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--list--id--me}
+     */
+    updateRelationship: (id: string, params?: defs.ListRelationshipUpdateRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 200; data: defs.ListRelationshipUpdateResponse }
+        | {
+            status: 401;
+            data: never;
+            reason: 'There is no authenticated member, or the authenticated member does not own the resource';
+          }
+        | { status: 404; data: never; reason: 'No list matches the specified ID' }
+      >({
+        method: 'patch',
+        path: `/list/${id}/me`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Report a list by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the list.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--list--id--report}
+     */
+    report: (id: string, params: defs.ReportListRequest) => {
+      return request<
+        | { status: 204; data: never }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | { status: 404; data: never; reason: 'No list matches the specified ID' }
+      >({
+        method: 'post',
+        path: `/list/${id}/report`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Get statistical data about a list by ID.
+     *
+     * @param id The LID of the list.
+     * @see {@link https://api-docs.letterboxd.com/#path--list--id--statistics}
+     */
+    statistics: (id: string) => {
+      return request<
+        | { status: 204; data: defs.ListStatistics }
+        | { status: 404; data: never; reason: 'No list matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/list/${id}/statistics`,
+        auth: this.credentials,
+      });
+    },
+  };
 
   public logEntry = {
     /**
