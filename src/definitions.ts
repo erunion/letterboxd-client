@@ -422,7 +422,7 @@ export type DisableAccountRequest = {
   /**
    * The disable account mode - defaults to 'Disable' if not specified.
    */
-  mode: 'Disable' | 'Delete';
+  mode?: 'Disable' | 'Delete';
 };
 
 export type Film = {
@@ -565,25 +565,29 @@ export type Film = {
 
   /**
    * The other films most similar to the film.
-   * @private
+   *
+   * @private First party API clients only
    */
   similarTo: FilmSummary[];
 
   /**
    * The film’s themes.
-   * @private
+   *
+   * @private First party API clients only
    */
   themes: Theme[];
 
   /**
    * The film’s minigenres.
-   * @private
+   *
+   * @private First party API clients only
    */
   minigenres: Minigenre[];
 
   /**
    * The film’s nanogenres.
-   * @private
+   *
+   * @private First party API clients only
    */
   nanogenres: Nanogenre[];
 };
@@ -3206,34 +3210,34 @@ export type MemberSettingsUpdateRequest = {
   /**
    * The member’s email address.
    */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**
    * The member’s current password. Required when updating the password.
    */
-  currentPassword: string;
+  currentPassword?: string;
 
   /**
    * The member’s new password.
    */
-  password: string;
+  password?: string;
 
   /**
    * The given name of the member.
    */
-  givenName: string;
+  givenName?: string;
 
   /**
    * The family name of the member.
    */
-  familyName: string;
+  familyName?: string;
 
   /**
    * The LID of the member’s preferred pronoun. Use the
    * [/members/pronouns](https://api-docs.letterboxd.com/#path--members-pronouns) endpoint to
    * request all available pronouns.
    */
-  pronoun: string;
+  pronoun?: string;
 
   /**
    * The member’s default policy determing who can post comments to their content. Supported
@@ -3243,125 +3247,125 @@ export type MemberSettingsUpdateRequest = {
    *
    * @see ListRelationship.commentThreadState
    */
-  commentPolicy: string;
+  commentPolicy?: string;
 
   /**
    * The member’s adult content policy determing whether or not they see adult content. Supported
    * options are `Always` or `Default`. `Default` means never show adult content.
    */
-  adultContentPolicy: string;
+  adultContentPolicy?: string;
 
   /**
    * The member’s poster mode determing whether or not they see custom posters. Supported options
    * are `All`, `Yours` or `None`.
    */
-  posterMode: string;
+  posterMode?: string;
 
   /**
    * The member’s location.
    */
-  location: string;
+  location?: string;
 
   /**
    * The member’s website URL. URLs are not validated, so sanitizing may be required.
    */
-  website: string;
+  website?: string;
 
   /**
    * The member’s bio in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
    * `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000 characters.
    */
-  bio: string;
+  bio?: string;
 
   /**
    * The LIDs of the member’s favorite films, in order, up to a maximum of four.
    */
-  favoriteFilms: string[];
+  favoriteFilms?: string[];
 
   /**
    * Set to `true` to prevent the member’s content from appearing in API requests other than the
    * [/me](https://api-docs.letterboxd.com/#path--me) endpoint.
    */
-  privateAccount: boolean;
+  privateAccount?: boolean;
 
   /**
    * Set to `false` to remove the account from the [Members](https://letterboxd.com/members/)
    * section of the Letterboxd website.
    */
-  includeInPeopleSection: boolean;
+  includeInPeopleSection?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive an email notification when another member
    * follows them.
    */
-  emailWhenFollowed: boolean;
+  emailWhenFollowed?: boolean;
 
-  emailAvailability: boolean;
-  emailBuyAvailability: boolean;
-  emailRentAvailability: boolean;
+  emailAvailability?: boolean;
+  emailBuyAvailability?: boolean;
+  emailRentAvailability?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive email notifications when new comments are posted
    * in threads they are subscribed to.
    */
-  emailComments: boolean;
+  emailComments?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive regular email news (including ‘Call Sheet’) from
    * Letterboxd.
    */
-  emailNews: boolean;
+  emailNews?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive a weekly email digest of new and popular content
    * (called ‘Rushes’).
    */
-  emailRushes: boolean;
+  emailRushes?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive offers from trusted partners via Letterboxd.
    */
-  emailPartnerMessages: boolean;
+  emailPartnerMessages?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive push notifications for platform and account
    * alerts.
    */
-  pushNotificationsForGeneralAnnouncements: boolean;
+  pushNotificationsForGeneralAnnouncements?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive push notifications with offers from trusted
    * partners.
    */
-  pushNotificationsForPartnerMessages: boolean;
+  pushNotificationsForPartnerMessages?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive push notifications when new comments are posted
    * in threads they are subscribed to.
    */
-  pushNotificationsForComments: boolean;
+  pushNotificationsForComments?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive push notifications when another member likes one
    * of their reviews.
    */
-  pushNotificationsForReviewLikes: boolean;
+  pushNotificationsForReviewLikes?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive push notifications when another member likes one
    * of their lists.
    */
-  pushNotificationsForListLikes: boolean;
+  pushNotificationsForListLikes?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive push notifications when another member follows
    * them.
    */
-  pushNotificationsForNewFollowers: boolean;
+  pushNotificationsForNewFollowers?: boolean;
 
-  pushNotificationsForAvailability: boolean;
-  pushNotificationsForBuyAvailability: boolean;
-  pushNotificationsForRentAvailability: boolean;
+  pushNotificationsForAvailability?: boolean;
+  pushNotificationsForBuyAvailability?: boolean;
+  pushNotificationsForRentAvailability?: boolean;
 };
 
 export type MemberSettingsUpdateResponse = {
@@ -3821,8 +3825,7 @@ export type RegisterPushNotificationsRequest = {
 
 export type RegisterRequest = {
   /**
-   * The username for the new account. Use the `/auth/username-check` endpoint to check
-   * availability.
+   * The username for the new account. Use the `/auth/username-check` endpoint to check availability.
    */
   username: string;
 
@@ -3842,8 +3845,7 @@ export type RegisterRequest = {
   captchaResponse: string;
 
   /**
-   * Set to `true` if the person creating the account has agreed to being at least 16 years of age,
-   * and to accepting Letterboxd’s [Terms of Use](https://letterboxd.com/terms-of-use/).
+   * Set to `true` if the person creating the account has agreed to being at least 16 years of age, and to accepting Letterboxd’s [Terms of Use](https://letterboxd.com/terms-of-use/).
    */
   acceptTermsOfUse: string;
 };
@@ -3910,7 +3912,7 @@ export type ReportMemberRequest = {
   /**
    * An optional, explanatory message to accompany the report. Required if the `reason` is `Other`.
    */
-  message: string;
+  message?: string;
 };
 
 export type ReportReviewRequest = {
