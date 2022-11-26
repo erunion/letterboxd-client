@@ -3679,12 +3679,14 @@ export type NewsItem = {
   url: string;
 
   /**
-   * A short description of the news item in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
+   * A short description of the news item in LBML. May contain the following HTML tags: `<br>`
+   * `<strong>` `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
    */
   shortDescription: string;
 
   /**
-   * A long description of the news item in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
+   * A long description of the news item in LBML. May contain the following HTML tags: `<br>`
+   * `<strong>` `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
    */
   longDescription: string;
 
@@ -3877,7 +3879,7 @@ export type ReportFilmRequest = {
    * An optional, explanatory message to accompany the report. Required if the `reason` is
    * `Duplicate` or `Other`.
    */
-  message: string;
+  message?: string;
 };
 
 export type ReportListRequest = {

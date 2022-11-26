@@ -115,33 +115,1119 @@ export default class Client {
   };
 
   public comment = {
-    // /comment/{id}
-    // /comment/{id}/report
+    /**
+     * Update the message portion of a comment.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)). Comments may only be edited by
+     * their owner.
+     *
+     * @param id The LID of the comment/reply.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--comment--id-}
+     */
+    update: (id: string, params: defs.CommentUpdateRequest) => {
+      return request<
+        | { status: 200; data: defs.CommentUpdateResponse }
+        | {
+            status: 401;
+            data: never;
+            reason: 'There is no authenticated member, or the authenticated member does not own the resource';
+          }
+        | { status: 404; data: never; reason: 'No comment matches the specified ID' }
+      >({
+        method: 'patch',
+        path: `/comment/${id}`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Report a comment by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the comment/reply.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--comment--id--report}
+     */
+    report: (id: string, params: defs.ReportCommentRequest) => {
+      return request<
+        | { status: 200; data: never }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | { status: 404; data: never; reason: 'No comment matches the specified ID' }
+      >({
+        method: 'post',
+        path: `/comment/${id}/report`,
+        auth: this.credentials,
+        params,
+      });
+    },
   };
 
   public contributor = {
-    // /contributor/{id}
-    // /contributor/{id}/contributions
+    /**
+     * Get details about a film contributor by ID.
+     *
+     * Contributors include the film’s director(s), cast, crew and studio(s).
+     *
+     * @param id The LID of the contributor.
+     * @see {@link https://api-docs.letterboxd.com/#path--contributor--id-}
+     */
+    getContributor: (id: string) => {
+      return request<
+        | { status: 200; data: defs.Contributor }
+        | { status: 404; data: never; reason: 'No contributor matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/contributor/${id}`,
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * A cursored window over the list of contributions to films for a contributor.
+     *
+     * Use the ‘next’ cursor to move through the list
+     *
+     * @param id The LID of the contributor.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--contributor--id--contributions}
+     */
+    getContributions: (
+      id: string,
+      params?: {
+        /**
+         * The pagination cursor.
+         */
+        cursor?: string;
+
+        /**
+         * The number of items to include per page (default is `20`, maximum is `100`).
+         */
+        perPage?: number;
+
+        /**
+         * Specify up to 100 Letterboxd IDs or TMDB IDs prefixed with `tmdb:`, or IMDB IDs prefixed
+         * with `imdb:`
+         */
+        filmId?: string[];
+
+        /**
+         * Specify the LID of a genre to limit films to those within the specified genre.
+         */
+        genre?: string;
+
+        /**
+         * Specify the LID of a film to limit films to those similar to the specified film.
+         *
+         * @private First party API clients only
+         */
+        similarTo?: string;
+
+        /**
+         * Specify the code of a theme to limit films to those within the specified theme.
+         *
+         * @private First party API clients only
+         */
+        theme?: string;
+
+        /**
+         * Specify the code of a minigenre to limit films to those within the specified minigenre.
+         *
+         * @private First party API clients only
+         */
+        minigenre?: string;
+
+        /**
+         * Specify the code of a nanogenre to limit films to those within the specified nanogenre.
+         *
+         * @private First party API clients only
+         */
+        nanogenre?: string;
+
+        /**
+         * Specify the LID of up to 100 genres to limit films to those within all of the specified
+         * genres.
+         */
+        includeGenre?: string[];
+
+        /**
+         * Specify the LID of up to 100 genres to limit films to those within none of the specified
+         * genres.
+         */
+        excludeGenre?: string[];
+
+        /**
+         * Specify the ISO 3166-1 defined code of the country to limit films to those produced in
+         * the specified country.
+         */
+        country?: string;
+
+        /**
+         * Specify the ISO 639-1 defined code of the language to limit films to those using the
+         * specified spoken language.
+         */
+        language?: string;
+
+        /**
+         * Specify the starting year of a decade (must end in `0`) to limit films to those released
+         * during the decade.
+         */
+        decade?: number;
+
+        /**
+         * Specify a year to limit films to those released during that year.
+         */
+        year?: number;
+
+        /**
+         * Specify the ID of a supported service to limit films to those available from that
+         * service. The list of available services can be found by using the
+         * [/films/film-services](https://api-docs.letterboxd.com/#path--films-film-services)
+         * endpoint.
+         */
+        service?: string;
+
+        /**
+         * Specify one or more values to limit the list of films accordingly.
+         */
+        where?:
+          | 'Released'
+          | 'NotReleased'
+          | 'InWatchlist'
+          | 'NotInWatchlist'
+          | 'Logged'
+          | 'NotLogged'
+          | 'Rewatched'
+          | 'NotRewatched,'
+          | 'Reviewed'
+          | 'NotReviewed'
+          | 'Owned'
+          | 'NotOwned'
+          | 'Customised'
+          | 'NotCustomised'
+          | 'Rated'
+          | 'NotRated'
+          | 'Liked'
+          | 'NotLiked'
+          | 'WatchedFromWatchlist'
+          | 'Watched'
+          | 'NotWatched'
+          | 'FeatureLength'
+          | 'NotFeatureLength'
+          | 'Fiction'
+          | 'Film'
+          | 'TV';
+
+        /**
+         * Specify the LID of a member to limit the returned films according to the value set in
+         * `memberRelationship` or to access the `MemberRating*` sort options.
+         */
+        member?: string;
+
+        /**
+         * Must be used in conjunction with `member`. Defaults to `Watched`. Specify the type of
+         * relationship to limit the returned films accordingly. Use `Ignore` if you only intend to
+         * specify the member for use with `sort=MemberRating*`.
+         *
+         * @see params.member
+         */
+        memberRelationship?:
+          | 'Ignore'
+          | 'Watched'
+          | 'NotWatched'
+          | 'Liked'
+          | 'NotLiked'
+          | 'Rated'
+          | 'NotRated'
+          | 'InWatchlist'
+          | 'NotInWatchlist'
+          | 'Favorited';
+
+        /**
+         * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
+         * from the member’s account. Use `Only` to return films from the member’s friends, and
+         * `All` to return films from both the member and their friends.
+         *
+         * @see params.member
+         */
+        includeFriends?: 'None' | 'All' | 'Only';
+
+        /**
+         * @deprecated Use `tagCode` instead.
+         * @see params.tagCode
+         */
+        tag?: string;
+
+        /**
+         * Specify a tag code to limit the returned films to those tagged accordingly.
+         */
+        tagCode?: string;
+
+        /**
+         * Must be used with `tagCode`. Specify the LID of a member to focus the tag filter on the
+         * member.
+         */
+        tagger?: string;
+
+        /**
+         * Must be used in conjunction with tagger. Defaults to `None`, which filters tags set by
+         * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter
+         * tags set by both the member and their friends.
+         */
+        includeTaggerFriends?: 'None' | 'All' | 'Only';
+
+        /**
+         * The order in which the films should be returned. Defaults to `FilmPopularity`, which is
+         * an all-time measurement of the amount of activity the film has received. The
+         * `*WithFriends` values are only available to signed-in members and consider popularity
+         * amongst the signed-in member’s friends.
+         *
+         * The `AuthenticatedMember*` values are only available to signed-in members.
+         *
+         * The `MemberRating` values must be used in conjunction with member and are only available
+         * when specifying a single member (i.e. `IncludeFriends=None`).
+         *
+         * DEPRECATED The `Rating*` options are deprecated in favor of `AverageRating*`.
+         */
+        sort?:
+          | 'Billing'
+          | 'FilmName'
+          | 'ReleaseDateLatestFirst'
+          | 'ReleaseDateEarliestFirst'
+          | 'AuthenticatedMemberRatingHighToLow'
+          | 'AuthenticatedMemberRatingLowToHigh'
+          | 'MemberRatingHighToLow'
+          | 'MemberRatingLowToHigh'
+          | 'AverageRatingHighToLow'
+          | 'AverageRatingLowToHigh'
+          | 'RatingHighToLow'
+          | 'RatingLowToHigh'
+          | 'FilmDurationShortestFirst'
+          | 'FilmDurationLongestFirst'
+          | 'FilmPopularity'
+          | 'FilmPopularityThisWeek'
+          | 'FilmPopularityThisMonth'
+          | 'FilmPopularityThisYear';
+
+        /**
+         * The type of contribution.
+         */
+        type?:
+          | 'Director'
+          | 'CoDirector'
+          | 'Actor'
+          | 'Producer'
+          | 'Writer'
+          | 'Editor'
+          | 'Cinematography'
+          | 'ProductionDesign'
+          | 'ArtDirection'
+          | 'SetDecoration'
+          | 'VisualEffects'
+          | 'Composer'
+          | 'Sound'
+          | 'Costumes'
+          | 'MakeUp'
+          | 'Studio';
+      }
+    ) => {
+      return request<
+        | { status: 200; data: defs.FilmContributionsResponse }
+        | { status: 404; data: never; reason: 'No contributor matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/contributor/${id}/contributions`,
+        auth: this.credentials,
+        params,
+      });
+    },
   };
 
   public filmCollection = {
-    // /film-collection/{id}
+    /**
+     * Get details about a film collection by ID. The response will include the film relationships
+     * for the signed-in member and the member indicated by the `member` LID if specified.
+     *
+     * @param id The LID of the film collection.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--film-collection--id-}
+     */
+    getCollection: (
+      id: string,
+      params?: {
+        /**
+         * Specify up to 100 Letterboxd IDs or TMDB IDs prefixed with `tmdb:`, or IMDB IDs prefixed
+         * with `imdb:`
+         */
+        filmId?: string[];
+
+        /**
+         * Specify the LID of a genre to limit films to those within the specified genre.
+         */
+        genre?: string;
+
+        /**
+         * Specify the LID of a film to limit films to those similar to the specified film.
+         *
+         * @private First party API clients only
+         */
+        similarTo?: string;
+
+        /**
+         * Specify the code of a theme to limit films to those within the specified theme.
+         *
+         * @private First party API clients only
+         */
+        theme?: string;
+
+        /**
+         * Specify the code of a minigenre to limit films to those within the specified minigenre.
+         *
+         * @private First party API clients only
+         */
+        minigenre?: string;
+
+        /**
+         * Specify the code of a nanogenre to limit films to those within the specified nanogenre.
+         *
+         * @private First party API clients only
+         */
+        nanogenre?: string;
+
+        /**
+         * Specify the LID of up to 100 genres to limit films to those within all of the specified
+         * genres.
+         */
+        includeGenre?: string[];
+
+        /**
+         * Specify the LID of up to 100 genres to limit films to those within none of the specified
+         * genres.
+         */
+        excludeGenre?: string[];
+
+        /**
+         * Specify the ISO 3166-1 defined code of the country to limit films to those produced in the
+         * specified country.
+         */
+        country?: string;
+
+        /**
+         * Specify the ISO 639-1 defined code of the language to limit films to those using the
+         * specified spoken language.
+         */
+        language?: string;
+
+        /**
+         * Specify the starting year of a decade (must end in `0`) to limit films to those released
+         * during the decade.
+         */
+        decade?: number;
+
+        /**
+         * Specify a year to limit films to those released during that year.
+         */
+        year?: number;
+
+        /**
+         * Specify the ID of a supported service to limit films to those available from that service.
+         * The list of available services can be found by using the
+         * [/films/film-services](https://api-docs.letterboxd.com/#path--films-film-services)
+         * endpoint.
+         */
+        service?: string;
+
+        /**
+         * Specify one or more values to limit the list of films accordingly.
+         */
+        where?:
+          | 'Released'
+          | 'NotReleased'
+          | 'InWatchlist'
+          | 'NotInWatchlist'
+          | 'Logged'
+          | 'NotLogged'
+          | 'Rewatched'
+          | 'NotRewatched'
+          | 'Reviewed'
+          | 'NotReviewed'
+          | 'Owned'
+          | 'NotOwned'
+          | 'Customised'
+          | 'NotCustomised'
+          | 'Rated'
+          | 'NotRated'
+          | 'Liked'
+          | 'NotLiked'
+          | 'WatchedFromWatchlist'
+          | 'Watched'
+          | 'NotWatched'
+          | 'FeatureLength'
+          | 'NotFeatureLength'
+          | 'Fiction'
+          | 'Film'
+          | 'TV';
+
+        /**
+         * Specify the LID of a member to limit the returned films according to the value set in
+         * `memberRelationship` or to access the `MemberRating*` sort options.
+         */
+        member?: string;
+
+        /**
+         * Must be used in conjunction with `member`. Defaults to `Watched`. Specify the type of
+         * relationship to limit the returned films accordingly. Use `Ignore` if you only intend to
+         * specify the member for use with `sort=MemberRating*`.
+         */
+        memberRelationship?:
+          | 'Ignore'
+          | 'Watched'
+          | 'NotWatched'
+          | 'Liked'
+          | 'NotLiked'
+          | 'Rated'
+          | 'NotRated'
+          | 'InWatchlist'
+          | 'NotInWatchlist'
+          | 'Favorited';
+
+        /**
+         * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
+         * from the member’s account. Use `Only` to return films from the member’s friends, and
+         * `All` to return films from both the member and their friends.
+         */
+        includeFriends?: 'None' | 'All' | 'Only';
+
+        /**
+         * @deprecated Use `tagCode` instead.
+         * @see params.tagCode
+         */
+        tag?: string;
+
+        /**
+         * Specify a tag code to limit the returned films to those tagged accordingly.
+         */
+        tagCode?: string;
+
+        /**
+         * Must be used with `tagCode`. Specify the LID of a member to focus the tag filter on the
+         * member.
+         *
+         * @see params.tagCode
+         */
+        tagger?: string;
+
+        /**
+         * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
+         * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter
+         * tags set by both the member and their friends.
+         *
+         * @see params.tagger
+         */
+        includeTaggerFriends?: 'None' | 'All' | 'Only';
+
+        /**
+         * The order in which the films should be returned. Defaults to `FilmPopularity`, which is
+         * an all-time measurement of the amount of activity the film has received. The
+         * `*WithFriends` values are only available to signed-in members and consider popularity
+         * amongst the signed-in member’s friends.
+         *
+         * The `AuthenticatedMember*` values are only available to signed-in members.
+         *
+         * The `MemberRating` values must be used in conjunction with member and are only available
+         * when specifying a single member (i.e. `IncludeFriends=None`).
+         */
+        sort?:
+          | 'FilmName'
+          | 'ReleaseDateLatestFirst'
+          | 'ReleaseDateEarliestFirst'
+          | 'AuthenticatedMemberRatingHighToLow'
+          | 'AuthenticatedMemberRatingLowToHigh'
+          | 'MemberRatingHighToLow'
+          | 'MemberRatingLowToHigh'
+          | 'AverageRatingHighToLow'
+          | 'AverageRatingLowToHigh'
+          | 'FilmDurationShortestFirst'
+          | 'FilmDurationLongestFirst'
+          | 'FilmPopularity'
+          | 'FilmPopularityThisWeek'
+          | 'FilmPopularityThisMonth'
+          | 'FilmPopularityThisYear'
+          | 'FilmPopularityWithFriends'
+          | 'FilmPopularityWithFriendsThisWeek'
+          | 'FilmPopularityWithFriendsThisMonth'
+          | 'FilmPopularityWithFriendsThisYear';
+      }
+    ) => {
+      return request<
+        | { status: 200; data: defs.FilmCollection }
+        | { status: 404; data: never; reason: 'No film collection matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/film-collection/${id}`,
+        auth: this.credentials,
+        params,
+      });
+    },
   };
 
   public film = {
-    // /films
-    // /films/autocomplete
-    // /films/countries
-    // /films/film-services
-    // /films/genres
-    // /films/languages
-    // /film/{id}
-    // /film/{id}/availability
-    // /film/{id}/friends
-    // /film/{id}/me
-    // /film/{id}/members
-    // /film/{id}/report
-    // /film/{id}/statistics
+    /**
+     * A cursored window over the list of films.
+     *
+     * Use the ‘next’ cursor to move through the list. The response will include the film
+     * relationships for the signed-in member and the member indicated by the `member` LID if
+     * specified.
+     *
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--films}
+     */
+    get: (params?: {
+      /**
+       * The pagination cursor.
+       */
+      cursor?: string;
+
+      /**
+       * The number of items to include per page (default is `20`, maximum is `100`).
+       */
+      perPage?: number;
+
+      /**
+       * Specify up to 100 Letterboxd IDs or TMDB IDs prefixed with `tmdb:`, or IMDB IDs prefixed
+       * with `imdb:`
+       */
+      filmId?: string[];
+
+      /**
+       * Specify the LID of a genre to limit films to those within the specified genre.
+       */
+      genre?: string;
+
+      /**
+       * Specify the LID of a film to limit films to those similar to the specified film.
+       *
+       * @private First party API clients only
+       */
+      similarTo?: string;
+
+      /**
+       * Specify the code of a theme to limit films to those within the specified theme.
+       *
+       * @private First party API clients only
+       */
+      theme?: string;
+
+      /**
+       * Specify the code of a minigenre to limit films to those within the specified minigenre.
+       *
+       * @private First party API clients only
+       */
+      minigenre?: string;
+
+      /**
+       * Specify the code of a nanogenre to limit films to those within the specified nanogenre.
+       *
+       * @private First party API clients only
+       */
+      nanogenre?: string;
+
+      /**
+       * Specify the LID of up to 100 genres to limit films to those within all of the specified
+       * genres.
+       */
+      includeGenre?: string[];
+
+      /**
+       * Specify the LID of up to 100 genres to limit films to those within none of the specified
+       * genres.
+       */
+      excludeGenre?: string[];
+
+      /**
+       * Specify the ISO 3166-1 defined code of the country to limit films to those produced in the
+       * specified country.
+       */
+      country?: string;
+
+      /**
+       * Specify the ISO 639-1 defined code of the language to limit films to those using the
+       * specified spoken language.
+       */
+      language?: string;
+
+      /**
+       * Specify the starting year of a decade (must end in 0) to limit films to those released
+       * during the decade.
+       */
+      decade?: number;
+
+      /**
+       * Specify a year to limit films to those released during that year.
+       */
+      year?: number;
+
+      /**
+       * Specify the ID of a supported service to limit films to those available from that service.
+       * The list of available services can be found by using the
+       * [/films/film-services](https://api-docs.letterboxd.com/#path--films-film-services)
+       * endpoint.
+       */
+      service?: string;
+
+      /**
+       * Specify one or more values to limit the list of films accordingly.
+       */
+      where?:
+        | 'Released'
+        | 'NotReleased'
+        | 'InWatchlist'
+        | 'NotInWatchlist'
+        | 'Logged'
+        | 'NotLogged'
+        | 'Rewatched'
+        | 'NotRewatched'
+        | 'Reviewed'
+        | 'NotReviewed'
+        | 'Owned'
+        | 'NotOwned'
+        | 'Customised'
+        | 'NotCustomised'
+        | 'Rated'
+        | 'NotRated'
+        | 'Liked'
+        | 'NotLiked'
+        | 'WatchedFromWatchlist'
+        | 'Watched'
+        | 'NotWatched'
+        | 'FeatureLength'
+        | 'NotFeatureLength'
+        | 'Fiction'
+        | 'Film'
+        | 'TV';
+
+      /**
+       * Specify the LID of a member to limit the returned films according to the value set in
+       * `memberRelationship` or to access the `MemberRating*` sort options.
+       */
+      member?: string;
+
+      /**
+       * Must be used in conjunction with `member`. Defaults to `Watched`. Specify the type of
+       * relationship to limit the returned films accordingly. Use `Ignore` if you only intend to
+       * specify the member for use with `sort=MemberRating*`.
+       */
+      memberRelationship?:
+        | 'Ignore'
+        | 'Watched'
+        | 'NotWatched'
+        | 'Liked'
+        | 'NotLiked'
+        | 'Rated'
+        | 'NotRated'
+        | 'InWatchlist'
+        | 'NotInWatchlist'
+        | 'Favorited';
+
+      /**
+       * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
+       * from the member’s account. Use `Only` to return films from the member’s friends, and `All`
+       * to return films from both the member and their friends.
+       */
+      includeFriends?: 'None' | 'All' | 'Only';
+
+      /**
+       * @deprecated Use `tagCode` instead.
+       * @see params.tagCode
+       */
+      tag?: string;
+
+      /**
+       * Specify a tag code to limit the returned films to those tagged accordingly.
+       */
+      tagCode?: string;
+
+      /**
+       * Must be used with `tagCode`. Specify the LID of a member to focus the tag filter on the
+       * member.
+       *
+       * @see params.tagCode
+       */
+      tagger?: string;
+
+      /**
+       * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
+       * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter tags
+       * set by both the member and their friends.
+       *
+       * @see params.tagger
+       */
+      includeTaggerFriends?: 'None' | 'All' | 'Only';
+
+      /**
+       * The order in which the films should be returned. Defaults to `FilmPopularity`, which is an
+       * all-time measurement of the amount of activity the film has received. The `*WithFriends`
+       * values are only available to signed-in members and consider popularity amongst the
+       * signed-in member’s friends. The `Date` values are only available when member is specified
+       * and using a `memberRelationship` of `Watched`, `Liked`, `Rated` or `InWatchlist`. The
+       * `BestMatch` sort order is only available when specifying one of the following: `similarTo`,
+       * `theme`, `minigenre` or `nanogenre`.
+       *
+       * The `AuthenticatedMember*` values are only available to signed-in members.
+       *
+       * The `MemberRating` values must be used in conjunction with `member` and are only available
+       * when specifying a single member (i.e. `IncludeFriends=None`).
+       *
+       * DEPRECATED The `Rating*` options are deprecated in favor of `AverageRating*`.
+       */
+      sort?:
+        | 'FilmName'
+        | 'DateLatestFirst'
+        | 'DateEarliestFirst'
+        | 'ReleaseDateLatestFirst'
+        | 'ReleaseDateEarliestFirst'
+        | 'AuthenticatedMemberRatingHighToLow'
+        | 'AuthenticatedMemberRatingLowToHigh'
+        | 'MemberRatingHighToLow'
+        | 'MemberRatingLowToHigh'
+        | 'AverageRatingHighToLow'
+        | 'AverageRatingLowToHigh'
+        | 'RatingHighToLow'
+        | 'RatingLowToHigh'
+        | 'FilmDurationShortestFirst'
+        | 'FilmDurationLongestFirst'
+        | 'BestMatch'
+        | 'FilmPopularity'
+        | 'FilmPopularityThisWeek'
+        | 'FilmPopularityThisMonth'
+        | 'FilmPopularityThisYear'
+        | 'FilmPopularityWithFriends'
+        | 'FilmPopularityWithFriendsThisWeek'
+        | 'FilmPopularityWithFriendsThisMonth'
+        | 'FilmPopularityWithFriendsThisYear';
+    }) => {
+      return request<{ status: 200; data: defs.FilmsResponse }>({
+        method: 'get',
+        path: '/films',
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Get a list of films matching a given search term.
+     *
+     * Titles are returned in order of relevance. Up to 100 films will be returned.
+     *
+     * @deprecated Please use `/search?input={input}&searchMethod=Autocomplete&include=FilmSearchItem` instead.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--films-autocomplete}
+     */
+    autocomplete: (params: {
+      /**
+       * The number of items to include per page (default is `20`, maximum is `100`).
+       */
+      perPage?: number;
+
+      /**
+       * The word, partial word or phrase to match against.
+       */
+      input: string;
+
+      /**
+       * Whether to include adult content in search results. Default to `false`.
+       */
+      adult?: boolean;
+    }) => {
+      return request<{ status: 200; data: defs.FilmsAutocompleteResponse }>({
+        method: 'get',
+        path: '/films/autocomplete',
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Get a list of countries supported by the /films endpoint.
+     *
+     * Countries are returned in alphabetical order.
+     *
+     * @see {@link https://api-docs.letterboxd.com/#path--films-countries}
+     */
+    countries: () => {
+      return request<{ status: 200; data: defs.CountriesResponse }>({
+        method: 'get',
+        path: '/films/countries',
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * Get a list of services supported by the /films endpoint.
+     *
+     * Services are returned in logical order. Some services (including ‘My Services’ options) are
+     * only available to paying members, so results will vary based on the authenticated member’s
+     * status.
+     *
+     * @see {@link https://api-docs.letterboxd.com/#path--films-film-services}
+     */
+    services: () => {
+      return request<{ status: 200; data: defs.FilmServicesResponse }>({
+        method: 'get',
+        path: '/films/film-services',
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * Get a list of genres supported by the /films endpoint.
+     *
+     * Genres are returned in alphabetical order.
+     *
+     * @see {@link https://api-docs.letterboxd.com/#path--films-genres}
+     */
+    genres: () => {
+      return request<{ status: 200; data: defs.GenresResponse }>({
+        method: 'get',
+        path: '/films/genres',
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * Get a list of languages supported by the /films endpoint.
+     *
+     * Languages are returned in alphabetical order.
+     *
+     * @see {@link https://api-docs.letterboxd.com/#path--films-languages}
+     */
+    languages: () => {
+      return request<{ status: 200; data: defs.LanguagesResponse }>({
+        method: 'get',
+        path: '/films/languages',
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * Get details about a film by ID. Supports an optional member ID to honor custom-poster
+     * settings.
+     *
+     * @param id The LID of the film.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--film--id-}
+     */
+    getFilm: (
+      id: string,
+      params?: {
+        /**
+         * Specify the LID of a member to honor any custom-poster settings the member may have for
+         * the film, when viewed within the context of their profile or content.
+         */
+        member?: string;
+      }
+    ) => {
+      return request<
+        { status: 200; data: defs.Film } | { status: 404; data: never; reason: 'No film matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/film/${id}`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Get availability data for a film by ID.
+     *
+     * @private First party API clients only
+     * @param id The LID of the film.
+     * @see {@link https://api-docs.letterboxd.com/#path--film--id--availability}
+     */
+    getAvailability: (id: string) => {
+      return request<
+        | { status: 200; data: defs.FilmAvailabilityResponse }
+        | { status: 404; data: never; reason: 'No film matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/film/${id}/availability`,
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * Get details of the authenticated member’s friends’ relationship with a film by ID.
+     *
+     * @param id The LID of the film.
+     * @see {@link https://api-docs.letterboxd.com/#path--film--id--friends}
+     */
+    getMemberFriends: (id: string) => {
+      return request<
+        | { status: 200; data: defs.FilmRelationship }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | { status: 404; data: never; reason: 'No film matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/film/${id}/friends`,
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * Get details of the authenticated member’s relationship with a film by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the film.
+     * @see {@link https://api-docs.letterboxd.com/#path--film--id--me}
+     */
+    getMemberRelationship: (id: string) => {
+      return request<
+        | { status: 200; data: defs.FilmRelationship }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | { status: 404; data: never; reason: 'No film matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/film/${id}/me`,
+        auth: this.credentials,
+      });
+    },
+
+    /**
+     * Get details of members’ relationships with a film by ID.
+     *
+     * @param id The LID of the film.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#path--film--id--members}
+     */
+    getMembers: (
+      id: string,
+      params?: {
+        /**
+         * The pagination cursor.
+         */
+        cursor?: string;
+
+        /**
+         * The number of items to include per page (default is `20`, maximum is `100`).
+         */
+        perPage?: number;
+
+        /**
+         * Defaults to `Date`, which has different semantics based on the request:
+         *
+         *  - When `review` is specified, members who most recently liked the review appear first.
+         *  - When `list` is specified, members who most recently liked the list appear first.
+         *  - When `film` is specified and `filmRelationship=Watched`, members who most recently
+         *    watched the film appear first.
+         *  - When `film` is specified and `filmRelationship=Liked`, members who most recently liked
+         *    the film appear first.
+         *  - When `film` is specified and `filmRelationship=InWatchlist`, members who most recently
+         *    added the film to their watchlist appear first.
+         *  - When `member` is specified and `memberRelationship=IsFollowing`, most recently followed
+         *    members appear first.
+         *  - When `member` is specified and `memberRelationship=IsFollowedBy`, most recent followers
+         *    appear first.
+         *  - Otherwise, members who most recently joined the site appear first.
+         *  - The `*WithFriends` values are only available to authenticated members and consider
+         *    popularity amongst the member’s friends.
+         */
+        sort?:
+          | 'Date'
+          | 'Name'
+          | 'MemberPopularity'
+          | 'MemberPopularityThisWeek'
+          | 'MemberPopularityThisMonth'
+          | 'MemberPopularityThisYear'
+          | 'MemberPopularityWithFriends'
+          | 'MemberPopularityWithFriendsThisWeek'
+          | 'MemberPopularityWithFriendsThisMonth'
+          | 'MemberPopularityWithFriendsThisYear';
+
+        /**
+         * Specify the LID of a member to return members who follow or are followed by that member.
+         */
+        member?: string;
+
+        /**
+         * Must be used in conjunction with `member`. Defaults to `IsFollowing`, which returns the
+         * list of members followed by the `member`. Use `IsFollowedBy` to return the list of
+         * members that follow the `member`.
+         */
+        memberRelationship?: 'IsFollowing' | 'IsFollowedBy';
+
+        /**
+         * Must be used in conjunction with `film`. Defaults to `Watched`, which returns the list of
+         * members who have seen the `film`. Specify the type of relationship to limit the returned
+         * members accordingly.
+         */
+        filmRelationship?:
+          | 'Ignore'
+          | 'Watched'
+          | 'NotWatched'
+          | 'Liked'
+          | 'NotLiked'
+          | 'Rated'
+          | 'NotRated'
+          | 'InWatchlist'
+          | 'NotInWatchlist'
+          | 'Favorited';
+      }
+    ) => {
+      return request<
+        | { status: 200; data: defs.MemberFilmRelationshipsResponse }
+        | { status: 404; data: never; reason: 'No film matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/film/${id}/members`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Report a film by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the film.
+     * @see {@link https://api-docs.letterboxd.com/#path--film--id--report}
+     */
+    report: (id: string, params: defs.ReportFilmRequest) => {
+      return request<
+        | { status: 204; data: never }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | { status: 404; data: never; reason: 'No film matches the specified ID' }
+      >({
+        method: 'post',
+        path: `/film/${id}/report`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
+     * Get statistical data about a film by ID.
+     *
+     * @param id The LID of the film.
+     * @see {@link https://api-docs.letterboxd.com/#path--film--id--statistics}
+     */
+    getFilmStatistics: (id: string) => {
+      return request<
+        | { status: 200; data: defs.FilmStatistics }
+        | { status: 404; data: never; reason: 'No film matches the specified ID' }
+      >({
+        method: 'get',
+        path: `/film/${id}/statistics`,
+        auth: this.credentials,
+      });
+    },
   };
 
   public list = {
@@ -197,7 +1283,7 @@ export default class Client {
 
       /**
        * @deprecated Use `tagCode` instead.
-       * @use params.tagCode
+       * @see params.tagCode
        */
       tag: string;
 
@@ -209,6 +1295,8 @@ export default class Client {
       /**
        * Must be used with `tagCode`. Specify the LID of a member to focus the tag filter on the
        * member.
+       *
+       * @see params.tagCode
        */
       tagger: string;
 
@@ -216,6 +1304,8 @@ export default class Client {
        * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
        * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter
        * tags set by both the member and their friends.
+       *
+       * @see params.tagger
        */
       includeTaggerFriends: 'None' | 'All' | 'Only';
 
