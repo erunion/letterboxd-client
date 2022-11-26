@@ -2917,6 +2917,7 @@ export default class Client {
          * *Only supported for paying members.*
          *
          * @deprecated Use `include` instead.
+         * @see params.include
          */
         exclude?:
           | 'ReviewActivity'
@@ -3308,6 +3309,8 @@ export default class Client {
         /**
          * Must be used with `tagCode`. Specify the LID of a member to focus the tag filter on the
          * member.
+         *
+         * @see params.tagCode
          */
         tagger?: string;
 
@@ -3315,6 +3318,8 @@ export default class Client {
          * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
          * the member. Use `Only` to filter tags set by the member's friends, and `All` to filter
          * tags set by both the member and their friends.
+         *
+         * @see params.tagger
          */
         includeTaggerFriends?: 'None' | 'All' | 'Only';
 

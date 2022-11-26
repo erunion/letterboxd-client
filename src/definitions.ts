@@ -595,7 +595,7 @@ export interface Film {
 export interface FilmAvailability {
   /**
    * @deprecated Use `displayName` instead.
-   * @see displayName
+   * @see FilmAvailability.displayName
    */
   service: 'Amazon' | 'AmazonVideo' | 'AmazonPrime' | 'iTunes' | 'Netflix';
 
@@ -1535,10 +1535,8 @@ export interface List {
   descriptionLbml: string;
 
   /**
-   * Use `tags2` instead.
-   *
-   * @deprecated
-   * @see tags2
+   * @deprecated Use `tags2` instead.
+   * @see List.tags2
    */
   tags: string[];
 
