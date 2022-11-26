@@ -41,6 +41,10 @@ export default class Client {
      * @see {@link https://api-docs.letterboxd.com/#path--auth-get-login-token}
      */
     getLoginToken: () => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
       return request<{ status: 200; res: defs.LoginTokenResponse } | { status: 400 } | { status: 401 }>({
         method: 'get',
         path: '/auth/get-login-token',
@@ -126,6 +130,10 @@ export default class Client {
      * @see {@link https://api-docs.letterboxd.com/#path--comment--id-}
      */
     update: (id: string, params: defs.CommentUpdateRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
       return request<
         | { status: 200; data: defs.CommentUpdateResponse }
         | {
@@ -153,6 +161,10 @@ export default class Client {
      * @see {@link https://api-docs.letterboxd.com/#path--comment--id--report}
      */
     report: (id: string, params: defs.ReportCommentRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
       return request<
         | { status: 200; data: never }
         | { status: 401; data: never; reason: 'There is no authenticated member' }
@@ -1086,6 +1098,10 @@ export default class Client {
      * @see {@link https://api-docs.letterboxd.com/#path--film--id--me}
      */
     getMemberRelationship: (id: string) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
       return request<
         | { status: 200; data: defs.FilmRelationship }
         | { status: 401; data: never; reason: 'There is no authenticated member' }
@@ -1199,6 +1215,10 @@ export default class Client {
      * @see {@link https://api-docs.letterboxd.com/#path--film--id--report}
      */
     report: (id: string, params: defs.ReportFilmRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
       return request<
         | { status: 204; data: never }
         | { status: 401; data: never; reason: 'There is no authenticated member' }
@@ -1489,6 +1509,10 @@ export default class Client {
      * @see {@link https://api-docs.letterboxd.com/#path--list--id-}
      */
     delete: (id: string) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
       return request<
         | { status: 204; data: never }
         | { status: 400; data: never; reason: 'Bad request' }
@@ -1883,6 +1907,10 @@ export default class Client {
      * @see {@link https://api-docs.letterboxd.com/#path--list--id--report}
      */
     report: (id: string, params: defs.ReportListRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
       return request<
         | { status: 204; data: never }
         | { status: 401; data: never; reason: 'There is no authenticated member' }
@@ -2380,7 +2408,8 @@ export default class Client {
     /**
      * Create a comment on a review.
      *
-     * Calls to this endpoint must include the access token for an authenticated member (see Authentication).
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
      * @param id The LID of the log entry.
      * @param params
