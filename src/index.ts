@@ -200,7 +200,7 @@ export default class Client {
     /**
      * A cursored window over the list of contributions to films for a contributor.
      *
-     * Use the ‘next' cursor to move through the list
+     * Use the `next` cursor to move through the list
      *
      * @param id The LID of the contributor.
      * @param params
@@ -697,14 +697,14 @@ export default class Client {
     /**
      * A cursored window over the list of films.
      *
-     * Use the ‘next' cursor to move through the list. The response will include the film
+     * Use the `next` cursor to move through the list. The response will include the film
      * relationships for the signed-in member and the member indicated by the `member` LID if
      * specified.
      *
      * @param params
      * @see {@link https://api-docs.letterboxd.com/#path--films}
      */
-    get: (params?: {
+    all: (params?: {
       /**
        * The pagination cursor.
        */
@@ -991,7 +991,7 @@ export default class Client {
     /**
      * Get a list of services supported by the /films endpoint.
      *
-     * Services are returned in logical order. Some services (including ‘My Services' options) are
+     * Services are returned in logical order. Some services (including 'My Services' options) are
      * only available to paying members, so results will vary based on the authenticated member's
      * status.
      *
@@ -1043,7 +1043,7 @@ export default class Client {
      * @param params
      * @see {@link https://api-docs.letterboxd.com/#path--film--id-}
      */
-    getFilm: (
+    get: (
       id: string,
       params?: {
         /**
@@ -1250,7 +1250,7 @@ export default class Client {
      * @param id The LID of the film.
      * @see {@link https://api-docs.letterboxd.com/#path--film--id--statistics}
      */
-    getFilmStatistics: (id: string) => {
+    statistics: (id: string) => {
       return request<
         | { status: 200; data: defs.FilmStatistics }
         | { status: 404; data: never; reason: 'No film matches the specified ID' }
@@ -1266,28 +1266,28 @@ export default class Client {
     /**
      * A cursored window over a list of lists.
      *
-     * Use the ‘next' cursor to move through the list.
+     * Use the `next` cursor to move through the list.
      *
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--lists}
+     * @see {@link https://api-docs.letterboxd.com/#operation--lists-get}
      */
-    getLists: (params: {
+    all: (params?: {
       /**
        * The pagination cursor.
        */
-      cursor: string;
+      cursor?: string;
 
       /**
        * The number of items to include per page (default is `20`, maximum is `100`).
        */
-      perPage: number;
+      perPage?: number;
 
       /**
        * Defaults to `Date`, which returns lists that were most recently created/updated first. The
        * `*WithFriends` values are only available to signed-in members and consider popularity
        * amongst the signed-in member's friends.
        */
-      sort:
+      sort?:
         | 'Date'
         | 'WhenPublishedLatestFirst'
         | 'WhenPublishedEarliestFirst'
@@ -1306,23 +1306,23 @@ export default class Client {
       /**
        * Specify the LID of a film to return lists that include that film.
        */
-      film: string;
+      film?: string;
 
       /**
        * Specify the LID of a list to return lists that were cloned from that list.
        */
-      clonedFrom: string;
+      clonedFrom?: string;
 
       /**
        * @deprecated Use `tagCode` instead.
        * @see params.tagCode
        */
-      tag: string;
+      tag?: string;
 
       /**
        * Specify a tag code to limit the returned lists to those tagged accordingly.
        */
-      tagCode: string;
+      tagCode?: string;
 
       /**
        * Must be used with `tagCode`. Specify the LID of a member to focus the tag filter on the
@@ -1330,7 +1330,7 @@ export default class Client {
        *
        * @see params.tagCode
        */
-      tagger: string;
+      tagger?: string;
 
       /**
        * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
@@ -1339,13 +1339,13 @@ export default class Client {
        *
        * @see params.tagger
        */
-      includeTaggerFriends: 'None' | 'All' | 'Only';
+      includeTaggerFriends?: 'None' | 'All' | 'Only';
 
       /**
        * Specify the LID of a member to return lists that are owned or liked by the member (or
        * their friends, when used with `includeFriends`).
        */
-      member: string;
+      member?: string;
 
       /**
        * Must be used in conjunction with `member`. Defaults to `Owner`, which returns lists owned
@@ -1353,7 +1353,7 @@ export default class Client {
        *
        * @see params.member
        */
-      memberRelationship: 'Owner' | 'Liked';
+      memberRelationship?: 'Owner' | 'Liked';
 
       /**
        * Must be used in conjunction with `member`. Defaults to `None`, which only returns lists
@@ -1362,7 +1362,7 @@ export default class Client {
        *
        * @see params.member
        */
-      includeFriends: 'None' | 'All' | 'Only';
+      includeFriends?: 'None' | 'All' | 'Only';
 
       /**
        * Specify `Clean` to return lists that do not contain profane language. Specify `Published`
@@ -1370,21 +1370,21 @@ export default class Client {
        * members other than the authenticated member are never returned. Specify NotPublished to
        * return the authenticated member's lists that have not been made public.
        */
-      where: 'Clean' | 'Published' | 'NotPublished';
+      where?: 'Clean' | 'Published' | 'NotPublished';
 
       /**
        * Specify `NoDuplicateMembers` to limit the list to only the first list for each member.
        * `NoDuplicateMembers` is only available when using these sort orders: `Date`,
        * `WhenPublishedLatestFirst`, `WhenCreatedLatestFirst`.
        */
-      filter: 'NoDuplicateMembers';
+      filter?: 'NoDuplicateMembers';
 
       /**
        * Specify the LIDs of any film(s) you wish to see the status for in respect of the returned
        * list(s). For each nominated film, the response will indicate (for each returned list)
        * whether the list contains the film, and if so, its rank position.
        */
-      filmsOfNote: string[];
+      filmsOfNote?: string[];
     }) => {
       return request<
         | { status: 200; data: defs.ListsResponse }
@@ -1410,7 +1410,7 @@ export default class Client {
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--lists}
+     * @see {@link https://api-docs.letterboxd.com/#operation--lists-post}
      */
     create: (params: defs.ListCreationRequest) => {
       if (!this.credentials.accessToken) {
@@ -1436,7 +1436,7 @@ export default class Client {
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--lists}
+     * @see {@link https://api-docs.letterboxd.com/#operation--lists-patch}
      */
     updateLists: (params?: defs.ListAdditionRequest) => {
       if (!this.credentials.accessToken) {
@@ -1472,7 +1472,7 @@ export default class Client {
      * Get details of a list by ID.
      *
      * @param id The LID of the list.
-     * @see {@link https://api-docs.letterboxd.com/#path--list--id-}
+     * @see {@link https://api-docs.letterboxd.com/#operation--list--id--get}
      */
     get: (id: string) => {
       return request<
@@ -1492,7 +1492,7 @@ export default class Client {
      *
      * @param id The LID of the list.
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--list--id-}
+     * @see {@link https://api-docs.letterboxd.com/#operation--list--id--patch}
      */
     update: (id: string, params?: defs.ListUpdateRequest) => {
       if (!this.credentials.accessToken) {
@@ -1523,7 +1523,7 @@ export default class Client {
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
      * @param id The LID of the list.
-     * @see {@link https://api-docs.letterboxd.com/#path--list--id-}
+     * @see {@link https://api-docs.letterboxd.com/#operation--list--id--delete}
      */
     delete: (id: string) => {
       if (!this.credentials.accessToken) {
@@ -1546,11 +1546,11 @@ export default class Client {
     /**
      * A cursored window over the comments for a list.
      *
-     * Use the ‘next' cursor to move through the comments.
+     * Use the `next` cursor to move through the comments.
      *
      * @param id The LID of the list.
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--list--id--comments}
+     * @see {@link https://api-docs.letterboxd.com/#operation--list--id--comments-get}
      */
     getComments: (
       id: string,
@@ -1597,7 +1597,7 @@ export default class Client {
      *
      * @param id
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--list--id--comments}
+     * @see {@link https://api-docs.letterboxd.com/#operation--list--id--comments-post}
      */
     createComment: (id: string, params: defs.CommentCreationRequest) => {
       if (!this.credentials.accessToken) {
@@ -1628,90 +1628,90 @@ export default class Client {
      */
     getEntries: (
       id: string,
-      params: {
+      params?: {
         /**
          * The pagination cursor.
          */
-        cursor: string;
+        cursor?: string;
 
         /**
          * The number of items to include per page (default is `20`, maximum is `100`).
          */
-        perPage: number;
+        perPage?: number;
 
         /**
          * Specify up to 100 Letterboxd IDs or TMDB IDs prefixed with `tmdb:`, or IMDB IDs prefixed
          * with `imdb:`
          */
-        filmId: string[];
+        filmId?: string[];
 
         /**
          * Specify the LID of a genre to limit films to those within the specified genre.
          */
-        genre: string;
+        genre?: string;
 
         /**
          * Specify the LID of a film to limit films to those similar to the specified film.
          *
          * @private First party API clients only
          */
-        similarTo: string;
+        similarTo?: string;
 
         /**
          * Specify the code of a theme to limit films to those within the specified theme.
          *
          * @private First party API clients only
          */
-        theme: string;
+        theme?: string;
 
         /**
          * Specify the code of a minigenre to limit films to those within the specified minigenre.
          *
          * @private First party API clients only
          */
-        minigenre: string;
+        minigenre?: string;
 
         /**
          * Specify the code of a nanogenre to limit films to those within the specified nanogenre.
          *
          * @private First party API clients only
          */
-        nanogenre: string;
+        nanogenre?: string;
 
         /**
          * Specify the LID of up to 100 genres to limit films to those within all of the specified
          * genres.
          */
-        includeGenre: string[];
+        includeGenre?: string[];
 
         /**
          * Specify the LID of up to 100 genres to limit films to those within none of the specified
          * genres.
          */
-        excludeGenre: string[];
+        excludeGenre?: string[];
 
         /**
          * Specify the ISO 3166-1 defined code of the country to limit films to those produced in
          * the specified country.
          */
-        country: string;
+        country?: string;
 
         /**
          * Specify the ISO 639-1 defined code of the language to limit films to those using the
          * specified spoken language.
          */
-        language: string;
+        language?: string;
 
         /**
          * Specify the starting year of a decade (must end in `0`) to limit films to those released
          * during the decade.
          */
-        decade: number;
+        decade?: number;
 
         /**
          * Specify a year to limit films to those released during that year.
          */
-        year: number;
+        year?: number;
 
         /**
          * Specify the ID of a supported service to limit films to those available from that
@@ -1719,12 +1719,12 @@ export default class Client {
          * [/films/film-services](https://api-docs.letterboxd.com/#path--films-film-services)
          * endpoint.
          */
-        service: string;
+        service?: string;
 
         /**
          * Specify one or more values to limit the list of films accordingly.
          */
-        where:
+        where?:
           | 'Released'
           | 'NotReleased'
           | 'InWatchlist'
@@ -1756,7 +1756,7 @@ export default class Client {
          * Specify the LID of a member to limit the returned films according to the value set in
          * `memberRelationship` or to access the `MemberRating*` sort options.
          */
-        member: string;
+        member?: string;
 
         /**
          * Must be used in conjunction with `member`. Defaults to `Watched`. Specify the type of
@@ -1765,7 +1765,7 @@ export default class Client {
          *
          * @see params.member
          */
-        memberRelationship:
+        memberRelationship?:
           | 'Ignore'
           | 'Watched'
           | 'NotWatched'
@@ -1784,31 +1784,31 @@ export default class Client {
          *
          * @see params.member
          */
-        includeFriends: 'None' | 'All' | 'Only';
+        includeFriends?: 'None' | 'All' | 'Only';
 
         /**
          * @deprecated Use `tagCode` instead.
          * @see params.tagCode
          */
-        tag: string;
+        tag?: string;
 
         /**
          * Specify a tag code to limit the returned films to those tagged accordingly.
          */
-        tagCode: string;
+        tagCode?: string;
 
         /**
          * Must be used with `tagCode`. Specify the LID of a member to focus the tag filter on the
          * member.
          */
-        tagger: string;
+        tagger?: string;
 
         /**
          * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
          * the member. Use `Only` to filter tags set by the member's friends, and `All` to filter
          * tags set by both the member and their friends.
          */
-        includeTaggerFriends: 'None' | 'All' | 'Only';
+        includeTaggerFriends?: 'None' | 'All' | 'Only';
 
         /**
          * The order in which the entries should be returned. Defaults to `ListRanking`, which is
@@ -1824,7 +1824,7 @@ export default class Client {
          *
          * The `Rating*` options are deprecated in favor of `AverageRating*`.
          */
-        sort:
+        sort?:
           | 'ListRanking'
           | 'WhenAddedToList'
           | 'WhenAddedToListEarliestFirst'
@@ -1868,7 +1868,7 @@ export default class Client {
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
      * @param id The LID of the list.
-     * @see {@link https://api-docs.letterboxd.com/#path--list--id--me}
+     * @see {@link https://api-docs.letterboxd.com/#operation--list--id--me-get}
      */
     getRelationship: (id: string) => {
       if (!this.credentials.accessToken) {
@@ -1894,7 +1894,7 @@ export default class Client {
      *
      * @param id The LID of the list.
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--list--id--me}
+     * @see {@link https://api-docs.letterboxd.com/#operation--list--id--me-patch}
      */
     updateRelationship: (id: string, params?: defs.ListRelationshipUpdateRequest) => {
       if (!this.credentials.accessToken) {
@@ -1968,10 +1968,10 @@ export default class Client {
      * entry (must have a date) or a review (must have review text). Log entries can be both a
      * diary entry and a review if they satisfy both criteria.
      *
-     * Use the ‘next' cursor to move through the list.
+     * Use the `next` cursor to move through the list.
      *
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--log-entries}
+     * @see {@link https://api-docs.letterboxd.com/#operation--log-entries-get}
      */
     getEntries: (params?: {
       /**
@@ -2302,7 +2302,7 @@ export default class Client {
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--log-entries}
+     * @see {@link https://api-docs.letterboxd.com/#operation--log-entries-post}
      */
     create: (params: defs.LogEntryCreationRequest) => {
       if (!this.credentials.accessToken) {
@@ -2327,7 +2327,7 @@ export default class Client {
      * Get details about a log entry by ID.
      *
      * @param id The LID of the log entry.
-     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id-}
+     * @see {@link https://api-docs.letterboxd.com/#operation--log-entry--id--get}
      */
     get: (id: string) => {
       return request<
@@ -2348,9 +2348,9 @@ export default class Client {
      *
      * @param id The LID of the log entry.
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id-}
+     * @see {@link https://api-docs.letterboxd.com/#operation--log-entry--id--patch}
      */
-    update: (id: string, params: defs.LogEntryUpdateRequest) => {
+    update: (id: string, params?: defs.LogEntryUpdateRequest) => {
       if (!this.credentials.accessToken) {
         throw new MissingAccessTokenError();
       }
@@ -2379,7 +2379,7 @@ export default class Client {
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
      * @param id The LID of the log entry.
-     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id-}
+     * @see {@link https://api-docs.letterboxd.com/#operation--log-entry--id--delete}
      */
     delete: (id: string) => {
       if (!this.credentials.accessToken) {
@@ -2402,11 +2402,11 @@ export default class Client {
     /**
      * A cursored window over the comments for a log entry's review.
      *
-     * Use the ‘next' cursor to move through the comments.
+     * Use the `next` cursor to move through the comments.
      *
      * @param id The LID of the log entry.
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id--comments}
+     * @see {@link https://api-docs.letterboxd.com/#operation--log-entry--id--comments-get}
      */
     getComments: (
       id: string,
@@ -2414,24 +2414,24 @@ export default class Client {
         /**
          * The pagination cursor.
          */
-        cursor: string;
+        cursor?: string;
 
         /**
          * The number of items to include per page (default is `20`, maximum is `100`).
          */
-        perPage: number;
+        perPage?: number;
 
         /**
          * Defaults to `Date`. The `Updates` sort order returns newest content first. Use this to
          * get the most recently posted or edited comments, and pass `includeDeletions=true` to
          * remain consistent in the case where a comment has been deleted.
          */
-        sort: 'Date' | 'DateLatestFirst' | 'Updates';
+        sort?: 'Date' | 'DateLatestFirst' | 'Updates';
 
         /**
          * Use this to discover any comments that were deleted.
          */
-        includeDeletions: boolean;
+        includeDeletions?: boolean;
       }
     ) => {
       return request<
@@ -2453,7 +2453,7 @@ export default class Client {
      *
      * @param id The LID of the log entry.
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id--comments}
+     * @see {@link https://api-docs.letterboxd.com/#operation--log-entry--id--comments-post}
      */
     createComment: (id: string, params: defs.CommentCreationRequest) => {
       if (!this.credentials.accessToken) {
@@ -2482,7 +2482,7 @@ export default class Client {
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
      * @param id The LID of the log entry.
-     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id--me}
+     * @see {@link https://api-docs.letterboxd.com/#operation--log-entry--id--me-get}
      */
     getRelationship: (id: string) => {
       if (!this.credentials.accessToken) {
@@ -2508,7 +2508,7 @@ export default class Client {
      *
      * @param id The LID of the log entry.
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id--me}
+     * @see {@link https://api-docs.letterboxd.com/#operation--log-entry--id--me-patch}
      */
     updateRelationship: (id: string, params?: defs.ReviewRelationshipUpdateRequest) => {
       if (!this.credentials.accessToken) {
@@ -2565,7 +2565,7 @@ export default class Client {
      * @param id The LID of the log entry.
      * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id--statistics}
      */
-    getStatistics: (id: string) => {
+    statistics: (id: string) => {
       return request<
         | { status: 200; data: defs.ReviewStatistics }
         | { status: 404; data: never; reason: 'No log entry matches the specified ID' }
@@ -2584,7 +2584,7 @@ export default class Client {
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
-     * @see {@link https://api-docs.letterboxd.com/#path--me}
+     * @see {@link https://api-docs.letterboxd.com/#operation--me-get}
      */
     get: () => {
       if (!this.credentials.accessToken) {
@@ -2608,9 +2608,9 @@ export default class Client {
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
      * @param params
-     * @see {@link https://api-docs.letterboxd.com/#path--me}
+     * @see {@link https://api-docs.letterboxd.com/#operation--me-patch}
      */
-    update: (params: defs.MemberSettingsUpdateRequest) => {
+    update: (params?: defs.MemberSettingsUpdateRequest) => {
       if (!this.credentials.accessToken) {
         throw new MissingAccessTokenError();
       }
@@ -2740,12 +2740,12 @@ export default class Client {
     /**
      * A cursored window over the list of members.
      *
-     * Use the ‘next' cursor to move through the list.
+     * Use the `next` cursor to move through the list.
      *
      * @param params
      * @see {@link https://api-docs.letterboxd.com/#path--members}
      */
-    get: (params?: {
+    all: (params?: {
       /**
        * The pagination cursor.
        */
@@ -2852,7 +2852,7 @@ export default class Client {
      *
      * @see {@link https://api-docs.letterboxd.com/#path--members-pronouns}
      */
-    getPronouns: () => {
+    pronouns: () => {
       return request<{ status: 200; data: defs.PronounsResponse }>({
         method: 'get',
         path: '/members/pronouns',
@@ -2870,7 +2870,7 @@ export default class Client {
      * @param params
      * @see {@link https://api-docs.letterboxd.com/#path--members-register}
      */
-    register: (params: defs.RegisterRequest) => {
+    register: (params?: defs.RegisterRequest) => {
       return request<
         | { status: 201; data: defs.Member }
         | { status: 400; data: never; reason: 'The username was already taken or is invalid' }
@@ -2888,7 +2888,7 @@ export default class Client {
      * @param id The LID of the member.
      * @see {@link https://api-docs.letterboxd.com/#path--member--id-}
      */
-    getMember: (id: string) => {
+    get: (id: string) => {
       return request<
         | { status: 200; data: defs.Member }
         | {
@@ -2906,7 +2906,7 @@ export default class Client {
     /**
      * A cursored window over the activity for a member.
      *
-     * Use the ‘next' cursor to move through the list.
+     * Use the `next` cursor to move through the list.
      *
      * @param id The LID of the member.
      * @param params
@@ -2914,7 +2914,7 @@ export default class Client {
      */
     getMemberActivity: (
       id: string,
-      params: {
+      params?: {
         /**
          * The pagination cursor.
          */
@@ -3028,7 +3028,7 @@ export default class Client {
       id: string,
       params?: {
         /**
-         * A case-insensitive prefix match. E.g. “pro" will match “pro", “project" and “Professional".
+         * A case-insensitive prefix match. E.g. "pro" will match "pro", "project" and "Professional".
          * An empty `input` will match all tags.
          */
         input?: string;
@@ -3063,7 +3063,7 @@ export default class Client {
       id: string,
       params?: {
         /**
-         * A case-insensitive prefix match. E.g. “pro" will match “pro", “project" and “Professional".
+         * A case-insensitive prefix match. E.g. "pro" will match "pro", "project" and "Professional".
          * An empty `input` will match all tags.
          */
         input: string;
@@ -3091,7 +3091,7 @@ export default class Client {
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
      *
      * @param id The LID of the other member.
-     * @see {@link https://api-docs.letterboxd.com/#path--member--id--me}
+     * @see {@link https://api-docs.letterboxd.com/#operation--member--id--me-get}
      */
     getMemberRelationship: (id: string) => {
       if (!this.credentials.accessToken) {
@@ -3114,6 +3114,37 @@ export default class Client {
     },
 
     /**
+     * Update the authenticated member’s relationship with another member by ID.
+     *
+     * Calls to this endpoint must include the access token for an authenticated member (see
+     * [Authentication](https://api-docs.letterboxd.com/#auth)).
+     *
+     * @param id The LID of the other member.
+     * @param params
+     * @see {@link https://api-docs.letterboxd.com/#operation--member--id--me-patch}
+     */
+    updateMemberRelationship: (id: string, params?: defs.MemberRelationshipUpdateRequest) => {
+      if (!this.credentials.accessToken) {
+        throw new MissingAccessTokenError();
+      }
+
+      return request<
+        | { status: 200; data: defs.MemberRelationshipUpdateResponse }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
+        | {
+            status: 404;
+            data: never;
+            reason: 'No member matches the specified ID, or the member has opted out of appearing in the API';
+          }
+      >({
+        method: 'patch',
+        path: `/member/${id}/me`,
+        auth: this.credentials,
+        params,
+      });
+    },
+
+    /**
      * Report a member by ID.
      *
      * Calls to this endpoint must include the access token for an authenticated member (see
@@ -3123,7 +3154,7 @@ export default class Client {
      * @param params
      * @see {@link https://api-docs.letterboxd.com/#path--member--id--report}
      */
-    reportMember: (id: string, params: defs.ReportMemberRequest) => {
+    report: (id: string, params: defs.ReportMemberRequest) => {
       if (!this.credentials.accessToken) {
         throw new MissingAccessTokenError();
       }
@@ -3150,7 +3181,7 @@ export default class Client {
      * @param id The LID of the member.
      * @see {@link https://api-docs.letterboxd.com/#path--member--id--statistics}
      */
-    getMemberStatistics: (id: string) => {
+    statistics: (id: string) => {
       return request<
         | { status: 200; data: defs.MemberStatistics }
         | {
@@ -3179,9 +3210,9 @@ export default class Client {
      * @param params
      * @see {@link https://api-docs.letterboxd.com/#path--member--id--watchlist}
      */
-    getMemberWatchlist: (
+    watchlist: (
       id: string,
-      params: {
+      params?: {
         /**
          * The pagination cursor.
          */
@@ -3529,12 +3560,12 @@ export default class Client {
     /**
      * A cursored window over a list of stories.
      *
-     * Use the ‘next' cursor to move through the list.
+     * Use the `next` cursor to move through the list.
      *
      * @param params
      * @see {@link https://api-docs.letterboxd.com/#path--stories}
      */
-    getStories: (params?: {
+    all: (params?: {
       /**
        * The pagination cursor.
        */
@@ -3572,9 +3603,9 @@ export default class Client {
       where?: ('Published' | 'NotPublished')[];
     }) => {
       return request<
-        | { status: 200; data: defs.StoriesResponse } // Success
-        | { status: 400; data: never } // Bad request
-        | { status: 404; data: never } // No film, member, tag or list matches the specified ID.
+        | { status: 200; data: defs.StoriesResponse }
+        | { status: 400; data: never; reason: 'Bad request' }
+        | { status: 404; data: never; reason: 'No film, member, tag or list matches the specified ID.' }
       >({
         method: 'get',
         path: '/stories',
@@ -3589,10 +3620,9 @@ export default class Client {
      * @param id The LID of the story.
      * @see {@link https://api-docs.letterboxd.com/#path--story--id-}
      */
-    getStory: (id: string) => {
+    get: (id: string) => {
       return request<
-        | { status: 200; data: defs.Story } // Success
-        | { status: 404; data: never } // No story matches the specified ID
+        { status: 200; data: defs.Story } | { status: 404; data: never; reason: 'No story matches the specified ID' }
       >({
         method: 'get',
         path: `/stories/${id}`,

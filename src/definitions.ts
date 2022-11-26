@@ -476,7 +476,7 @@ export interface Film {
   top250Position: number;
 
   /**
-   * `true` if the film is in TMDb's ‘Adult' category.
+   * `true` if the film is in TMDb's 'Adult' category.
    */
   adult: boolean;
 
@@ -1005,7 +1005,7 @@ export type FilmRatingActivity = AbstractActivity & {
 
 export interface FilmRelationship {
   /**
-   * Will be `true` if the member has indicated they've seen the film (via the ‘eye' icon) or has a
+   * Will be `true` if the member has indicated they've seen the film (via the 'eye' icon) or has a
    * log entry for the film.
    */
   watched: boolean;
@@ -1017,7 +1017,7 @@ export interface FilmRelationship {
   whenWatched: string;
 
   /**
-   * Will be `true` if the member likes the film (via the ‘heart' icon).
+   * Will be `true` if the member likes the film (via the 'heart' icon).
    */
   liked: boolean;
 
@@ -1092,18 +1092,18 @@ export interface FilmRelationshipUpdateMessage {
  */
 export interface FilmRelationshipUpdateRequest {
   /**
-   * Set to `true` to change the film's status for the authenticated member to ‘watched' or `false`
-   * for ‘not watched'. If the status is changed to ‘watched' and the film is in the member's
+   * Set to `true` to change the film's status for the authenticated member to 'watched' or `false`
+   * for 'not watched'. If the status is changed to 'watched' and the film is in the member's
    * watchlist, it will be removed as part of this action. You may not change the status of a film
-   * to ‘not watched' if there is existing activity (a rating, review or diary entry) for the
+   * to 'not watched' if there is existing activity (a rating, review or diary entry) for the
    * authenticated member—check the messages returned from this endpoint to ensure no such business
    * rules have been violated.
    */
   watched: boolean;
 
   /**
-   * Set to `true` to change the film's status for the authenticated member to ‘liked' or `false`
-   * for ‘not liked'.
+   * Set to `true` to change the film's status for the authenticated member to 'liked' or `false`
+   * for 'not liked'.
    */
   liked: boolean;
 
@@ -1185,7 +1185,7 @@ export interface FilmsRelationship {
 
 export interface FilmsRelationshipCounts {
   /**
-   * The number of films the member has indicated they've seen (via the ‘eye' icon) or has a log
+   * The number of films the member has indicated they've seen (via the 'eye' icon) or has a log
    * entry for.
    */
   watches: number;
@@ -1313,7 +1313,7 @@ export interface FilmSummary {
   top250Position: number | null;
 
   /**
-   * `true` if the film is in TMDb's ‘Adult' category.
+   * `true` if the film is in TMDb's 'Adult' category.
    */
   adult: boolean;
 
@@ -1768,19 +1768,19 @@ export interface ListCreateEntry {
    * entry will be appended to the end of the list. Sending two or more `ListCreateEntry`s with the
    * same rank will return an error.
    */
-  rank: number;
+  rank?: number;
 
   /**
    * The notes for the list entry in LBML. May contain the following HTML tags: `<br>` `<strong>`
    * `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
    */
-  notes: string;
+  notes?: string;
 
   /**
    * Set to `true` if the member has indicated that the `notes` field contains plot spoilers for
    * the film.
    */
-  containsSpoilers: boolean;
+  containsSpoilers?: boolean;
 }
 
 export interface ListCreateMessage {
@@ -1965,7 +1965,7 @@ export type ListLikeActivity = AbstractActivity & {
 
 export interface ListRelationship {
   /**
-   * Will be `true` if the member likes the list (via the ‘heart' icon). A member may not like their
+   * Will be `true` if the member likes the list (via the 'heart' icon). A member may not like their
    * own list.
    */
   liked: boolean;
@@ -1997,7 +1997,7 @@ export interface ListRelationship {
    *  - `BlockedThem` means the member has blocked the owner and is therefore unable to post
    *    comments.
    *  - `CanComment` means the authenticated member is authorized to post a comment (also known as
-   *    a “reply"). All other values mean the authenticated member is not authorized to post a
+   *    a "reply"). All other values mean the authenticated member is not authorized to post a
    *    comment.
    *  - `Closed` means the owner has closed the comment thread to all other members.
    *  - `FriendsOnly` means the owner is only accepting comments from members they follow.
@@ -2043,7 +2043,7 @@ export interface ListRelationshipUpdateMessage {
 
 export interface ListRelationshipUpdateRequest {
   /**
-   * Set to `true` if the member likes the list (via the ‘heart' icon). A member may not like their
+   * Set to `true` if the member likes the list (via the 'heart' icon). A member may not like their
    * own list.
    */
   liked?: boolean;
@@ -2182,7 +2182,7 @@ export interface ListUpdateEntry {
   /**
    * The LID of the film.
    */
-  film: string;
+  film?: string;
 
   /**
    * If the list is ranked, this is the entry's rank in the list, numbered from 1. If not set, the
@@ -2204,6 +2204,35 @@ export interface ListUpdateEntry {
    * the film.
    */
   containsSpoilers?: boolean;
+
+  /**
+   * The update action to take. If not set then any existing entry for the film will be updated, if
+   * there is no existing entry for the film it will be added into the list.
+   */
+  action?:
+    | 'ADD'
+    | 'DELETE'
+    | 'UPDATE'
+    | 'SORT_NAME'
+    | 'SORT_RELEASE_NEWEST'
+    | 'SORT_RELEASE_OLDEST'
+    | 'SORT_RATING_HIGHEST'
+    | 'SORT_RATING_LOWEST'
+    | 'SORT_AVR_RATING_HIGHEST'
+    | 'SORT_AVR_RATING_LOWEST';
+
+  /**
+   * The entry position (numbered from 0) to update or delete. Required for UPDATE and DELETE
+   * actions.
+   */
+  position?: number;
+
+  /**
+   * The new entry position (numbered from 0) for the updated or added entry. If not set, the
+   * entry will stay in the same place (for UPDATE actions) or be appended to the end of the list
+   * (for ADD actions).
+   */
+  newPosition?: number;
 }
 
 export interface ListUpdateMessage {
@@ -2382,7 +2411,7 @@ export interface LogEntry {
   rating: number;
 
   /**
-   * Will be `true` if the member likes the film (via the ‘heart' icon).
+   * Will be `true` if the member likes the film (via the 'heart' icon).
    */
   like: boolean;
 
@@ -2428,28 +2457,28 @@ export interface LogEntryCreationRequest {
   /**
    * Information about this log entry if adding to the member's diary.
    */
-  diaryDetails: LogEntryCreationRequestDiaryDetails;
+  diaryDetails?: LogEntryCreationRequestDiaryDetails;
 
   /**
    * Information about the review if adding a review.
    */
-  review: LogEntryCreationRequestReview;
+  review?: LogEntryCreationRequestReview;
 
   /**
    * The tags for the log entry.
    */
-  tags: string[];
+  tags?: string[];
 
   /**
    * Allowable values are between `0.5` and `5.0`, with increments of `0.5`.
    */
-  rating: number;
+  rating?: number;
 
   /**
-   * Set to `true` if the member likes the review (via the ‘heart' icon). A member may not like
+   * Set to `true` if the member likes the review (via the 'heart' icon). A member may not like
    * their own review.
    */
-  like: boolean;
+  like?: boolean;
 
   /**
    * The policy determining who can post comments to the log entry. `You` in this context refers to
@@ -2458,7 +2487,7 @@ export interface LogEntryCreationRequest {
    *
    * @see ListRelationship.commentThreadState
    */
-  commentPolicy: 'Anyone' | 'Friends' | 'You';
+  commentPolicy?: 'Anyone' | 'Friends' | 'You';
 }
 
 export interface LogEntryCreationRequestDiaryDetails {
@@ -2569,7 +2598,7 @@ export interface LogEntryUpdateRequest {
   rating?: number;
 
   /**
-   * Set to `true` if the member likes the review (via the ‘heart' icon). A member may not like
+   * Set to `true` if the member likes the review (via the 'heart' icon). A member may not like
    * their own review.
    */
   like?: boolean;
@@ -2863,13 +2892,13 @@ export interface MemberAccount {
 
   /**
    * Defaults to `true` for new accounts. Indicates whether the member has elected to receive
-   * regular email news (including ‘Call Sheet') from Letterboxd.
+   * regular email news (including 'Call Sheet') from Letterboxd.
    */
   emailNews: boolean;
 
   /**
    * Defaults to `true` for new accounts. Indicates whether the member has elected to receive a
-   * weekly email digest of new and popular content (called ‘Rushes').
+   * weekly email digest of new and popular content (called 'Rushes').
    */
   emailRushes: boolean;
 
@@ -3157,13 +3186,13 @@ export interface MemberRelationshipUpdateRequest {
    * `false` if they wish to unfollow. A member may not follow their own account, or the account of
    * a member they have blocked or that has blocked them.
    */
-  following: boolean;
+  following?: boolean;
 
   /**
    * Set to `true` if the authenticated member wishes to block the member identified by ID, or
    * `false` if they wish to unblock. A member may not block their own account.
    */
-  blocking: boolean;
+  blocking?: boolean;
 }
 
 export interface MemberRelationshipUpdateResponse {
@@ -3315,14 +3344,14 @@ export interface MemberSettingsUpdateRequest {
   emailComments?: boolean;
 
   /**
-   * Set to `true` if the member wishes to receive regular email news (including ‘Call Sheet') from
+   * Set to `true` if the member wishes to receive regular email news (including 'Call Sheet') from
    * Letterboxd.
    */
   emailNews?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive a weekly email digest of new and popular content
-   * (called ‘Rushes').
+   * (called 'Rushes').
    */
   emailRushes?: boolean;
 
@@ -3834,28 +3863,28 @@ export interface RegisterRequest {
   /**
    * The username for the new account. Use the `/auth/username-check` endpoint to check availability.
    */
-  username: string;
+  username?: string;
 
   /**
    * The password for the new account.
    */
-  password: string;
+  password?: string;
 
   /**
    * The email address for the new account.
    */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**
    * The captcha response value
    */
-  captchaResponse: string;
+  captchaResponse?: string;
 
   /**
    * Set to `true` if the person creating the account has agreed to being at least 16 years of age,
    *  and to accepting Letterboxd's [Terms of Use](https://letterboxd.com/terms-of-use/).
    */
-  acceptTermsOfUse: string;
+  acceptTermsOfUse?: string;
 }
 
 export type RegistrationActivity = AbstractActivity & {
@@ -4114,7 +4143,7 @@ export type ReviewLikeActivity = AbstractActivity & {
 
 export interface ReviewRelationship {
   /**
-   * Will be `true` if the member likes the review (via the ‘heart' icon). A member may not like
+   * Will be `true` if the member likes the review (via the 'heart' icon). A member may not like
    * their own review.
    */
   liked: boolean;
@@ -4146,7 +4175,7 @@ export interface ReviewRelationship {
    *  - `BlockedThem` means the member has blocked the owner and is therefore unable to post
    *    comments.
    *  - `CanComment` means the authenticated member is authorized to post a comment (also known as
-   *    a “reply"). All other values mean the authenticated member is not authorized to post a
+   *    a "reply"). All other values mean the authenticated member is not authorized to post a
    *    comment.
    *  - `Closed` means the owner has closed the comment thread to all other members.
    *  - `FriendsOnly` means the owner is only accepting comments from members they follow.
@@ -4194,7 +4223,7 @@ export interface ReviewRelationshipUpdateMessage {
 
 export interface ReviewRelationshipUpdateRequest {
   /**
-   * Set to `true` if the member likes the review (via the ‘heart' icon). A member may not like
+   * Set to `true` if the member likes the review (via the 'heart' icon). A member may not like
    * their own review.
    */
   liked?: boolean;
