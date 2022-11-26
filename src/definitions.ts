@@ -185,7 +185,7 @@ export interface AListAddition {
 
 export interface AListEntryOccurrence {
   /**
-   * If the list is ranked, this is the entry’s rank in the list, numbered from 1.
+   * If the list is ranked, this is the entry's rank in the list, numbered from 1.
    */
   rank: number;
 
@@ -381,7 +381,7 @@ export interface Country {
 }
 
 /**
- * A cursor is a string value provided by the API. It should be treated as an opaque value — don’t
+ * A cursor is a string value provided by the API. It should be treated as an opaque value — don't
  * change it.
  */
 export type Cursor = string;
@@ -415,7 +415,7 @@ export type DiaryEntryActivity = AbstractActivity & {
 
 export interface DisableAccountRequest {
   /**
-   * The member’s current password.
+   * The member's current password.
    */
   currentPassword: string;
 
@@ -458,25 +458,25 @@ export interface Film {
   directors: ContributorSummary[];
 
   /**
-   * The film’s poster image (2:3 aspect ratio in multiple sizes). Will contain only a single
+   * The film's poster image (2:3 aspect ratio in multiple sizes). Will contain only a single
    * obfuscated image if the `adult` flag is `true.
    */
   poster: Image;
 
   /**
-   * The film’s unobfuscated poster image (2:3 aspect ratio in multiple sizes), only populated if
+   * The film's unobfuscated poster image (2:3 aspect ratio in multiple sizes), only populated if
    * the `adult` flag is `true`, may contain adult content.
    */
   adultPoster: Image;
 
   /**
-   * The film’s position in the official Letterboxd Top 250 list of narrative feature films, null
+   * The film's position in the official Letterboxd Top 250 list of narrative feature films, null
    * if the film is not in the list.
    */
   top250Position: number;
 
   /**
-   * `true` if the film is in TMDb’s ‘Adult’ category.
+   * `true` if the film is in TMDb's ‘Adult' category.
    */
   adult: boolean;
 
@@ -502,7 +502,7 @@ export interface Film {
   relationships: MemberFilmRelationship[];
 
   /**
-   * The film’s genres.
+   * The film's genres.
    */
   genres: Genre[];
 
@@ -517,39 +517,39 @@ export interface Film {
   description: string;
 
   /**
-   * The film’s duration (in minutes).
+   * The film's duration (in minutes).
    */
   runTime: number;
 
   /**
-   * The film’s backdrop image (16:9 ratio in multiple sizes).
+   * The film's backdrop image (16:9 ratio in multiple sizes).
    */
   backdrop: Image;
 
   /**
-   * The backdrop’s vertical focal point, expressed as a proportion of the image’s height, using
+   * The backdrop's vertical focal point, expressed as a proportion of the image's height, using
    * values between `0.0` and `1.0`. Use when cropping the image into a shorter space, such as in
    * the page for a film on the Letterboxd site.
    */
   backdropFocalPoint: number;
 
   /**
-   * The film’s trailer.
+   * The film's trailer.
    */
   trailer: FilmTrailer;
 
   /**
-   * The film’s production countries.
+   * The film's production countries.
    */
   countries: Country[];
 
   /**
-   * The film’s spoken languages.
+   * The film's spoken languages.
    */
   languages: Language[];
 
   /**
-   * The film’s contributors (director, cast and crew) grouped by discipline.
+   * The film's contributors (director, cast and crew) grouped by discipline.
    */
   contributions: FilmContributions[];
 
@@ -571,21 +571,21 @@ export interface Film {
   similarTo: FilmSummary[];
 
   /**
-   * The film’s themes.
+   * The film's themes.
    *
    * @private First party API clients only
    */
   themes: Theme[];
 
   /**
-   * The film’s minigenres.
+   * The film's minigenres.
    *
    * @private First party API clients only
    */
   minigenres: Minigenre[];
 
   /**
-   * The film’s nanogenres.
+   * The film's nanogenres.
    *
    * @private First party API clients only
    */
@@ -892,7 +892,7 @@ export interface FilmContributionsResponse {
   items: FilmContribution[];
 
   /**
-   * Metadata about the contributor’s contributions.
+   * Metadata about the contributor's contributions.
    */
   metadata: FilmContributorMetadata[];
 
@@ -997,7 +997,7 @@ export type FilmRatingActivity = AbstractActivity & {
   film: FilmSummary;
 
   /**
-   * The member’s rating for the film. Allowable values are between `0.5` and `5.0`, with increments
+   * The member's rating for the film. Allowable values are between `0.5` and `5.0`, with increments
    * of `0.5`.
    */
   rating: number;
@@ -1005,7 +1005,7 @@ export type FilmRatingActivity = AbstractActivity & {
 
 export interface FilmRelationship {
   /**
-   * Will be `true` if the member has indicated they’ve seen the film (via the ‘eye’ icon) or has a
+   * Will be `true` if the member has indicated they've seen the film (via the ‘eye' icon) or has a
    * log entry for the film.
    */
   watched: boolean;
@@ -1017,7 +1017,7 @@ export interface FilmRelationship {
   whenWatched: string;
 
   /**
-   * Will be `true` if the member likes the film (via the ‘heart’ icon).
+   * Will be `true` if the member likes the film (via the ‘heart' icon).
    */
   liked: boolean;
 
@@ -1033,7 +1033,7 @@ export interface FilmRelationship {
   favorited: boolean;
 
   /**
-   * Will be `true` if the film is in the member’s watchlist.
+   * Will be `true` if the film is in the member's watchlist.
    */
   inWatchlist: boolean;
 
@@ -1051,7 +1051,7 @@ export interface FilmRelationship {
   whenCompletedInWatchlist: string;
 
   /**
-   * The member’s rating for the film.
+   * The member's rating for the film.
    */
   rating: number;
 
@@ -1086,27 +1086,29 @@ export interface FilmRelationshipUpdateMessage {
 }
 
 /**
- * When PATCHing a film relationship, you may send all of the current property values, or just those you wish to change. Properties that violate business rules (see watched below) or contain invalid values will be ignored.
+ * When PATCHing a film relationship, you may send all of the current property values, or just
+ * those you wish to change. Properties that violate business rules (see watched below) or contain
+ * invalid values will be ignored.
  */
 export interface FilmRelationshipUpdateRequest {
   /**
-   * Set to `true` to change the film’s status for the authenticated member to ‘watched’ or `false`
-   * for ‘not watched’. If the status is changed to ‘watched’ and the film is in the member’s
+   * Set to `true` to change the film's status for the authenticated member to ‘watched' or `false`
+   * for ‘not watched'. If the status is changed to ‘watched' and the film is in the member's
    * watchlist, it will be removed as part of this action. You may not change the status of a film
-   * to ‘not watched’ if there is existing activity (a rating, review or diary entry) for the
+   * to ‘not watched' if there is existing activity (a rating, review or diary entry) for the
    * authenticated member—check the messages returned from this endpoint to ensure no such business
    * rules have been violated.
    */
   watched: boolean;
 
   /**
-   * Set to `true` to change the film’s status for the authenticated member to ‘liked’ or `false`
-   * for ‘not liked’.
+   * Set to `true` to change the film's status for the authenticated member to ‘liked' or `false`
+   * for ‘not liked'.
    */
   liked: boolean;
 
   /**
-   * Set to `true` to add the film to the authenticated member’s watchlist, or `false` to remove it.
+   * Set to `true` to add the film to the authenticated member's watchlist, or `false` to remove it.
    */
   inWatchlist: boolean;
 
@@ -1183,7 +1185,7 @@ export interface FilmsRelationship {
 
 export interface FilmsRelationshipCounts {
   /**
-   * The number of films the member has indicated they’ve seen (via the ‘eye’ icon) or has a log
+   * The number of films the member has indicated they've seen (via the ‘eye' icon) or has a log
    * entry for.
    */
   watches: number;
@@ -1293,23 +1295,25 @@ export interface FilmSummary {
   directors: ContributorSummary[];
 
   /**
-   * The film’s poster image (2:3 aspect ratio in multiple sizes). Will contain only a single
+   * The film's poster image (2:3 aspect ratio in multiple sizes). Will contain only a single
    * obfuscated image if the `adult` flag is `true`.
    */
   poster: Image;
 
   /**
-   * The film’s unobfuscated poster image (2:3 aspect ratio in multiple sizes), only populated if the `adult` flag is `true`, may contain adult content.
+   * The film's unobfuscated poster image (2:3 aspect ratio in multiple sizes), only populated if
+   * the `adult` flag is `true`, may contain adult content.
    */
   adultPoster: Image;
 
   /**
-   * The film’s position in the official Letterboxd Top 250 list of narrative feature films, `null` if the film is not in the list.
+   * The film's position in the official Letterboxd Top 250 list of narrative feature films, `null`
+   * if the film is not in the list.
    */
   top250Position: number | null;
 
   /**
-   * `true` if the film is in TMDb’s ‘Adult’ category.
+   * `true` if the film is in TMDb's ‘Adult' category.
    */
   adult: boolean;
 
@@ -1329,12 +1333,13 @@ export interface FilmSummary {
   links: Link[];
 
   /**
-   * Relationships to the film for the authenticated member (if any) and other members where relevant.
+   * Relationships to the film for the authenticated member (if any) and other members where
+   * relevant.
    */
   relationships: MemberFilmRelationship[];
 
   /**
-   * The film’s genres.
+   * The film's genres.
    */
   genres: Genre[];
 }
@@ -1544,7 +1549,7 @@ export interface List {
 
   /**
    * The third-party service or services to which this list can be shared. Only included if the
-   * authenticated member is the list’s owner.
+   * authenticated member is the list's owner.
    *
    * @deprecated No longer supported by Facebook.
    */
@@ -1552,7 +1557,7 @@ export interface List {
 
   /**
    * The third-party service or services to which this list has been shared. Only included if the
-   * authenticated member is the list’s owner.
+   * authenticated member is the list's owner.
    *
    * @deprecated No longer supported by Facebook.
    */
@@ -1575,7 +1580,7 @@ export interface List {
   /**
    * The policy determining who can post comments to the list. `You` in this context refers to the
    * content owner. Use the `commentThreadState` property of the `ListRelationship` to determine
-   * the signed-in member’s ability to comment (or not).
+   * the signed-in member's ability to comment (or not).
    *
    * @see ListRelationship
    */
@@ -1603,14 +1608,14 @@ export interface List {
   links: Link[];
 
   /**
-   * The list’s backdrop image at multiple sizes, sourced from the first film in the list, if
+   * The list's backdrop image at multiple sizes, sourced from the first film in the list, if
    * available. Only returned for [Patron](https://letterboxd.com/patrons/) members.
    */
   backdrop: Image;
 
   /**
-   * The vertical focal point of the list’s backdrop image, if available. Expressed as a proportion
-   * of the image’s height, using values between `0.0` and `1.0`. Use when cropping the image into
+   * The vertical focal point of the list's backdrop image, if available. Expressed as a proportion
+   * of the image's height, using values between `0.0` and `1.0`. Use when cropping the image into
    * a shorter space, such as in the page for a film on the Letterboxd site.
    */
   backdropFocalPoint: number;
@@ -1761,7 +1766,7 @@ export interface ListCreateEntry {
   film: string;
 
   /**
-   * If the list is ranked, this is the entry’s rank in the list, numbered from 1. If not set, the
+   * If the list is ranked, this is the entry's rank in the list, numbered from 1. If not set, the
    * entry will be appended to the end of the list. Sending two or more `ListCreateEntry`s with the
    * same rank will return an error.
    */
@@ -1833,7 +1838,7 @@ export interface ListCreationRequest {
   /**
    * The policy determining who can post comments to the list. `You` in this context refers to the
    * content owner. Use the `commentThreadState` property of the `ListRelationship` to determine
-   * the signed-in member’s ability to comment (or not).
+   * the signed-in member's ability to comment (or not).
    *
    * @see ListRelationship
    */
@@ -1900,7 +1905,7 @@ export interface ListEntriesResponse {
 
 export interface ListEntry {
   /**
-   * If the list is ranked, this is the entry’s rank in the list, numbered from 1.
+   * If the list is ranked, this is the entry's rank in the list, numbered from 1.
    */
   rank: number;
 
@@ -1936,7 +1941,7 @@ export interface ListEntry {
 
 export interface ListEntrySummary {
   /**
-   * If the list is ranked, this is the entry’s rank in the list, numbered from 1.
+   * If the list is ranked, this is the entry's rank in the list, numbered from 1.
    */
   rank: number;
 
@@ -1962,7 +1967,7 @@ export type ListLikeActivity = AbstractActivity & {
 
 export interface ListRelationship {
   /**
-   * Will be `true` if the member likes the list (via the ‘heart’ icon). A member may not like their
+   * Will be `true` if the member likes the list (via the ‘heart' icon). A member may not like their
    * own list.
    */
   liked: boolean;
@@ -1973,7 +1978,7 @@ export interface ListRelationship {
   subscribed: boolean;
 
   /**
-   * Defaults to `Subscribed` for the list’s owner, and `NotSubscribed` for other members. The
+   * Defaults to `Subscribed` for the list's owner, and `NotSubscribed` for other members. The
    * subscription value may change when a member (other than the owner) posts a comment, as follows:
    * the member will become automatically `Subscribed` unless they have previously `Unsubscribed`
    * from the comment thread via the web interface or API, or unless they have disabled comment
@@ -1986,15 +1991,15 @@ export interface ListRelationship {
   subscriptionState: 'Subscribed' | 'NotSubscribed' | 'Unsubscribed';
 
   /**
-   * The authenticated member’s state with respect to posting comments to the list.
+   * The authenticated member's state with respect to posting comments to the list.
    *
-   *  - `Banned` means the Letterboxd community managers have restricted the member’s ability to
+   *  - `Banned` means the Letterboxd community managers have restricted the member's ability to
    *      post comments.
    *  - `Blocked` means the owner has blocked the member from posting comments
    *  - `BlockedThem` means the member has blocked the owner and is therefore unable to post
    *    comments.
    *  - `CanComment` means the authenticated member is authorized to post a comment (also known as
-   *    a “reply”). All other values mean the authenticated member is not authorized to post a
+   *    a “reply"). All other values mean the authenticated member is not authorized to post a
    *    comment.
    *  - `Closed` means the owner has closed the comment thread to all other members.
    *  - `FriendsOnly` means the owner is only accepting comments from members they follow.
@@ -2040,7 +2045,7 @@ export interface ListRelationshipUpdateMessage {
 
 export interface ListRelationshipUpdateRequest {
   /**
-   * Set to `true` if the member likes the list (via the ‘heart’ icon). A member may not like their
+   * Set to `true` if the member likes the list (via the ‘heart' icon). A member may not like their
    * own list.
    */
   liked?: boolean;
@@ -2137,12 +2142,12 @@ export interface ListSummary {
   /**
    * The list description in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>`
    * `<b>` `<i>` `<a href="">` `<blockquote>`. The text is a preview extract, and may be truncated
-   * if it’s too long.
+   * if it's too long.
    */
   descriptionLbml: string;
 
   /**
-   * Will be `true` if the list description was truncated because it’s very long.
+   * Will be `true` if the list description was truncated because it's very long.
    */
   descriptionTruncated: boolean;
 
@@ -2170,7 +2175,7 @@ export interface ListSummary {
 
   /**
    * The list description formatted as HTML. The text is a preview extract, and may be truncated if
-   * it’s too long.
+   * it's too long.
    */
   description: string;
 }
@@ -2182,7 +2187,7 @@ export interface ListUpdateEntry {
   film: string;
 
   /**
-   * If the list is ranked, this is the entry’s rank in the list, numbered from 1. If not set, the
+   * If the list is ranked, this is the entry's rank in the list, numbered from 1. If not set, the
    * entry will stay in the same place (if already in the list) or be appended to the end of the
    * list (if not in the list). If set, any entries at or after this position will be incremented
    * by one. Sending two or more `ListUpdateEntry`s with the same rank will return an error.
@@ -2243,7 +2248,7 @@ export interface ListUpdateRequest {
   /**
    * The policy determining who can post comments to the list. `You` in this context refers to the
    * content owner. Use the `commentThreadState` property of the `ListRelationship` to determine
-   * the signed-in member’s ability to comment (or not).
+   * the signed-in member's ability to comment (or not).
    *
    * @see ListRelationship
    */
@@ -2373,19 +2378,19 @@ export interface LogEntry {
   whenUpdated: string;
 
   /**
-   * The member’s rating for the film. Allowable values are between `0.5` and `5.0`, with
+   * The member's rating for the film. Allowable values are between `0.5` and `5.0`, with
    * increments of `0.5`.
    */
   rating: number;
 
   /**
-   * Will be `true` if the member likes the film (via the ‘heart’ icon).
+   * Will be `true` if the member likes the film (via the ‘heart' icon).
    */
   like: boolean;
 
   /**
    * Will be `true` if comments can be posted to the log entry by the member. This is determined
-   * according to the existence of review text and other factors such as the content owner’s
+   * according to the existence of review text and other factors such as the content owner's
    * comment policy.
    */
   commentable: boolean;
@@ -2393,7 +2398,7 @@ export interface LogEntry {
   /**
    * The policy determining who can post comments to the log entry. `You` in this context refers to
    * the content owner. Use the commentThreadState property of the ListRelationship to determine
-   * the signed-in member’s ability to comment (or not).
+   * the signed-in member's ability to comment (or not).
    */
   commentPolicy: 'Anyone' | 'Friends' | 'You';
 
@@ -2409,8 +2414,8 @@ export interface LogEntry {
   backdrop: Image;
 
   /**
-   * The vertical focal point of the log entry’s backdrop image, if available. Expressed as a
-   * proportion of the image’s height, using values between `0.0` and `1.0`. Use when cropping the
+   * The vertical focal point of the log entry's backdrop image, if available. Expressed as a
+   * proportion of the image's height, using values between `0.0` and `1.0`. Use when cropping the
    * image into a shorter space, such as in the page for a film on the Letterboxd site.
    */
   backdropFocalPoint: number;
@@ -2423,7 +2428,7 @@ export interface LogEntryCreationRequest {
   filmId: string;
 
   /**
-   * Information about this log entry if adding to the member’s diary.
+   * Information about this log entry if adding to the member's diary.
    */
   diaryDetails: LogEntryCreationRequestDiaryDetails;
 
@@ -2443,7 +2448,7 @@ export interface LogEntryCreationRequest {
   rating: number;
 
   /**
-   * Set to `true` if the member likes the review (via the ‘heart’ icon). A member may not like
+   * Set to `true` if the member likes the review (via the ‘heart' icon). A member may not like
    * their own review.
    */
   like: boolean;
@@ -2451,7 +2456,7 @@ export interface LogEntryCreationRequest {
   /**
    * The policy determining who can post comments to the log entry. `You` in this context refers to
    * the content owner. Use the `commentThreadState` property of the `ListRelationship` to determine
-   * the signed-in member’s ability to comment (or not).
+   * the signed-in member's ability to comment (or not).
    *
    * @see ListRelationship.commentThreadState
    */
@@ -2514,7 +2519,7 @@ export interface LogEntrySummary {
   diaryEntry: boolean;
 
   /**
-   * The member’s rating for this viewing of the film. Allowable values are between `0.5` and `5.0`,
+   * The member's rating for this viewing of the film. Allowable values are between `0.5` and `5.0`,
    * with increments of `0.5`.
    */
   rating: number;
@@ -2544,7 +2549,7 @@ export interface LogEntryUpdateMessage {
 
 export interface LogEntryUpdateRequest {
   /**
-   * Information about this log entry if adding to the member’s diary. Set to `null` to remove this
+   * Information about this log entry if adding to the member's diary. Set to `null` to remove this
    * log entry from the diary.
    */
   diaryDetails?: LogEntryUpdateRequestDiaryDetails | null;
@@ -2566,7 +2571,7 @@ export interface LogEntryUpdateRequest {
   rating?: number;
 
   /**
-   * Set to `true` if the member likes the review (via the ‘heart’ icon). A member may not like
+   * Set to `true` if the member likes the review (via the ‘heart' icon). A member may not like
    * their own review.
    */
   like?: boolean;
@@ -2574,7 +2579,7 @@ export interface LogEntryUpdateRequest {
   /**
    * The policy determining who can post comments to the log entry. `You` in this context refers to
    * the content owner. Use the `commentThreadState` property of the `ListRelationship` to
-   * determine the signed-in member’s ability to comment (or not).
+   * determine the signed-in member's ability to comment (or not).
    *
    * @see ListRelationship.commentThreadState
    */
@@ -2632,7 +2637,8 @@ export interface Member {
   id: string;
 
   /**
-   * The member’s Letterboxd username. Usernames must be between 2 and 15 characters long and may only contain upper or lowercase letters, numbers or the underscore (_) character.
+   * The member's Letterboxd username. Usernames must be between 2 and 15 characters long and may
+   * only contain upper or lowercase letters, numbers or the underscore (`_`) character.
    */
   username: string;
 
@@ -2647,33 +2653,33 @@ export interface Member {
   familyName: string;
 
   /**
-   * A convenience method that returns the member’s given name and family name concatenated with a
+   * A convenience method that returns the member's given name and family name concatenated with a
    * space, if both are set, or just their given name or family name, if one is set, or their
    * username, if neither is set. Will never be empty.
    */
   displayName: string;
 
   /**
-   * A convenience method that returns the member’s given name, if set, or their username. Will
+   * A convenience method that returns the member's given name, if set, or their username. Will
    * never be empty.
    */
   shortName: string;
 
   /**
-   * The member’s preferred pronoun. Use the
+   * The member's preferred pronoun. Use the
    * [/members/pronouns](https://api-docs.letterboxd.com/#path--members-pronouns) endpoint to
    * request all available pronouns.
    */
   pronoun: Pronoun;
 
   /**
-   * The member’s avatar image at multiple sizes. Avatar images to not have an enforced aspect
+   * The member's avatar image at multiple sizes. Avatar images to not have an enforced aspect
    * ratio, so should be center-cropped to a square if they are not 1:1.
    */
   avatar: Image;
 
   /**
-   * The member’s account type.
+   * The member's account type.
    */
   memberStatus: 'Crew' | 'Alum' | 'Hq' | 'Patron' | 'Pro' | 'Member';
 
@@ -2683,17 +2689,17 @@ export interface Member {
   hideAdsInContent: boolean;
 
   /**
-   * The member’s default policy determing who can post comments to their content. Supported
+   * The member's default policy determing who can post comments to their content. Supported
    * options are `Anyone`, `Friends` and `You`. `You` in this context refers to the content owner.
    * Use the `commentThreadState` property of the `ListRelationship` to determine the signed-in
-   * member’s ability to comment (or not).
+   * member's ability to comment (or not).
    *
    * @see ListRelationship.commentThreadState
    */
   commentPolicy: 'Anyone' | 'Friends' | 'You';
 
   /**
-   * The member’s account status.
+   * The member's account status.
    */
   accountStatus: 'Active' | 'Locked' | 'Memorialized';
 
@@ -2703,42 +2709,42 @@ export interface Member {
   hideAds: boolean;
 
   /**
-   * The member’s Twitter username, if they have authenticated their account.
+   * The member's Twitter username, if they have authenticated their account.
    */
   twitterUsername: string;
 
   /**
-   * The member’s bio in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
+   * The member's bio in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
    * `<i>` `<a href="">` `<blockquote>`.
    */
   bioLbml: string;
 
   /**
-   * The member’s location.
+   * The member's location.
    */
   location: string;
 
   /**
-   * The member’s website URL. URLs are not validated, so sanitizing may be required.
+   * The member's website URL. URLs are not validated, so sanitizing may be required.
    */
   website: string;
 
   /**
-   * The member’s backdrop image at multiple sizes, sourced from the first film in the member’s
+   * The member's backdrop image at multiple sizes, sourced from the first film in the member's
    * list of favorite films, if available. Only returned for
    * [Patron](https://letterboxd.com/patrons/) members.
    */
   backdrop: Image;
 
   /**
-   * The vertical focal point of the member’s backdrop image, if available. Expressed as a
-   * proportion of the image’s height, using values between 0.0 and 1.0. Use when cropping the
+   * The vertical focal point of the member's backdrop image, if available. Expressed as a
+   * proportion of the image's height, using values between 0.0 and 1.0. Use when cropping the
    * image into a shorter space, such as in the page for a film on the Letterboxd site.
    */
   backdropFocalPoint: number;
 
   /**
-   * A summary of the member’s favorite films, up to a maximum of four.
+   * A summary of the member's favorite films, up to a maximum of four.
    */
   favoriteFilms: FilmSummary[];
 
@@ -2749,7 +2755,7 @@ export interface Member {
   pinnedReviews: LogEntry[];
 
   /**
-   * A link to the member’s profile page on the Letterboxd website.
+   * A link to the member's profile page on the Letterboxd website.
    */
   links: Link[];
 
@@ -2760,17 +2766,17 @@ export interface Member {
   privateWatchlist: boolean;
 
   /**
-   * A summary of the member’s featured list. Only returned for HQ members.
+   * A summary of the member's featured list. Only returned for HQ members.
    */
   featuredList: ListSummary;
 
   /**
-   * A summary of the member’s team members. Only returned for HQ members.
+   * A summary of the member's team members. Only returned for HQ members.
    */
   teamMembers: MemberSummary[];
 
   /**
-   * The member’s organisation type. Only returned for HQ members.
+   * The member's organisation type. Only returned for HQ members.
    */
   orgType:
     | 'Society'
@@ -2787,14 +2793,14 @@ export interface Member {
     | 'Studio';
 
   /**
-   * The member’s bio formatted as HTML.
+   * The member's bio formatted as HTML.
    */
   bio: string;
 }
 
 export interface MemberAccount {
   /**
-   * The member’s email address.
+   * The member's email address.
    */
   emailAddress: string;
 
@@ -2859,13 +2865,13 @@ export interface MemberAccount {
 
   /**
    * Defaults to `true` for new accounts. Indicates whether the member has elected to receive
-   * regular email news (including ‘Call Sheet’) from Letterboxd.
+   * regular email news (including ‘Call Sheet') from Letterboxd.
    */
   emailNews: boolean;
 
   /**
    * Defaults to `true` for new accounts. Indicates whether the member has elected to receive a
-   * weekly email digest of new and popular content (called ‘Rushes’).
+   * weekly email digest of new and popular content (called ‘Rushes').
    */
   emailRushes: boolean;
 
@@ -2939,7 +2945,7 @@ export interface MemberAccount {
 
   /**
    * Defaults to `false` for new accounts. Indicates whether the member has commenting privileges.
-   * Commenting is disabled on new accounts until the member’s `emailAddress` is validated. At
+   * Commenting is disabled on new accounts until the member's `emailAddress` is validated. At
    * present `canComment` is synonymous with `emailAddressValidated` (unless the member is
    * `suspended`) but this may change in future.
    */
@@ -2952,7 +2958,7 @@ export interface MemberAccount {
   suspended: boolean;
 
   /**
-   * Indicates whether the member is able to clone other members’ lists. Determined by Letterboxd
+   * Indicates whether the member is able to clone other members' lists. Determined by Letterboxd
    * based upon `memberStatus`.
    */
   canCloneLists: boolean;
@@ -2986,7 +2992,7 @@ export interface MemberAccount {
   membershipDaysRemaining: number;
 
   /**
-   * Indicates whether the member’s subscription is expected to auto-renew via Apple’s IAP
+   * Indicates whether the member's subscription is expected to auto-renew via Apple's IAP
    * subscription. *Only returned for members who have subscribed through IAP.*
    */
   membershipWillAutoRenewViaIAP: boolean;
@@ -2999,7 +3005,7 @@ export interface MemberAccount {
   hasActiveSubscription: boolean;
 
   /**
-   * Indicates the member’s subscription type, possible values are `apple` or `paddle`. *Only
+   * Indicates the member's subscription type, possible values are `apple` or `paddle`. *Only
    * returned for members who have an active subscription.*
    */
   subscriptionType: string;
@@ -3015,13 +3021,13 @@ export interface MemberAccount {
   campaigns: string[];
 
   /**
-   * The member’s adult content policy determing whether or not they see adult content. Supported
+   * The member's adult content policy determing whether or not they see adult content. Supported
    * options are `Always` or `Default`. `Default` means never show adult content.
    */
   adultContentPolicy: 'Always' | 'Default';
 
   /**
-   * The member’s poster mode determing whether or not they see custom posters. Supported options
+   * The member's poster mode determing whether or not they see custom posters. Supported options
    * are `All`, `Yours` or `None`.
    */
   posterMode: 'All' | 'Yours' | 'None';
@@ -3032,17 +3038,17 @@ export interface MemberAccount {
   posterModeOptions: 'All' | 'Yours' | 'None';
 
   /**
-   * The member’s default policy determing who can post comments to their content. Supported
+   * The member's default policy determing who can post comments to their content. Supported
    * options are `Anyone`, `Friends` and `You`. `You` in this context refers to the content owner.
    * Use the `commentThreadState` property of the `ListRelationship` to determine the signed-in
-   * member’s ability to comment (or not).
+   * member's ability to comment (or not).
    *
    * @see ListRelationship.commentThreadState
    */
   commentPolicy: 'Anyone' | 'Friends' | 'You';
 
   /**
-   * The member’s account status.
+   * The member's account status.
    */
   accountStatus: 'Active' | 'Locked' | 'Memorialized';
 
@@ -3208,17 +3214,17 @@ export interface MemberSettingsUpdateMessage {
 
 export interface MemberSettingsUpdateRequest {
   /**
-   * The member’s email address.
+   * The member's email address.
    */
   emailAddress?: string;
 
   /**
-   * The member’s current password. Required when updating the password.
+   * The member's current password. Required when updating the password.
    */
   currentPassword?: string;
 
   /**
-   * The member’s new password.
+   * The member's new password.
    */
   password?: string;
 
@@ -3233,57 +3239,57 @@ export interface MemberSettingsUpdateRequest {
   familyName?: string;
 
   /**
-   * The LID of the member’s preferred pronoun. Use the
+   * The LID of the member's preferred pronoun. Use the
    * [/members/pronouns](https://api-docs.letterboxd.com/#path--members-pronouns) endpoint to
    * request all available pronouns.
    */
   pronoun?: string;
 
   /**
-   * The member’s default policy determing who can post comments to their content. Supported
+   * The member's default policy determing who can post comments to their content. Supported
    * options are `Anyone`, `Friends` and `You`. `You` in this context refers to the content owner.
    * Use the `commentThreadState` property of the `ListRelationship` to determine the signed-in
-   * member’s ability to comment (or not).
+   * member's ability to comment (or not).
    *
    * @see ListRelationship.commentThreadState
    */
   commentPolicy?: string;
 
   /**
-   * The member’s adult content policy determing whether or not they see adult content. Supported
+   * The member's adult content policy determing whether or not they see adult content. Supported
    * options are `Always` or `Default`. `Default` means never show adult content.
    */
   adultContentPolicy?: string;
 
   /**
-   * The member’s poster mode determing whether or not they see custom posters. Supported options
+   * The member's poster mode determing whether or not they see custom posters. Supported options
    * are `All`, `Yours` or `None`.
    */
   posterMode?: string;
 
   /**
-   * The member’s location.
+   * The member's location.
    */
   location?: string;
 
   /**
-   * The member’s website URL. URLs are not validated, so sanitizing may be required.
+   * The member's website URL. URLs are not validated, so sanitizing may be required.
    */
   website?: string;
 
   /**
-   * The member’s bio in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
+   * The member's bio in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
    * `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000 characters.
    */
   bio?: string;
 
   /**
-   * The LIDs of the member’s favorite films, in order, up to a maximum of four.
+   * The LIDs of the member's favorite films, in order, up to a maximum of four.
    */
   favoriteFilms?: string[];
 
   /**
-   * Set to `true` to prevent the member’s content from appearing in API requests other than the
+   * Set to `true` to prevent the member's content from appearing in API requests other than the
    * [/me](https://api-docs.letterboxd.com/#path--me) endpoint.
    */
   privateAccount?: boolean;
@@ -3311,14 +3317,14 @@ export interface MemberSettingsUpdateRequest {
   emailComments?: boolean;
 
   /**
-   * Set to `true` if the member wishes to receive regular email news (including ‘Call Sheet’) from
+   * Set to `true` if the member wishes to receive regular email news (including ‘Call Sheet') from
    * Letterboxd.
    */
   emailNews?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive a weekly email digest of new and popular content
-   * (called ‘Rushes’).
+   * (called ‘Rushes').
    */
   emailRushes?: boolean;
 
@@ -3433,7 +3439,8 @@ export interface MemberStatisticsCounts {
   reviewLikes: number;
 
   /**
-   * The number of films the member has watched. This is a distinct total — films with multiple log entries are only counted once.
+   * The number of films the member has watched. This is a distinct total — films with multiple log
+   * entries are only counted once.
    */
   watches: number;
 
@@ -3509,7 +3516,7 @@ export interface MemberSummary {
   id: string;
 
   /**
-   * The member’s Letterboxd username. Usernames must be between 2 and 15 characters long and may
+   * The member's Letterboxd username. Usernames must be between 2 and 15 characters long and may
    * only contain upper or lowercase letters, numbers or the underscore (`_`) character.
    */
   username: string;
@@ -3525,33 +3532,33 @@ export interface MemberSummary {
   familyName: string;
 
   /**
-   * A convenience method that returns the member’s given name and family name concatenated with a
+   * A convenience method that returns the member's given name and family name concatenated with a
    * space, if both are set, or just their given name or family name, if one is set, or their
    * username, if neither is set. Will never be empty.
    */
   displayName: string;
 
   /**
-   * A convenience method that returns the member’s given name, if set, or their username. Will
+   * A convenience method that returns the member's given name, if set, or their username. Will
    * never be empty.
    */
   shortName: string;
 
   /**
-   * The member’s preferred pronoun. Use the
+   * The member's preferred pronoun. Use the
    * [/members/pronouns](https://api-docs.letterboxd.com/#path--members-pronouns) endpoint to
    * request all available pronouns.
    */
   pronoun: Pronoun;
 
   /**
-   * The member’s avatar image at multiple sizes. Avatar images to not have an enforced aspect
+   * The member's avatar image at multiple sizes. Avatar images to not have an enforced aspect
    * ratio, so should be center-cropped to a square if they are not 1:1.
    */
   avatar: Image;
 
   /**
-   * The member’s account type.
+   * The member's account type.
    */
   memberStatus: 'Crew' | 'Alum' | 'Hq' | 'Patron' | 'Pro' | 'Member';
 
@@ -3561,17 +3568,17 @@ export interface MemberSummary {
   hideAdsInContent: boolean;
 
   /**
-   * The member’s default policy determing who can post comments to their content. Supported
+   * The member's default policy determing who can post comments to their content. Supported
    * options are `Anyone`, `Friends` and `You`. `You` in this context refers to the content owner.
    * Use the `commentThreadState` property of the `ListRelationship` to determine the signed-in
-   * member’s ability to comment (or not).
+   * member's ability to comment (or not).
    *
    * @see ListRelationship.commentThreadState
    */
   commentPolicy: 'Anyone' | 'Friends' | 'You';
 
   /**
-   * The member’s account status.
+   * The member's account status.
    */
   accountStatus: 'Active' | 'Locked' | 'Memorialized';
 
@@ -3599,7 +3606,7 @@ export interface MemberTag {
   displayTag: string;
 
   /**
-   * Counts of the member’s uses of this tag.
+   * Counts of the member's uses of this tag.
    */
   counts: MemberTagCounts;
 }
@@ -3796,7 +3803,7 @@ export interface RatingsHistogramBar {
   rating: number;
 
   /**
-   * The height of this rating increment’s entry in a unit-height histogram, normalized between
+   * The height of this rating increment's entry in a unit-height histogram, normalized between
    * `0.0` and `1.0`. The increment(s) with the highest number of ratings will always return `1.0`
    * (unless there are no ratings for the film).
    */
@@ -3847,7 +3854,8 @@ export interface RegisterRequest {
   captchaResponse: string;
 
   /**
-   * Set to `true` if the person creating the account has agreed to being at least 16 years of age, and to accepting Letterboxd’s [Terms of Use](https://letterboxd.com/terms-of-use/).
+   * Set to `true` if the person creating the account has agreed to being at least 16 years of age,
+   *  and to accepting Letterboxd's [Terms of Use](https://letterboxd.com/terms-of-use/).
    */
   acceptTermsOfUse: string;
 }
@@ -3955,7 +3963,7 @@ export interface Review {
 
   /**
    * The third-party service or services to which this review can be shared. Only included if the
-   * authenticated member is the review’s owner.
+   * authenticated member is the review's owner.
    *
    * @deprecated No longer supported by Facebook.
    */
@@ -3963,14 +3971,14 @@ export interface Review {
 
   /**
    * The third-party service or services to which this review has been shared. Only included if the
-   * authenticated member is the review’s owner.
+   * authenticated member is the review's owner.
    *
    * @deprecated No longer supported by Facebook.
    */
   sharedOn: 'Facebook';
 
   /**
-   * The timestamp when this log entry’s review was first published, in ISO 8601 format with UTC
+   * The timestamp when this log entry's review was first published, in ISO 8601 format with UTC
    * timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
    *
    * @example 1997-08-29T07:14:00Z
@@ -4108,7 +4116,7 @@ export type ReviewLikeActivity = AbstractActivity & {
 
 export interface ReviewRelationship {
   /**
-   * Will be `true` if the member likes the review (via the ‘heart’ icon). A member may not like
+   * Will be `true` if the member likes the review (via the ‘heart' icon). A member may not like
    * their own review.
    */
   liked: boolean;
@@ -4119,7 +4127,7 @@ export interface ReviewRelationship {
   subscribed: boolean;
 
   /**
-   * Defaults to `Subscribed` for the review’s author, and `NotSubscribed` for other members. The
+   * Defaults to `Subscribed` for the review's author, and `NotSubscribed` for other members. The
    * subscription value may change when a member (other than the owner) posts a comment, as follows:
    * the member will become automatically `Subscribed` unless they have previously `Unsubscribed`
    * from the comment thread via the web interface or API, or unless they have disabled comment
@@ -4132,15 +4140,15 @@ export interface ReviewRelationship {
   subscriptionState: 'Subscribed' | 'NotSubscribed' | 'Unsubscribed';
 
   /**
-   * The authenticated member’s state with respect to adding comments for this review.
+   * The authenticated member's state with respect to adding comments for this review.
    *
-   *  - `Banned` means the Letterboxd community managers have restricted the member’s ability to
+   *  - `Banned` means the Letterboxd community managers have restricted the member's ability to
    *    post comments.
    *  - `Blocked` means the owner has blocked the member from posting comments.
    *  - `BlockedThem` means the member has blocked the owner and is therefore unable to post
    *    comments.
    *  - `CanComment` means the authenticated member is authorized to post a comment (also known as
-   *    a “reply”). All other values mean the authenticated member is not authorized to post a
+   *    a “reply"). All other values mean the authenticated member is not authorized to post a
    *    comment.
    *  - `Closed` means the owner has closed the comment thread to all other members.
    *  - `FriendsOnly` means the owner is only accepting comments from members they follow.
@@ -4188,7 +4196,7 @@ export interface ReviewRelationshipUpdateMessage {
 
 export interface ReviewRelationshipUpdateRequest {
   /**
-   * Set to `true` if the member likes the review (via the ‘heart’ icon). A member may not like
+   * Set to `true` if the member likes the review (via the ‘heart' icon). A member may not like
    * their own review.
    */
   liked?: boolean;
@@ -4324,12 +4332,12 @@ export interface Story {
   source: string;
 
   /**
-   * The URL of the story’s video (if applicable).
+   * The URL of the story's video (if applicable).
    */
   videoUrl: string;
 
   /**
-   * The story body formatted as HTML. The text is a preview extract, and may be truncated if it’s
+   * The story body formatted as HTML. The text is a preview extract, and may be truncated if it's
    * too long.
    */
   bodyHtml: string;
@@ -4337,7 +4345,7 @@ export interface Story {
   /**
    * The story body formatted as LBML. May contain the following HTML tags: `<br>` `<strong>`
    * `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`. The text is a preview extract, and may be
-   * truncated if it’s too long.
+   * truncated if it's too long.
    */
   bodyLbml: string;
 
@@ -4356,7 +4364,7 @@ export interface Story {
   whenCreated: string;
 
   /**
-   * The story’s hero image, in multiple resolutions.
+   * The story's hero image, in multiple resolutions.
    */
   image: Image;
 }
@@ -4402,12 +4410,12 @@ export interface StorySummary {
   source: string;
 
   /**
-   * The URL of the story’s video (if applicable).
+   * The URL of the story's video (if applicable).
    */
   videoUrl: string;
 
   /**
-   * The story body formatted as HTML. The text is a preview extract, and may be truncated if it’s
+   * The story body formatted as HTML. The text is a preview extract, and may be truncated if it's
    * too long.
    */
   bodyHtml: string;
@@ -4415,12 +4423,12 @@ export interface StorySummary {
   /**
    * The story body formatted as LBML. May contain the following HTML tags: `<br>` `<strong>`
    * `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`. The text is a preview extract, and may be
-   * truncated if it’s too long.
+   * truncated if it's too long.
    */
   bodyLbml: string;
 
   /**
-   * Will be true if the story body was truncated because it’s very long.
+   * Will be true if the story body was truncated because it's very long.
    */
   bodyTruncated: boolean;
 
@@ -4439,7 +4447,7 @@ export interface StorySummary {
   whenCreated: string;
 
   /**
-   * The story’s hero image, in multiple resolutions.
+   * The story's hero image, in multiple resolutions.
    */
   image: Image;
 }
@@ -4499,7 +4507,7 @@ export interface UsernameCheckResponse {
   /**
    * Will be `Available` if the username is available to register, or `NotAvailable` if used by
    * another member (or attached to a deactivated account, or otherwise reserved). May return an
-   * appropriate error value if the username doesn’t meet Letterboxd’s requirements: Usernames must
+   * appropriate error value if the username doesn't meet Letterboxd's requirements: Usernames must
    * be between 2 and 15 characters long and may only contain upper or lowercase letters, numbers
    * or the underscore (`_`) character.
    */

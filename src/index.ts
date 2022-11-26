@@ -18,7 +18,7 @@ export default class Client {
 
   public auth = {
     /**
-     * Request a link via email to reset the password for a member’s account.
+     * Request a link via email to reset the password for a member's account.
      *
      * @see {@link https://api-docs.letterboxd.com/#path--auth-forgotten-password-request}
      */
@@ -53,7 +53,6 @@ export default class Client {
     },
 
     /**
-     * @module Auth
      * @see {@link https://api-docs.letterboxd.com/#path--auth-revoke}
      */
     revokeAuth: () => {
@@ -65,7 +64,7 @@ export default class Client {
     },
 
     /**
-     * Use a member’s credentials to sign in and receive an authentication token.
+     * Use a member's credentials to sign in and receive an authentication token.
      *
      * Use this endpoint to generate or refresh an auth token. See
      * [Authentication](https://api-docs.letterboxd.com/#auth) for more details.
@@ -182,7 +181,7 @@ export default class Client {
     /**
      * Get details about a film contributor by ID.
      *
-     * Contributors include the film’s director(s), cast, crew and studio(s).
+     * Contributors include the film's director(s), cast, crew and studio(s).
      *
      * @param id The LID of the contributor.
      * @see {@link https://api-docs.letterboxd.com/#path--contributor--id-}
@@ -201,7 +200,7 @@ export default class Client {
     /**
      * A cursored window over the list of contributions to films for a contributor.
      *
-     * Use the ‘next’ cursor to move through the list
+     * Use the ‘next' cursor to move through the list
      *
      * @param id The LID of the contributor.
      * @param params
@@ -360,7 +359,7 @@ export default class Client {
 
         /**
          * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
-         * from the member’s account. Use `Only` to return films from the member’s friends, and
+         * from the member's account. Use `Only` to return films from the member's friends, and
          * `All` to return films from both the member and their friends.
          *
          * @see params.member
@@ -386,7 +385,7 @@ export default class Client {
 
         /**
          * Must be used in conjunction with tagger. Defaults to `None`, which filters tags set by
-         * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter
+         * the member. Use `Only` to filter tags set by the member's friends, and `All` to filter
          * tags set by both the member and their friends.
          */
         includeTaggerFriends?: 'None' | 'All' | 'Only';
@@ -395,7 +394,7 @@ export default class Client {
          * The order in which the films should be returned. Defaults to `FilmPopularity`, which is
          * an all-time measurement of the amount of activity the film has received. The
          * `*WithFriends` values are only available to signed-in members and consider popularity
-         * amongst the signed-in member’s friends.
+         * amongst the signed-in member's friends.
          *
          * The `AuthenticatedMember*` values are only available to signed-in members.
          *
@@ -608,7 +607,7 @@ export default class Client {
 
         /**
          * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
-         * from the member’s account. Use `Only` to return films from the member’s friends, and
+         * from the member's account. Use `Only` to return films from the member's friends, and
          * `All` to return films from both the member and their friends.
          */
         includeFriends?: 'None' | 'All' | 'Only';
@@ -634,7 +633,7 @@ export default class Client {
 
         /**
          * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
-         * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter
+         * the member. Use `Only` to filter tags set by the member's friends, and `All` to filter
          * tags set by both the member and their friends.
          *
          * @see params.tagger
@@ -645,7 +644,7 @@ export default class Client {
          * The order in which the films should be returned. Defaults to `FilmPopularity`, which is
          * an all-time measurement of the amount of activity the film has received. The
          * `*WithFriends` values are only available to signed-in members and consider popularity
-         * amongst the signed-in member’s friends.
+         * amongst the signed-in member's friends.
          *
          * The `AuthenticatedMember*` values are only available to signed-in members.
          *
@@ -690,7 +689,7 @@ export default class Client {
     /**
      * A cursored window over the list of films.
      *
-     * Use the ‘next’ cursor to move through the list. The response will include the film
+     * Use the ‘next' cursor to move through the list. The response will include the film
      * relationships for the signed-in member and the member indicated by the `member` LID if
      * specified.
      *
@@ -846,7 +845,7 @@ export default class Client {
 
       /**
        * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
-       * from the member’s account. Use `Only` to return films from the member’s friends, and `All`
+       * from the member's account. Use `Only` to return films from the member's friends, and `All`
        * to return films from both the member and their friends.
        */
       includeFriends?: 'None' | 'All' | 'Only';
@@ -872,7 +871,7 @@ export default class Client {
 
       /**
        * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
-       * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter tags
+       * the member. Use `Only` to filter tags set by the member's friends, and `All` to filter tags
        * set by both the member and their friends.
        *
        * @see params.tagger
@@ -883,7 +882,7 @@ export default class Client {
        * The order in which the films should be returned. Defaults to `FilmPopularity`, which is an
        * all-time measurement of the amount of activity the film has received. The `*WithFriends`
        * values are only available to signed-in members and consider popularity amongst the
-       * signed-in member’s friends. The `Date` values are only available when member is specified
+       * signed-in member's friends. The `Date` values are only available when member is specified
        * and using a `memberRelationship` of `Watched`, `Liked`, `Rated` or `InWatchlist`. The
        * `BestMatch` sort order is only available when specifying one of the following: `similarTo`,
        * `theme`, `minigenre` or `nanogenre`.
@@ -980,8 +979,8 @@ export default class Client {
     /**
      * Get a list of services supported by the /films endpoint.
      *
-     * Services are returned in logical order. Some services (including ‘My Services’ options) are
-     * only available to paying members, so results will vary based on the authenticated member’s
+     * Services are returned in logical order. Some services (including ‘My Services' options) are
+     * only available to paying members, so results will vary based on the authenticated member's
      * status.
      *
      * @see {@link https://api-docs.letterboxd.com/#path--films-film-services}
@@ -1071,7 +1070,7 @@ export default class Client {
     },
 
     /**
-     * Get details of the authenticated member’s friends’ relationship with a film by ID.
+     * Get details of the authenticated member's friends' relationship with a film by ID.
      *
      * @param id The LID of the film.
      * @see {@link https://api-docs.letterboxd.com/#path--film--id--friends}
@@ -1089,7 +1088,7 @@ export default class Client {
     },
 
     /**
-     * Get details of the authenticated member’s relationship with a film by ID.
+     * Get details of the authenticated member's relationship with a film by ID.
      *
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
@@ -1114,7 +1113,7 @@ export default class Client {
     },
 
     /**
-     * Get details of members’ relationships with a film by ID.
+     * Get details of members' relationships with a film by ID.
      *
      * @param id The LID of the film.
      * @param params
@@ -1150,7 +1149,7 @@ export default class Client {
          *    appear first.
          *  - Otherwise, members who most recently joined the site appear first.
          *  - The `*WithFriends` values are only available to authenticated members and consider
-         *    popularity amongst the member’s friends.
+         *    popularity amongst the member's friends.
          */
         sort?:
           | 'Date'
@@ -1253,7 +1252,7 @@ export default class Client {
     /**
      * A cursored window over a list of lists.
      *
-     * Use the ‘next’ cursor to move through the list.
+     * Use the ‘next' cursor to move through the list.
      *
      * @param params
      * @see {@link https://api-docs.letterboxd.com/#path--lists}
@@ -1272,7 +1271,7 @@ export default class Client {
       /**
        * Defaults to `Date`, which returns lists that were most recently created/updated first. The
        * `*WithFriends` values are only available to signed-in members and consider popularity
-       * amongst the signed-in member’s friends.
+       * amongst the signed-in member's friends.
        */
       sort:
         | 'Date'
@@ -1321,7 +1320,7 @@ export default class Client {
 
       /**
        * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
-       * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter
+       * the member. Use `Only` to filter tags set by the member's friends, and `All` to filter
        * tags set by both the member and their friends.
        *
        * @see params.tagger
@@ -1342,16 +1341,16 @@ export default class Client {
 
       /**
        * Must be used in conjunction with `member`. Defaults to `None`, which only returns lists
-       * from the member’s account. Use `Only` to return lists from the member’s friends, and `All`
+       * from the member's account. Use `Only` to return lists from the member's friends, and `All`
        * to return lists from both the member and their friends.
        */
       includeFriends: 'None' | 'All' | 'Only';
 
       /**
        * Specify `Clean` to return lists that do not contain profane language. Specify `Published`
-       * to return the member’s lists that have been made public. Note that unpublished lists for
+       * to return the member's lists that have been made public. Note that unpublished lists for
        * members other than the authenticated member are never returned. Specify NotPublished to
-       * return the authenticated member’s lists that have not been made public.
+       * return the authenticated member's lists that have not been made public.
        */
       where: 'Clean' | 'Published' | 'NotPublished';
 
@@ -1529,7 +1528,7 @@ export default class Client {
     /**
      * A cursored window over the comments for a list.
      *
-     * Use the ‘next’ cursor to move through the comments.
+     * Use the ‘next' cursor to move through the comments.
      *
      * @param id The LID of the list.
      * @param params
@@ -1760,7 +1759,7 @@ export default class Client {
 
         /**
          * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
-         * from the member’s account. Use `Only` to return films from the member’s friends, and
+         * from the member's account. Use `Only` to return films from the member's friends, and
          * `All` to return films from both the member and their friends.
          */
         includeFriends: 'None' | 'All' | 'Only';
@@ -1784,7 +1783,7 @@ export default class Client {
 
         /**
          * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
-         * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter
+         * the member. Use `Only` to filter tags set by the member's friends, and `All` to filter
          * tags set by both the member and their friends.
          */
         includeTaggerFriends: 'None' | 'All' | 'Only';
@@ -1841,7 +1840,7 @@ export default class Client {
     },
 
     /**
-     * Get details of the authenticated member’s relationship with a list by ID.
+     * Get details of the authenticated member's relationship with a list by ID.
      *
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
@@ -1866,7 +1865,7 @@ export default class Client {
     },
 
     /**
-     * Update the authenticated member’s relationship with a list by ID.
+     * Update the authenticated member's relationship with a list by ID.
      *
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
@@ -1947,7 +1946,7 @@ export default class Client {
      * entry (must have a date) or a review (must have review text). Log entries can be both a
      * diary entry and a review if they satisfy both criteria.
      *
-     * Use the ‘next’ cursor to move through the list.
+     * Use the ‘next' cursor to move through the list.
      *
      * @param params
      * @see {@link https://api-docs.letterboxd.com/#path--log-entries}
@@ -1979,7 +1978,7 @@ export default class Client {
        * The `FilmPopularity` values return reviews for films with more combined activity first.
        *
        * The `*WithFriends` values are only available to signed-in members and consider popularity
-       * amongst the signed-in member’s friends.
+       * amongst the signed-in member's friends.
        *
        * The `Date` value sorts by the diary date, and implies `where=HasDiaryDate`
        *
@@ -2027,7 +2026,9 @@ export default class Client {
         | 'FilmPopularityWithFriendsThisYear';
 
       /**
-       * Specify the LID of a film to return log entries for that film. Must not be included if the `sort` value is one of `FilmName`, `ReleaseDate*`, `FilmDuration*` or any of the `FilmPopularity` options.
+       * Specify the LID of a film to return log entries for that film. Must not be included if the
+       * `sort` value is one of `FilmName`, `ReleaseDate*`, `FilmDuration*` or any of the
+       * `FilmPopularity` options.
        */
       film?: string;
 
@@ -2064,7 +2065,7 @@ export default class Client {
       /**
        * Must be used in conjunction with `member`. Defaults to `None`, which only returns log
        * entries created or liked by the member. Use `Only` to return log entries created or liked
-       * by the member’s friends, and All to return log entries created or liked by both the member
+       * by the member's friends, and All to return log entries created or liked by both the member
        * and their friends.
        */
       includeFriends?: 'None' | 'All' | 'Only';
@@ -2165,7 +2166,7 @@ export default class Client {
 
       /**
        * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
-       * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter
+       * the member. Use `Only` to filter tags set by the member's friends, and `All` to filter
        * tags set by both the member and their friends.
        */
       includeTaggerFriends?: 'None' | 'All' | 'Only';
@@ -2184,11 +2185,11 @@ export default class Client {
        *  - `Released`, `NotReleased`, `FeatureLength` and `NotFeatureLength` refer to properties
        *    of the associated film rather than to the relevant log entry.
        *  - Use `InWatchlist` or `NotInWatchlist` to limit the returned log entries based on the
-       *    contents of the authenticated member’s watchlist. Use `Watched` and `NotWatched` to
-       *    limit the returned log entries based on the authenticated member’s list of watched
+       *    contents of the authenticated member's watchlist. Use `Watched` and `NotWatched` to
+       *    limit the returned log entries based on the authenticated member's list of watched
        *    films. (Note: you can specify `member` and `filmMemberRelationship` to further limit
-       *    returned entries based on another  member’s films or watchlist.)
-       *  - Use `HasDiaryDate` to limit the returned log entries to those that appear in a member’s
+       *    returned entries based on another  member's films or watchlist.)
+       *  - Use `HasDiaryDate` to limit the returned log entries to those that appear in a member's
        *    diary.
        *  - Use `HasReview` to limit the returned log entries to those containing a review.
        *  - Use `Clean` to exclude reviews that contain profane language.
@@ -2360,9 +2361,9 @@ export default class Client {
     },
 
     /**
-     * A cursored window over the comments for a log entry’s review.
+     * A cursored window over the comments for a log entry's review.
      *
-     * Use the ‘next’ cursor to move through the comments.
+     * Use the ‘next' cursor to move through the comments.
      *
      * @param id The LID of the log entry.
      * @param params
@@ -2436,7 +2437,7 @@ export default class Client {
     },
 
     /**
-     * Get details of the authenticated member’s relationship with a log entry’s review by ID.
+     * Get details of the authenticated member's relationship with a log entry's review by ID.
      *
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
@@ -2461,7 +2462,7 @@ export default class Client {
     },
 
     /**
-     * Update the authenticated member’s relationship with a log entry’s review by ID.
+     * Update the authenticated member's relationship with a log entry's review by ID.
      *
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
@@ -2493,7 +2494,7 @@ export default class Client {
     },
 
     /**
-     * Report a log entry’s review by ID.
+     * Report a log entry's review by ID.
      *
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
@@ -2520,7 +2521,7 @@ export default class Client {
     },
 
     /**
-     * Get statistical data about a log-entry’s review by ID.
+     * Get statistical data about a log-entry's review by ID.
      *
      * @param id The LID of the log entry.
      * @see {@link https://api-docs.letterboxd.com/#path--log-entry--id--statistics}
@@ -2665,7 +2666,7 @@ export default class Client {
      *
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)). If the email address associated
-     * with a member’s account has not been validated and the validation link has expired or been
+     * with a member's account has not been validated and the validation link has expired or been
      * lost, use this endpoint to request a new validation link.
      *
      * @see {@link https://api-docs.letterboxd.com/#path--me-validation-request}
@@ -2681,12 +2682,12 @@ export default class Client {
         | {
             status: 403;
             data: never;
-            reason: 'The authenticated member’s email address was already successfully validated';
+            reason: "The authenticated member's email address was already successfully validated";
           }
         | {
             status: 429;
             data: never;
-            reason: 'Too many validation requests have been made (the email is probably in the member’s spam or junk folder)';
+            reason: "Too many validation requests have been made (the email is probably in the member's spam or junk folder)";
           }
       >({
         method: 'post',
@@ -2700,7 +2701,7 @@ export default class Client {
     /**
      * A cursored window over the list of members.
      *
-     * Use the ‘next’ cursor to move through the list.
+     * Use the ‘next' cursor to move through the list.
      *
      * @param params
      * @see {@link https://api-docs.letterboxd.com/#path--members}
@@ -2735,7 +2736,7 @@ export default class Client {
        * Otherwise, members who most recently joined the site appear first.
        *
        * The `*WithFriends` values are only available to authenticated members and consider
-       * popularity amongst the member’s friends.
+       * popularity amongst the member's friends.
        */
       sort?:
         | 'Date'
@@ -2862,7 +2863,7 @@ export default class Client {
     /**
      * A cursored window over the activity for a member.
      *
-     * Use the ‘next’ cursor to move through the list.
+     * Use the ‘next' cursor to move through the list.
      *
      * @param id The LID of the member.
      * @param params
@@ -2942,9 +2943,9 @@ export default class Client {
          * except their comments on their own lists and reviews. `NetworkActivity` is activity
          * performed either by the member or their followers. Use
          * `where=NetworkActivity&where=NotOwnActivity` to only see activity from followers. If
-         * you don’t specify any of `NetworkActivity`, `OwnActivity` or `NotIncomingActivity`, you
-         * will receive activity related to the member’s content from members outside their network
-         * (e.g. comments and likes on the member’s lists and reviews).
+         * you don't specify any of `NetworkActivity`, `OwnActivity` or `NotIncomingActivity`, you
+         * will receive activity related to the member's content from members outside their network
+         * (e.g. comments and likes on the member's lists and reviews).
          */
         where?: 'OwnActivity' | 'NotOwnActivity' | 'IncomingActivity' | 'NotIncomingActivity' | 'NetworkActivity';
 
@@ -2970,7 +2971,7 @@ export default class Client {
     },
 
     /**
-     * Get the list of a member’s tags, or those that match an optional search prefix.
+     * Get the list of a member's tags, or those that match an optional search prefix.
      *
      * The tags will be returned in order of relevance. All tags previously used by the member will
      * be returned if no search prefix is specified.
@@ -2983,7 +2984,7 @@ export default class Client {
       id: string,
       params?: {
         /**
-         * A case-insensitive prefix match. E.g. “pro” will match “pro”, “project” and “Professional”.
+         * A case-insensitive prefix match. E.g. “pro" will match “pro", “project" and “Professional".
          * An empty `input` will match all tags.
          */
         input?: string;
@@ -3005,7 +3006,7 @@ export default class Client {
     },
 
     /**
-     * Get the list of a member’s tags, or those that match an optional search prefix.
+     * Get the list of a member's tags, or those that match an optional search prefix.
      *
      * The tags will be returned in order of relevance. All tags previously used by the member will
      * be returned if no search prefix is specified.
@@ -3018,7 +3019,7 @@ export default class Client {
       id: string,
       params?: {
         /**
-         * A case-insensitive prefix match. E.g. “pro” will match “pro”, “project” and “Professional”.
+         * A case-insensitive prefix match. E.g. “pro" will match “pro", “project" and “Professional".
          * An empty `input` will match all tags.
          */
         input: string;
@@ -3040,7 +3041,7 @@ export default class Client {
     },
 
     /**
-     * Get details of the authenticated member’s relationship with another member by ID.
+     * Get details of the authenticated member's relationship with another member by ID.
      *
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
@@ -3121,14 +3122,14 @@ export default class Client {
     },
 
     /**
-     * Get details of a member’s public watchlist by ID.
+     * Get details of a member's public watchlist by ID.
      *
-     * The response will include the film relationships for the signed-in member, the watchlist’s
+     * The response will include the film relationships for the signed-in member, the watchlist's
      * owner, and the member indicated by the `member` LID if specified (the `member` and
      * `memberRelationship` parameters are optional, and can be used to perform comparisons between
      * the watchlist owner and another member). Use the
      * [/film/{id}/me](https://api-docs.letterboxd.com/#path--film--id--me) endpoint to add or
-     * remove films from a member’s watchlist.
+     * remove films from a member's watchlist.
      *
      * @param id The LID of the member.
      * @param params
@@ -3288,7 +3289,7 @@ export default class Client {
 
         /**
          * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
-         * from the member’s account. Use `Only` to return films from the member’s friends, and
+         * from the member's account. Use `Only` to return films from the member's friends, and
          * `All` to return films from both the member and their friends.
          */
         includeFriends?: 'None' | 'All' | 'Only';
@@ -3312,7 +3313,7 @@ export default class Client {
 
         /**
          * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
-         * the member. Use `Only` to filter tags set by the member’s friends, and `All` to filter
+         * the member. Use `Only` to filter tags set by the member's friends, and `All` to filter
          * tags set by both the member and their friends.
          */
         includeTaggerFriends?: 'None' | 'All' | 'Only';
@@ -3359,7 +3360,7 @@ export default class Client {
     ) => {
       return request<
         | { status: 200; data: defs.FilmsResponse }
-        | { status: 403; data: never; reason: 'The specified member’s watchlist is private' }
+        | { status: 403; data: never; reason: "The specified member's watchlist is private" }
         | {
             status: 404;
             data: never;
@@ -3419,8 +3420,8 @@ export default class Client {
     input: string;
 
     /**
-     * The type of search to perform. Defaults to `FullText`, which performs a standard search considering text in all
-     * fields. `Autocomplete` only searches primary fields.
+     * The type of search to perform. Defaults to `FullText`, which performs a standard search
+     * considering text in all fields. `Autocomplete` only searches primary fields.
      */
     searchMethod?: 'FullText' | 'Autocomplete' | 'NamesAndKeywords';
 
@@ -3476,7 +3477,7 @@ export default class Client {
     /**
      * A cursored window over a list of stories.
      *
-     * Use the ‘next’ cursor to move through the list.
+     * Use the ‘next' cursor to move through the list.
      *
      * @param params
      * @see {@link https://api-docs.letterboxd.com/#path--stories}
@@ -3511,9 +3512,9 @@ export default class Client {
       member?: string;
 
       /**
-       * Specify `Published` to return the member’s stories that have been made public. Note that
+       * Specify `Published` to return the member's stories that have been made public. Note that
        * unpublished stories for members other than the authenticated member are never returned.
-       * Specify `NotPublished` to return the authenticated member’s stories that have not been made
+       * Specify `NotPublished` to return the authenticated member's stories that have not been made
        * public.
        */
       where?: ('Published' | 'NotPublished')[];
