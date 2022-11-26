@@ -380,13 +380,17 @@ export default class Client {
         /**
          * Must be used with `tagCode`. Specify the LID of a member to focus the tag filter on the
          * member.
+         *
+         * @see params.tagCode
          */
         tagger?: string;
 
         /**
-         * Must be used in conjunction with tagger. Defaults to `None`, which filters tags set by
+         * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
          * the member. Use `Only` to filter tags set by the member's friends, and `All` to filter
          * tags set by both the member and their friends.
+         *
+         * @see params.tagger
          */
         includeTaggerFriends?: 'None' | 'All' | 'Only';
 
@@ -592,6 +596,8 @@ export default class Client {
          * Must be used in conjunction with `member`. Defaults to `Watched`. Specify the type of
          * relationship to limit the returned films accordingly. Use `Ignore` if you only intend to
          * specify the member for use with `sort=MemberRating*`.
+         *
+         * @see params.member
          */
         memberRelationship?:
           | 'Ignore'
@@ -609,6 +615,8 @@ export default class Client {
          * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
          * from the member's account. Use `Only` to return films from the member's friends, and
          * `All` to return films from both the member and their friends.
+         *
+         * @see params.member
          */
         includeFriends?: 'None' | 'All' | 'Only';
 
@@ -830,6 +838,8 @@ export default class Client {
        * Must be used in conjunction with `member`. Defaults to `Watched`. Specify the type of
        * relationship to limit the returned films accordingly. Use `Ignore` if you only intend to
        * specify the member for use with `sort=MemberRating*`.
+       *
+       * @see params.member
        */
       memberRelationship?:
         | 'Ignore'
@@ -847,6 +857,8 @@ export default class Client {
        * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
        * from the member's account. Use `Only` to return films from the member's friends, and `All`
        * to return films from both the member and their friends.
+       *
+       * @see params.member
        */
       includeFriends?: 'None' | 'All' | 'Only';
 
@@ -1172,6 +1184,8 @@ export default class Client {
          * Must be used in conjunction with `member`. Defaults to `IsFollowing`, which returns the
          * list of members followed by the `member`. Use `IsFollowedBy` to return the list of
          * members that follow the `member`.
+         *
+         * @see params.member
          */
         memberRelationship?: 'IsFollowing' | 'IsFollowedBy';
 
@@ -1336,6 +1350,8 @@ export default class Client {
       /**
        * Must be used in conjunction with `member`. Defaults to `Owner`, which returns lists owned
        * by the specified member. Use `Liked` to return lists liked by the member.
+       *
+       * @see params.member
        */
       memberRelationship: 'Owner' | 'Liked';
 
@@ -1343,6 +1359,8 @@ export default class Client {
        * Must be used in conjunction with `member`. Defaults to `None`, which only returns lists
        * from the member's account. Use `Only` to return lists from the member's friends, and `All`
        * to return lists from both the member and their friends.
+       *
+       * @see params.member
        */
       includeFriends: 'None' | 'All' | 'Only';
 
@@ -1744,6 +1762,8 @@ export default class Client {
          * Must be used in conjunction with `member`. Defaults to `Watched`. Specify the type of
          * relationship to limit the returned films accordingly. Use `Ignore` if you only intend to
          * specify the member for use with `sort=MemberRating*`.
+         *
+         * @see params.member
          */
         memberRelationship:
           | 'Ignore'
@@ -1761,6 +1781,8 @@ export default class Client {
          * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
          * from the member's account. Use `Only` to return films from the member's friends, and
          * `All` to return films from both the member and their friends.
+         *
+         * @see params.member
          */
         includeFriends: 'None' | 'All' | 'Only';
 
@@ -2042,6 +2064,8 @@ export default class Client {
        * Must be used in conjunction with `member`. Use `Owner` to limit the returned log entries
        * to those created by the specified member. Use `Liked` to limit the returned reviews to
        * those liked by the specified member (implies `where=HasReview`).
+       *
+       * @see params.member
        */
       memberRelationship?: 'Ignore' | 'Owner' | 'Liked';
 
@@ -2049,6 +2073,8 @@ export default class Client {
        * Must be used in conjunction with `member`. Specify the type of relationship to limit the
        * returned films accordingly. e.g. Use `Liked` to limit the returned reviews to those for
        * films liked by the member.
+       *
+       * @see params.member
        */
       filmMemberRelationship?:
         | 'Ignore'
@@ -2067,6 +2093,8 @@ export default class Client {
        * entries created or liked by the member. Use `Only` to return log entries created or liked
        * by the member's friends, and All to return log entries created or liked by both the member
        * and their friends.
+       *
+       * @see params.member
        */
       includeFriends?: 'None' | 'All' | 'Only';
 
@@ -2077,20 +2105,27 @@ export default class Client {
       year?: number;
 
       /**
-       * Accepts values of `1` through `12`. Must be used with year. If set, limits the returned
+       * Accepts values of `1` through `12`. Must be used with `year`. If set, limits the returned
        * log entries to those with a date that falls during the specified month and year.
+       *
+       * @see parmas.year
        */
       month?: number;
 
       /**
-       * Accepts values of `1` through `52`. Must be used with year. If set, limits the returned
+       * Accepts values of `1` through `52`. Must be used with `year`. If set, limits the returned
        * log entries to those with a date that falls during the specified week and year.
+       *
+       * @see params.year
        */
       week?: number;
 
       /**
-       * Accepts values of `1` through `31`. Must be used with month and `year`. If set, limits the
+       * Accepts values of `1` through `31`. Must be used with `month` and `year`. If set, limits the
        * returned log entries to those with a date that falls on the specified day, month and year.
+       *
+       * @see params.month
+       * @see params.year
        */
       day?: number;
 
@@ -2161,6 +2196,8 @@ export default class Client {
       /**
        * Must be used with `tagCode`. Specify the LID of a member to focus the tag filter on the
        * member.
+       *
+       * @see params.tagCode
        */
       tagger?: string;
 
@@ -2168,6 +2205,8 @@ export default class Client {
        * Must be used in conjunction with `tagger`. Defaults to `None`, which filters tags set by
        * the member. Use `Only` to filter tags set by the member's friends, and `All` to filter
        * tags set by both the member and their friends.
+       *
+       * @see params.tagger
        */
       includeTaggerFriends?: 'None' | 'All' | 'Only';
 
@@ -2759,6 +2798,8 @@ export default class Client {
        * Must be used in conjunction with `member`. Defaults to `IsFollowing`, which returns the
        * list of members followed by the `member`. Use `IsFollowedBy` to return the list of members
        * that follow the `member`.
+       *
+       * @see params.member
        */
       memberRelationship?: 'IsFollowing' | 'IsFollowedBy';
 
@@ -2772,6 +2813,8 @@ export default class Client {
        * members who have seen the `film`. Specify the type of relationship to limit the returned
        * members accordingly. You must specify a `member` in order to use the `InWatchlist`
        * relationship.
+       *
+       * @see params.film
        */
       filmRelationship?:
         | 'Ignore'
@@ -3275,6 +3318,8 @@ export default class Client {
          * Must be used in conjunction with `member`. Defaults to `Watched`. Specify the type of
          * relationship to limit the returned films accordingly. Use `Ignore` if you only intend to
          * specify the member for use with `sort=MemberRating*`.
+         *
+         * @see parmas.member
          */
         memberRelationship?:
           | 'Ignore'
@@ -3292,6 +3337,8 @@ export default class Client {
          * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
          * from the member's account. Use `Only` to return films from the member's friends, and
          * `All` to return films from both the member and their friends.
+         *
+         * @see params.member
          */
         includeFriends?: 'None' | 'All' | 'Only';
 
