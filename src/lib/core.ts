@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as crypto from 'crypto';
 
 import 'isomorphic-fetch';
@@ -5,11 +6,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const BASE_URL = 'https://api.letterboxd.com/api/v0';
 
-export type Auth = {
+export interface Auth {
   apiKey?: string;
   apiSecret?: string;
   accessToken?: string;
-};
+}
 
 export interface APIResponse {
   status: number;

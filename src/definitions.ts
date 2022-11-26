@@ -1,4 +1,4 @@
-export type AbstractActivity = {
+export interface AbstractActivity {
   /**
    * The type of activity.
    */
@@ -30,9 +30,9 @@ export type AbstractActivity = {
    * @example 1997-08-29T07:14:00Z
    */
   whenCreated: string;
-};
+}
 
-export type AbstractComment = {
+export interface AbstractComment {
   /**
    * The type of comment.
    */
@@ -108,9 +108,9 @@ export type AbstractComment = {
    * The message portion of the comment formatted as HTML.
    */
   comment: string;
-};
+}
 
-export type AbstractSearchItem = {
+export interface AbstractSearchItem {
   /**
    * The type of the search result.
    */
@@ -129,9 +129,9 @@ export type AbstractSearchItem = {
    * A relevancy value that can be used to order results.
    */
   score: number;
-};
+}
 
-export type AccessToken = {
+export interface AccessToken {
   /**
    * The access token that grants the member access. Combine this with the `token_type` to form the
    * `Authorization` header.
@@ -157,9 +157,9 @@ export type AccessToken = {
   expires_in: number;
 
   issuer: string;
-};
+}
 
-export type ActivityResponse = {
+export interface ActivityResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -169,9 +169,9 @@ export type ActivityResponse = {
    * The list of activity items.
    */
   items: AbstractActivity[];
-};
+}
 
-export type AListAddition = {
+export interface AListAddition {
   /**
    * The list.
    */
@@ -181,9 +181,9 @@ export type AListAddition = {
    * The number of films added to the list.
    */
   additions: number;
-};
+}
 
-export type AListEntryOccurrence = {
+export interface AListEntryOccurrence {
   /**
    * If the list is ranked, this is the entry’s rank in the list, numbered from 1.
    */
@@ -193,9 +193,9 @@ export type AListEntryOccurrence = {
    * The film LID for this entry.
    */
   filmId: string;
-};
+}
 
-export type AListTopic = {
+export interface AListTopic {
   /**
    * The topic name.
    */
@@ -205,7 +205,7 @@ export type AListTopic = {
    * The list of featured lists for the topic.
    */
   items: ListSummary[];
-};
+}
 
 export type ArticleSearchItem = AbstractSearchItem & {
   /**
@@ -214,16 +214,16 @@ export type ArticleSearchItem = AbstractSearchItem & {
   article: NewsItem;
 };
 
-export type CommentCreationRequest = {
+export interface CommentCreationRequest {
   /**
    * The message portion of the comment in LBML. May contain the following HTML tags: `<br>`
    * `<strong>` `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of
    * 100,000 characters.
    */
   comment: string;
-};
+}
 
-export type CommentUpdateMessage = {
+export interface CommentUpdateMessage {
   /**
    * The type of message.
    */
@@ -244,18 +244,18 @@ export type CommentUpdateMessage = {
    * The error message text in human-readable form.
    */
   title: string;
-};
+}
 
-export type CommentUpdateRequest = {
+export interface CommentUpdateRequest {
   /**
    * The message portion of the comment in LBML. May contain the following HTML tags: `<br>`
    * `<strong>` `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of
    * 100,000 characters.
    */
   comment: string;
-};
+}
 
-export type CommentUpdateResponse = {
+export interface CommentUpdateResponse {
   /**
    * The response object.
    */
@@ -265,9 +265,9 @@ export type CommentUpdateResponse = {
    * A list of messages the API client should show to the user.
    */
   messages: CommentUpdateMessage[];
-};
+}
 
-export type ContributionStatistics = {
+export interface ContributionStatistics {
   /**
    *  The type of contribution.
    */
@@ -293,9 +293,9 @@ export type ContributionStatistics = {
    * The number of films for this contribution type.
    */
   filmCount: number;
-};
+}
 
-export type Contributor = {
+export interface Contributor {
   /**
    * The LID of the contributor.
    */
@@ -320,7 +320,7 @@ export type Contributor = {
    * A list of relevant URLs for this entity, on Letterboxd and external sites.
    */
   links: Link[];
-};
+}
 
 export type ContributorSearchItem = AbstractSearchItem & {
   /**
@@ -329,14 +329,14 @@ export type ContributorSearchItem = AbstractSearchItem & {
   contributor: Contributor;
 };
 
-export type ContributorStatistics = {
+export interface ContributorStatistics {
   /**
    * The statistics for each contribution type.
    */
   contributions: ContributionStatistics[];
-};
+}
 
-export type ContributorSummary = {
+export interface ContributorSummary {
   /**
    * The LID of the contributor.
    */
@@ -359,16 +359,16 @@ export type ContributorSummary = {
    * The ID of the contributor on TMDB, if known
    */
   tmdbid: string;
-};
+}
 
-export type CountriesResponse = {
+export interface CountriesResponse {
   /**
    * The list of countries.
    */
   items: Country[];
-};
+}
 
-export type Country = {
+export interface Country {
   /**
    * The ISO 3166-1 defined code of the country.
    */
@@ -378,7 +378,7 @@ export type Country = {
    * The name of the country.
    */
   name: string;
-};
+}
 
 /**
  * A cursor is a string value provided by the API. It should be treated as an opaque value — don’t
@@ -386,14 +386,14 @@ export type Country = {
  */
 export type Cursor = string;
 
-export type DeregisterPushNotificationsRequest = {
+export interface DeregisterPushNotificationsRequest {
   /**
    * The device ID.
    */
   deviceId: string;
-};
+}
 
-export type DiaryDetails = {
+export interface DiaryDetails {
   /**
    * The date the film was watched, if specified, in ISO 8601 format, i.e. `YYYY-MM-DD`
    */
@@ -404,7 +404,7 @@ export type DiaryDetails = {
    * has seen the film prior to this date.
    */
   rewatch: boolean;
-};
+}
 
 export type DiaryEntryActivity = AbstractActivity & {
   /**
@@ -413,7 +413,7 @@ export type DiaryEntryActivity = AbstractActivity & {
   diaryEntry: LogEntry;
 };
 
-export type DisableAccountRequest = {
+export interface DisableAccountRequest {
   /**
    * The member’s current password.
    */
@@ -423,9 +423,9 @@ export type DisableAccountRequest = {
    * The disable account mode - defaults to 'Disable' if not specified.
    */
   mode?: 'Disable' | 'Delete';
-};
+}
 
-export type Film = {
+export interface Film {
   /**
    * The LID of the film.
    */
@@ -590,9 +590,9 @@ export type Film = {
    * @private First party API clients only
    */
   nanogenres: Nanogenre[];
-};
+}
 
-export type FilmAvailability = {
+export interface FilmAvailability {
   /**
    * @deprecated Use `displayName` instead.
    * @see displayName
@@ -786,18 +786,18 @@ export type FilmAvailability = {
    * The code for the service.
    */
   serviceCode: string;
-};
+}
 
-export type FilmAvailabilityResponse = {
+export interface FilmAvailabilityResponse {
   /**
    * The list of stores where the film is available for streaming or purchasing, in order of
    * preference. If the member has not specified their preferred stores for a service, the USA
    * store will be assumed.
    */
   items: FilmAvailability[];
-};
+}
 
-export type FilmCollection = {
+export interface FilmCollection {
   /**
    * The LID of the film collection.
    */
@@ -817,9 +817,9 @@ export type FilmCollection = {
    * A list of relevant URLs for this entity, on Letterboxd and external sites.
    */
   links: Link[];
-};
+}
 
-export type FilmContribution = {
+export interface FilmContribution {
   /**
    * The type of contribution.
    */
@@ -850,9 +850,9 @@ export type FilmContribution = {
    * The name of the character (only when type is Actor).
    */
   characterName: string;
-};
+}
 
-export type FilmContributions = {
+export interface FilmContributions {
   /**
    * The type of contribution.
    */
@@ -878,9 +878,9 @@ export type FilmContributions = {
    * The list of contributors of the specified type for the film.
    */
   contributors: ContributorSummary[];
-};
+}
 
-export type FilmContributionsResponse = {
+export interface FilmContributionsResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -900,9 +900,9 @@ export type FilmContributionsResponse = {
    * The relationships to the contributor for the members referenced in the request.
    */
   relationships: FilmContributorMemberRelationship[];
-};
+}
 
-export type FilmContributorMemberRelationship = {
+export interface FilmContributorMemberRelationship {
   /**
    * The member.
    */
@@ -912,9 +912,9 @@ export type FilmContributorMemberRelationship = {
    * The relationship details.
    */
   relationships: FilmContributorRelationship[];
-};
+}
 
-export type FilmContributorMetadata = {
+export interface FilmContributorMetadata {
   /**
    * The type of contribution.
    */
@@ -940,9 +940,9 @@ export type FilmContributorMetadata = {
    * The details for this contribution type.
    */
   data: FilmsMetadata;
-};
+}
 
-export type FilmContributorRelationship = {
+export interface FilmContributorRelationship {
   /**
    * The type of contribution.
    */
@@ -968,14 +968,14 @@ export type FilmContributorRelationship = {
    * The relationship the member has with the (filtered) films.
    */
   relationship: FilmsRelationship;
-};
+}
 
-export type FilmIdentifier = {
+export interface FilmIdentifier {
   /**
    * The LID of the film.
    */
   id: string;
-};
+}
 
 export type FilmLikeActivity = AbstractActivity & {
   /**
@@ -1003,7 +1003,7 @@ export type FilmRatingActivity = AbstractActivity & {
   rating: number;
 };
 
-export type FilmRelationship = {
+export interface FilmRelationship {
   /**
    * Will be `true` if the member has indicated they’ve seen the film (via the ‘eye’ icon) or has a
    * log entry for the film.
@@ -1066,9 +1066,9 @@ export type FilmRelationship = {
    * recent entries first.
    */
   diaryEntries: string[];
-};
+}
 
-export type FilmRelationshipUpdateMessage = {
+export interface FilmRelationshipUpdateMessage {
   /**
    * The type of message.
    */
@@ -1083,12 +1083,12 @@ export type FilmRelationshipUpdateMessage = {
    * The error message text in human-readable form.
    */
   title: string;
-};
+}
 
 /**
  * When PATCHing a film relationship, you may send all of the current property values, or just those you wish to change. Properties that violate business rules (see watched below) or contain invalid values will be ignored.
  */
-export type FilmRelationshipUpdateRequest = {
+export interface FilmRelationshipUpdateRequest {
   /**
    * Set to `true` to change the film’s status for the authenticated member to ‘watched’ or `false`
    * for ‘not watched’. If the status is changed to ‘watched’ and the film is in the member’s
@@ -1115,9 +1115,9 @@ export type FilmRelationshipUpdateRequest = {
    * rating). If set, `watched` is assumed to be `true`.
    */
   rating: number;
-};
+}
 
-export type FilmRelationshipUpdateResponse = {
+export interface FilmRelationshipUpdateResponse {
   /**
    * The response object.
    */
@@ -1127,14 +1127,14 @@ export type FilmRelationshipUpdateResponse = {
    * A list of messages the API client should show to the user.
    */
   messages: FilmRelationshipUpdateMessage[];
-};
+}
 
-export type FilmsAutocompleteResponse = {
+export interface FilmsAutocompleteResponse {
   /**
    * The list of films.
    */
   items: FilmSummary[];
-};
+}
 
 export type FilmSearchItem = AbstractSearchItem & {
   /**
@@ -1143,14 +1143,14 @@ export type FilmSearchItem = AbstractSearchItem & {
   film: FilmSummary;
 };
 
-export type FilmServicesResponse = {
+export interface FilmServicesResponse {
   /**
    * The list of film services.
    */
   items: Service[];
-};
+}
 
-export type FilmsMemberRelationship = {
+export interface FilmsMemberRelationship {
   /**
    * The member.
    */
@@ -1160,9 +1160,9 @@ export type FilmsMemberRelationship = {
    * The relationship details.
    */
   relationship: FilmsRelationship;
-};
+}
 
-export type FilmsMetadata = {
+export interface FilmsMetadata {
   /**
    * The total number of films.
    */
@@ -1172,16 +1172,16 @@ export type FilmsMetadata = {
    * The number of films that match the filter for this request.
    */
   filteredFilmCount: number;
-};
+}
 
-export type FilmsRelationship = {
+export interface FilmsRelationship {
   /**
    * The number of watches and likes for the films.
    */
   counts: FilmsRelationshipCounts;
-};
+}
 
-export type FilmsRelationshipCounts = {
+export interface FilmsRelationshipCounts {
   /**
    * The number of films the member has indicated they’ve seen (via the ‘eye’ icon) or has a log
    * entry for.
@@ -1192,9 +1192,9 @@ export type FilmsRelationshipCounts = {
    * The number of films the member has indicated they liked.
    */
   likes: number;
-};
+}
 
-export type FilmsResponse = {
+export interface FilmsResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -1204,9 +1204,9 @@ export type FilmsResponse = {
    * The list of films.
    */
   items: FilmSummary[];
-};
+}
 
-export type FilmStatistics = {
+export interface FilmStatistics {
   /**
    * The film for which statistics were requested.
    */
@@ -1227,9 +1227,9 @@ export type FilmStatistics = {
    * A summary of the number of ratings at each increment between `0.5` and `5.0`.
    */
   ratingsHistogram: RatingsHistogramBar[];
-};
+}
 
-export type FilmStatisticsCounts = {
+export interface FilmStatisticsCounts {
   /**
    * The number of members who have watched the film.
    */
@@ -1259,9 +1259,9 @@ export type FilmStatisticsCounts = {
    * The number of reviews for the film.
    */
   reviews: number;
-};
+}
 
-export type FilmSummary = {
+export interface FilmSummary {
   /**
    * The LID of the film.
    */
@@ -1337,9 +1337,9 @@ export type FilmSummary = {
    * The film’s genres.
    */
   genres: Genre[];
-};
+}
 
-export type FilmTrailer = {
+export interface FilmTrailer {
   /**
    * The YouTube ID of the trailer.
    *
@@ -1353,7 +1353,7 @@ export type FilmTrailer = {
    * @example https://www.youtube.com/watch?v=ICp4g9p_rgo
    */
   url: string;
-};
+}
 
 export type FilmWatchActivity = AbstractActivity & {
   /**
@@ -1372,11 +1372,11 @@ export type FollowActivity = AbstractActivity & {
   followed: MemberSummary;
 };
 
-export type ForgottenPasswordRequest = {
+export interface ForgottenPasswordRequest {
   emailAddress: string;
-};
+}
 
-export type FriendFilmRelationshipsResponse = {
+export interface FriendFilmRelationshipsResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -1396,9 +1396,9 @@ export type FriendFilmRelationshipsResponse = {
    * The number of friends who want to watch the film
    */
   watchListCount: number;
-};
+}
 
-export type Genre = {
+export interface Genre {
   /**
    * The LID of the genre.
    */
@@ -1408,23 +1408,23 @@ export type Genre = {
    * The name of the genre.
    */
   name: string;
-};
+}
 
-export type GenresResponse = {
+export interface GenresResponse {
   /**
    * The list of genres.
    */
   items: Genre[];
-};
+}
 
-export type Image = {
+export interface Image {
   /**
    * The available sizes for the image.
    */
   sizes: ImageSize[];
-};
+}
 
-export type ImageSize = {
+export interface ImageSize {
   /**
    * The image width in pixels.
    */
@@ -1439,14 +1439,14 @@ export type ImageSize = {
    * The URL to the image file.
    */
   url: string;
-};
+}
 
 export type InvitationAcceptedActivity = AbstractActivity & {
   type: InvitationAcceptedActivity;
   invitor: MemberSummary;
 };
 
-export type Language = {
+export interface Language {
   /**
    * The ISO 639-1 defined code of the language.
    */
@@ -1456,16 +1456,16 @@ export type Language = {
    * The name of the language.
    */
   name: string;
-};
+}
 
-export type LanguagesResponse = {
+export interface LanguagesResponse {
   /**
    * The list of languages.
    */
   items: Language[];
-};
+}
 
-export type Link = {
+export interface Link {
   /**
    * Denotes which site the link is for.
    */
@@ -1490,9 +1490,9 @@ export type Link = {
    * The fully qualified URL on the destination site.
    */
   url: string;
-};
+}
 
-export type List = {
+export interface List {
   /**
    * The LID of the list.
    */
@@ -1619,7 +1619,7 @@ export type List = {
    * The list description formatted as HTML.
    */
   description: string;
-};
+}
 
 export type ListActivity = AbstractActivity & {
   /**
@@ -1633,7 +1633,7 @@ export type ListActivity = AbstractActivity & {
   clonedFrom: ListSummary;
 };
 
-export type ListAdditionRequest = {
+export interface ListAdditionRequest {
   /**
    * Specify the LIDs of lists to be added to.
    */
@@ -1643,16 +1643,16 @@ export type ListAdditionRequest = {
    * Specify the LIDs of films to be added to each of the specified lists.
    */
   films?: string[];
-};
+}
 
-export type ListAdditionResponse = {
+export interface ListAdditionResponse {
   /**
    * The list of additions to each list.
    */
   items: AListAddition[];
-};
+}
 
-export type ListComment = {
+export interface ListComment {
   /**
    * The LID of the comment/reply.
    */
@@ -1728,7 +1728,7 @@ export type ListComment = {
    * The message portion of the comment formatted as HTML.
    */
   comment: string;
-};
+}
 
 export type ListCommentActivity = AbstractActivity & {
   /**
@@ -1742,7 +1742,7 @@ export type ListCommentActivity = AbstractActivity & {
   comment: ListComment;
 };
 
-export type ListCommentsResponse = {
+export interface ListCommentsResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -1752,9 +1752,9 @@ export type ListCommentsResponse = {
    * The list of comments.
    */
   items: ListComment[];
-};
+}
 
-export type ListCreateEntry = {
+export interface ListCreateEntry {
   /**
    * The LID of the film.
    */
@@ -1778,9 +1778,9 @@ export type ListCreateEntry = {
    * the film.
    */
   containsSpoilers: boolean;
-};
+}
 
-export type ListCreateMessage = {
+export interface ListCreateMessage {
   /**
    * The type of message.
    */
@@ -1805,9 +1805,9 @@ export type ListCreateMessage = {
    * The error message text in human-readable form.
    */
   title: string;
-};
+}
 
-export type ListCreateResponse = {
+export interface ListCreateResponse {
   /**
    * The response object.
    */
@@ -1817,9 +1817,9 @@ export type ListCreateResponse = {
    * A list of messages the API client should show to the user.
    */
   messages: ListCreateMessage[];
-};
+}
 
-export type ListCreationRequest = {
+export interface ListCreationRequest {
   /**
    * Set to `true` if the owner has elected to publish the list for other members to see.
    */
@@ -1874,9 +1874,9 @@ export type ListCreationRequest = {
    * @see MemberAccount
    */
   share?: 'Facebook';
-};
+}
 
-export type ListEntriesResponse = {
+export interface ListEntriesResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -1896,9 +1896,9 @@ export type ListEntriesResponse = {
    * The relationships to the films in the list for the members referenced in the request.
    */
   relationships: FilmsMemberRelationship[];
-};
+}
 
-export type ListEntry = {
+export interface ListEntry {
   /**
    * If the list is ranked, this is the entry’s rank in the list, numbered from 1.
    */
@@ -1932,9 +1932,9 @@ export type ListEntry = {
    * The notes for the list entry formatted as HTML.
    */
   notes: string;
-};
+}
 
-export type ListEntrySummary = {
+export interface ListEntrySummary {
   /**
    * If the list is ranked, this is the entry’s rank in the list, numbered from 1.
    */
@@ -1944,14 +1944,14 @@ export type ListEntrySummary = {
    * The film for this entry.
    */
   film: FilmSummary;
-};
+}
 
-export type ListIdentifier = {
+export interface ListIdentifier {
   /**
    * The LID of the list.
    */
   id: string;
-};
+}
 
 export type ListLikeActivity = AbstractActivity & {
   /**
@@ -1960,7 +1960,7 @@ export type ListLikeActivity = AbstractActivity & {
   list: ListSummary;
 };
 
-export type ListRelationship = {
+export interface ListRelationship {
   /**
    * Will be `true` if the member likes the list (via the ‘heart’ icon). A member may not like their
    * own list.
@@ -2013,9 +2013,9 @@ export type ListRelationship = {
     | 'Moderated'
     | 'NotCommentable'
     | 'NotValidated';
-};
+}
 
-export type ListRelationshipUpdateMessage = {
+export interface ListRelationshipUpdateMessage {
   /**
    * The type of message.
    */
@@ -2036,9 +2036,9 @@ export type ListRelationshipUpdateMessage = {
    * The error message text in human-readable form.
    */
   title: string;
-};
+}
 
-export type ListRelationshipUpdateRequest = {
+export interface ListRelationshipUpdateRequest {
   /**
    * Set to `true` if the member likes the list (via the ‘heart’ icon). A member may not like their
    * own list.
@@ -2051,9 +2051,9 @@ export type ListRelationshipUpdateRequest = {
    * notifications in their profile settings.
    */
   subscribed?: boolean;
-};
+}
 
-export type ListRelationshipUpdateResponse = {
+export interface ListRelationshipUpdateResponse {
   /**
    * The response object.
    */
@@ -2063,7 +2063,7 @@ export type ListRelationshipUpdateResponse = {
    * A list of messages the API client should show to the user.
    */
   messages: ListRelationshipUpdateMessage[];
-};
+}
 
 export type ListSearchItem = AbstractSearchItem & {
   /**
@@ -2072,7 +2072,7 @@ export type ListSearchItem = AbstractSearchItem & {
   list: ListSummary;
 };
 
-export type ListsResponse = {
+export interface ListsResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -2082,9 +2082,9 @@ export type ListsResponse = {
    * The list of lists.
    */
   items: ListSummary[];
-};
+}
 
-export type ListStatistics = {
+export interface ListStatistics {
   /**
    * The list for which statistics were requested.
    */
@@ -2094,9 +2094,9 @@ export type ListStatistics = {
    * The number of comments and likes for the list.
    */
   counts: ListStatisticsCounts;
-};
+}
 
-export type ListStatisticsCounts = {
+export interface ListStatisticsCounts {
   /**
    * The number of comments for the list.
    */
@@ -2106,9 +2106,9 @@ export type ListStatisticsCounts = {
    * The number of members who like the list.
    */
   likes: number;
-};
+}
 
-export type ListSummary = {
+export interface ListSummary {
   /**
    * The LID of the list.
    */
@@ -2173,9 +2173,9 @@ export type ListSummary = {
    * it’s too long.
    */
   description: string;
-};
+}
 
-export type ListUpdateEntry = {
+export interface ListUpdateEntry {
   /**
    * The LID of the film.
    */
@@ -2201,9 +2201,9 @@ export type ListUpdateEntry = {
    * the film.
    */
   containsSpoilers?: boolean;
-};
+}
 
-export type ListUpdateMessage = {
+export interface ListUpdateMessage {
   /**
    * The type of message.
    */
@@ -2227,9 +2227,9 @@ export type ListUpdateMessage = {
    * The error message text in human-readable form.
    */
   title: string;
-};
+}
 
-export type ListUpdateRequest = {
+export interface ListUpdateRequest {
   /**
    * Set to `true` if the owner has elected to publish the list for other members to see.
    */
@@ -2285,9 +2285,9 @@ export type ListUpdateRequest = {
    * @see ListRelationship
    */
   share?: 'Facebook';
-};
+}
 
-export type ListUpdateResponse = {
+export interface ListUpdateResponse {
   /**
    * The response object.
    */
@@ -2297,9 +2297,9 @@ export type ListUpdateResponse = {
    * A list of messages the API client should show to the user.
    */
   messages: ListUpdateMessage[];
-};
+}
 
-export type LogEntriesResponse = {
+export interface LogEntriesResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -2309,9 +2309,9 @@ export type LogEntriesResponse = {
    * The list of log entries.
    */
   items: LogEntry[];
-};
+}
 
-export type LogEntry = {
+export interface LogEntry {
   /**
    * The LID of the log entry.
    */
@@ -2414,9 +2414,9 @@ export type LogEntry = {
    * image into a shorter space, such as in the page for a film on the Letterboxd site.
    */
   backdropFocalPoint: number;
-};
+}
 
-export type LogEntryCreationRequest = {
+export interface LogEntryCreationRequest {
   /**
    * The film being logged.
    */
@@ -2456,9 +2456,9 @@ export type LogEntryCreationRequest = {
    * @see ListRelationship.commentThreadState
    */
   commentPolicy: 'Anyone' | 'Friends' | 'You';
-};
+}
 
-export type LogEntryCreationRequestDiaryDetails = {
+export interface LogEntryCreationRequestDiaryDetails {
   /**
    * The date the film was watched, if specified, in ISO 8601 format, i.e. `YYYY-MM-DD`
    */
@@ -2469,9 +2469,9 @@ export type LogEntryCreationRequestDiaryDetails = {
    * has seen the film prior to this date.
    */
   rewatch: boolean;
-};
+}
 
-export type LogEntryCreationRequestReview = {
+export interface LogEntryCreationRequestReview {
   /**
    * The review text in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
    * `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000 characters.
@@ -2493,9 +2493,9 @@ export type LogEntryCreationRequestReview = {
    * @see MemberAccount
    */
   share: 'Facebook';
-};
+}
 
-export type LogEntrySummary = {
+export interface LogEntrySummary {
   /**
    * The LID of the log entry.
    */
@@ -2518,9 +2518,9 @@ export type LogEntrySummary = {
    * with increments of `0.5`.
    */
   rating: number;
-};
+}
 
-export type LogEntryUpdateMessage = {
+export interface LogEntryUpdateMessage {
   /**
    * The type of message.
    */
@@ -2540,9 +2540,9 @@ export type LogEntryUpdateMessage = {
    * The error message text in human-readable form.
    */
   title: string;
-};
+}
 
-export type LogEntryUpdateRequest = {
+export interface LogEntryUpdateRequest {
   /**
    * Information about this log entry if adding to the member’s diary. Set to `null` to remove this
    * log entry from the diary.
@@ -2579,9 +2579,9 @@ export type LogEntryUpdateRequest = {
    * @see ListRelationship.commentThreadState
    */
   commentPolicy?: 'Anyone' | 'Friends' | 'You';
-};
+}
 
-export type LogEntryUpdateRequestDiaryDetails = {
+export interface LogEntryUpdateRequestDiaryDetails {
   /**
    * The date the film was watched, if specified, in ISO 8601 format, i.e. `YYYY-MM-DD`
    */
@@ -2592,9 +2592,9 @@ export type LogEntryUpdateRequestDiaryDetails = {
    * has seen the film prior to this date.
    */
   rewatch?: boolean;
-};
+}
 
-export type LogEntryUpdateRequestReview = {
+export interface LogEntryUpdateRequestReview {
   /**
    * The review text in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
    * `<i>` `<a href="">` `<blockquote>`.
@@ -2616,16 +2616,16 @@ export type LogEntryUpdateRequestReview = {
    * @see ReviewRelationship.canShareOn
    */
   share?: 'Facebook';
-};
+}
 
-export type LoginTokenResponse = {
+export interface LoginTokenResponse {
   /**
    * A single-use token for signing into the Letterboxd website.
    */
   token: string;
-};
+}
 
-export type Member = {
+export interface Member {
   /**
    * The LID of the member.
    */
@@ -2790,9 +2790,9 @@ export type Member = {
    * The member’s bio formatted as HTML.
    */
   bio: string;
-};
+}
 
-export type MemberAccount = {
+export interface MemberAccount {
   /**
    * The member’s email address.
    */
@@ -3061,9 +3061,9 @@ export type MemberAccount = {
    * upon `memberStatus`.
    */
   canHaveCustomPosters: boolean;
-};
+}
 
-export type MemberFilmRelationship = {
+export interface MemberFilmRelationship {
   /**
    * The member.
    */
@@ -3073,9 +3073,9 @@ export type MemberFilmRelationship = {
    * The relationship details.
    */
   relationship: FilmRelationship;
-};
+}
 
-export type MemberFilmRelationshipsResponse = {
+export interface MemberFilmRelationshipsResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -3085,9 +3085,9 @@ export type MemberFilmRelationshipsResponse = {
    * The list of film relationships for members.
    */
   items: MemberFilmRelationship[];
-};
+}
 
-export type MemberFilmViewingRelationship = {
+export interface MemberFilmViewingRelationship {
   /**
    * The member.
    */
@@ -3099,16 +3099,16 @@ export type MemberFilmViewingRelationship = {
   relationship: FilmRelationship;
 
   logEntry: LogEntrySummary;
-};
+}
 
-export type MemberIdentifier = {
+export interface MemberIdentifier {
   /**
    * The LID of the member.
    */
   id: string;
-};
+}
 
-export type MemberRelationship = {
+export interface MemberRelationship {
   /**
    * Will be `true` if the authenticated member follows the member identified by ID.
    */
@@ -3128,9 +3128,9 @@ export type MemberRelationship = {
    * Will be `true` if the member identified by ID has blocked the authenticated member.
    */
   blockedBy: boolean;
-};
+}
 
-export type MemberRelationshipUpdateMessage = {
+export interface MemberRelationshipUpdateMessage {
   /**
    * The type of message.
    */
@@ -3145,9 +3145,9 @@ export type MemberRelationshipUpdateMessage = {
    * The error message text in human-readable form.
    */
   title: string;
-};
+}
 
-export type MemberRelationshipUpdateRequest = {
+export interface MemberRelationshipUpdateRequest {
   /**
    * Set to `true` if the authenticated member wishes to follow the member identified by ID, or
    * `false` if they wish to unfollow. A member may not follow their own account, or the account of
@@ -3160,9 +3160,9 @@ export type MemberRelationshipUpdateRequest = {
    * `false` if they wish to unblock. A member may not block their own account.
    */
   blocking: boolean;
-};
+}
 
-export type MemberRelationshipUpdateResponse = {
+export interface MemberRelationshipUpdateResponse {
   /**
    * The response object.
    */
@@ -3172,7 +3172,7 @@ export type MemberRelationshipUpdateResponse = {
    * A list of messages the API client should show to the user.
    */
   messages: MemberRelationshipUpdateMessage[];
-};
+}
 
 export type MemberSearchItem = AbstractSearchItem & {
   /**
@@ -3181,7 +3181,7 @@ export type MemberSearchItem = AbstractSearchItem & {
   member: MemberSummary;
 };
 
-export type MemberSettingsUpdateMessage = {
+export interface MemberSettingsUpdateMessage {
   /**
    * The type of message.
    */
@@ -3204,9 +3204,9 @@ export type MemberSettingsUpdateMessage = {
    * The error message text in human-readable form.
    */
   title: string;
-};
+}
 
-export type MemberSettingsUpdateRequest = {
+export interface MemberSettingsUpdateRequest {
   /**
    * The member’s email address.
    */
@@ -3366,9 +3366,9 @@ export type MemberSettingsUpdateRequest = {
   pushNotificationsForAvailability?: boolean;
   pushNotificationsForBuyAvailability?: boolean;
   pushNotificationsForRentAvailability?: boolean;
-};
+}
 
-export type MemberSettingsUpdateResponse = {
+export interface MemberSettingsUpdateResponse {
   /**
    * The response object.
    */
@@ -3378,9 +3378,9 @@ export type MemberSettingsUpdateResponse = {
    * A list of messages the API client should show to the user.
    */
   messages: MemberSettingsUpdateMessage[];
-};
+}
 
-export type MembersResponse = {
+export interface MembersResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -3390,9 +3390,9 @@ export type MembersResponse = {
    * The list of members.
    */
   items: MemberSummary[];
-};
+}
 
-export type MemberStatistics = {
+export interface MemberStatistics {
   /**
    * The member for which statistics were requested.
    */
@@ -3414,9 +3414,9 @@ export type MemberStatistics = {
    * A list of years the member has year-in-review pages for. *Only supported for paying members.*
    */
   yearsInReview: number[];
-};
+}
 
-export type MemberStatisticsCounts = {
+export interface MemberStatisticsCounts {
   /**
    * The number of films the member has liked.
    */
@@ -3500,9 +3500,9 @@ export type MemberStatisticsCounts = {
    * The number of tags the member has used for diary entries and reviews.
    */
   filmTags: number;
-};
+}
 
-export type MemberSummary = {
+export interface MemberSummary {
   /**
    * The LID of the member.
    */
@@ -3579,9 +3579,9 @@ export type MemberSummary = {
    * `true` if member should not be shown ads.
    */
   hideAds: boolean;
-};
+}
 
-export type MemberTag = {
+export interface MemberTag {
   /**
    * @deprecated Use `displayTag` instead.
    * @see MemberTag.displayTag
@@ -3602,9 +3602,9 @@ export type MemberTag = {
    * Counts of the member’s uses of this tag.
    */
   counts: MemberTagCounts;
-};
+}
 
-export type MemberTagCounts = {
+export interface MemberTagCounts {
   /**
    * The number of films the member has used this tag on.
    */
@@ -3629,16 +3629,16 @@ export type MemberTagCounts = {
    * The number of lists the member has used this tag on.
    */
   lists: number;
-};
+}
 
-export type MemberTagsResponse = {
+export interface MemberTagsResponse {
   /**
    * The list of tag items, ordered by frequency of use.
    */
   items: MemberTag[];
-};
+}
 
-export type Minigenre = {
+export interface Minigenre {
   /**
    * The identifying code for the minigenre.
    */
@@ -3648,9 +3648,9 @@ export type Minigenre = {
    * The name of the minigenre.
    */
   name: string;
-};
+}
 
-export type Nanogenre = {
+export interface Nanogenre {
   /**
    * The identifying code for the nanogenre.
    */
@@ -3660,9 +3660,9 @@ export type Nanogenre = {
    * The name of the nanogenre.
    */
   name: string;
-};
+}
 
-export type NewsItem = {
+export interface NewsItem {
   /**
    * The title of the news item.
    */
@@ -3699,9 +3699,9 @@ export type NewsItem = {
    * The podcast season number, if this news item is for a podcast
    */
   season: number;
-};
+}
 
-export type NewsResponse = {
+export interface NewsResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -3711,9 +3711,9 @@ export type NewsResponse = {
    * The list of news items.
    */
   items: NewsItem[];
-};
+}
 
-export type OAuthError = {
+export interface OAuthError {
   /**
    * The error code, usually `invalid_grant`.
    */
@@ -3723,7 +3723,7 @@ export type OAuthError = {
    * The error description.
    */
   errorDescription: string;
-};
+}
 
 export type PodcastSearchItem = AbstractSearchItem & {
   /**
@@ -3732,7 +3732,7 @@ export type PodcastSearchItem = AbstractSearchItem & {
   podcast: NewsItem;
 };
 
-export type Pronoun = {
+export interface Pronoun {
   /**
    *
 The LID for this pronoun.
@@ -3780,16 +3780,16 @@ The LID for this pronoun.
    * @example He saw himself as a great director.
    */
   reflexive: string;
-};
+}
 
-export type PronounsResponse = {
+export interface PronounsResponse {
   /**
    * The list of pronouns.
    */
   items: Pronoun[];
-};
+}
 
-export type RatingsHistogramBar = {
+export interface RatingsHistogramBar {
   /**
    * The rating increment between `0.5` and `5.0`.
    */
@@ -3806,9 +3806,9 @@ export type RatingsHistogramBar = {
    * The number of ratings made at this increment.
    */
   count: number;
-};
+}
 
-export type RegisterPushNotificationsRequest = {
+export interface RegisterPushNotificationsRequest {
   /**
    * The device ID.
    */
@@ -3823,9 +3823,9 @@ export type RegisterPushNotificationsRequest = {
    * The Firebase token.
    */
   token: string;
-};
+}
 
-export type RegisterRequest = {
+export interface RegisterRequest {
   /**
    * The username for the new account. Use the `/auth/username-check` endpoint to check availability.
    */
@@ -3850,13 +3850,13 @@ export type RegisterRequest = {
    * Set to `true` if the person creating the account has agreed to being at least 16 years of age, and to accepting Letterboxd’s [Terms of Use](https://letterboxd.com/terms-of-use/).
    */
   acceptTermsOfUse: string;
-};
+}
 
 export type RegistrationActivity = AbstractActivity & {
   type: 'RegistrationActivity';
 };
 
-export type ReportCommentRequest = {
+export interface ReportCommentRequest {
   /**
    * The reason why the comment was reported.
    */
@@ -3867,9 +3867,9 @@ export type ReportCommentRequest = {
    * `Plagiarism` or `Other`.
    */
   message?: string;
-};
+}
 
-export type ReportFilmRequest = {
+export interface ReportFilmRequest {
   /**
    * The reason why the film was reported.
    */
@@ -3880,9 +3880,9 @@ export type ReportFilmRequest = {
    * `Duplicate` or `Other`.
    */
   message?: string;
-};
+}
 
-export type ReportListRequest = {
+export interface ReportListRequest {
   /**
    * The reason why the list was reported.
    */
@@ -3893,9 +3893,9 @@ export type ReportListRequest = {
    * `Plagiarism` or `Other`.
    */
   message?: string;
-};
+}
 
-export type ReportMemberRequest = {
+export interface ReportMemberRequest {
   /**
    * The reason why the member was reported.
    */
@@ -3915,9 +3915,9 @@ export type ReportMemberRequest = {
    * An optional, explanatory message to accompany the report. Required if the `reason` is `Other`.
    */
   message?: string;
-};
+}
 
-export type ReportReviewRequest = {
+export interface ReportReviewRequest {
   /**
    * The reason why the review was reported.
    */
@@ -3928,9 +3928,9 @@ export type ReportReviewRequest = {
    * `Plagiarism` or `Other`.
    */
   message?: string;
-};
+}
 
-export type Review = {
+export interface Review {
   /**
    * The review text in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
    * `<i>` `<a href="">` `<blockquote>`.
@@ -3981,7 +3981,7 @@ export type Review = {
    * The review text formatted as HTML.
    */
   text: string;
-};
+}
 
 export type ReviewActivity = AbstractActivity & {
   /**
@@ -3990,7 +3990,7 @@ export type ReviewActivity = AbstractActivity & {
   review: LogEntry;
 };
 
-export type ReviewComment = {
+export interface ReviewComment {
   /**
    * The LID of the comment/reply.
    */
@@ -4066,7 +4066,7 @@ export type ReviewComment = {
    * The message portion of the comment formatted as HTML.
    */
   comment: string;
-};
+}
 
 export type ReviewCommentActivity = AbstractActivity & {
   /**
@@ -4080,7 +4080,7 @@ export type ReviewCommentActivity = AbstractActivity & {
   comment: ReviewComment;
 };
 
-export type ReviewCommentsResponse = {
+export interface ReviewCommentsResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -4090,14 +4090,14 @@ export type ReviewCommentsResponse = {
    * The list of comments.
    */
   items: ReviewComment[];
-};
+}
 
-export type ReviewIdentifier = {
+export interface ReviewIdentifier {
   /**
    * The LID of the log entry.
    */
   id: string;
-};
+}
 
 export type ReviewLikeActivity = AbstractActivity & {
   /**
@@ -4106,7 +4106,7 @@ export type ReviewLikeActivity = AbstractActivity & {
   review: LogEntry;
 };
 
-export type ReviewRelationship = {
+export interface ReviewRelationship {
   /**
    * Will be `true` if the member likes the review (via the ‘heart’ icon). A member may not like
    * their own review.
@@ -4159,9 +4159,9 @@ export type ReviewRelationship = {
     | 'Moderated'
     | 'NotCommentable'
     | 'NotValidated';
-};
+}
 
-export type ReviewRelationshipUpdateMessage = {
+export interface ReviewRelationshipUpdateMessage {
   /**
    * The type of message.
    */
@@ -4184,9 +4184,9 @@ export type ReviewRelationshipUpdateMessage = {
    * The error message text in human-readable form.
    */
   title: string;
-};
+}
 
-export type ReviewRelationshipUpdateRequest = {
+export interface ReviewRelationshipUpdateRequest {
   /**
    * Set to `true` if the member likes the review (via the ‘heart’ icon). A member may not like
    * their own review.
@@ -4199,9 +4199,9 @@ export type ReviewRelationshipUpdateRequest = {
    * notifications in their profile settings.
    */
   subscribed?: boolean;
-};
+}
 
-export type ReviewRelationshipUpdateResponse = {
+export interface ReviewRelationshipUpdateResponse {
   /**
    * The response object.
    */
@@ -4211,7 +4211,7 @@ export type ReviewRelationshipUpdateResponse = {
    * A list of messages the API client should show to the user.
    */
   messages: ReviewRelationshipUpdateMessage[];
-};
+}
 
 export type ReviewSearchItem = AbstractSearchItem & {
   /**
@@ -4220,7 +4220,7 @@ export type ReviewSearchItem = AbstractSearchItem & {
   review: LogEntry;
 };
 
-export type ReviewStatistics = {
+export interface ReviewStatistics {
   /**
    * The log entry for which statistics were requested.
    */
@@ -4230,9 +4230,9 @@ export type ReviewStatistics = {
    * The number of comments and likes for the review.
    */
   counts: ReviewStatisticsCounts;
-};
+}
 
-export type ReviewStatisticsCounts = {
+export interface ReviewStatisticsCounts {
   /**
    * The number of comments for the review.
    */
@@ -4242,9 +4242,9 @@ export type ReviewStatisticsCounts = {
    * The number of members who like the review.
    */
   likes: number;
-};
+}
 
-export type ReviewUpdateResponse = {
+export interface ReviewUpdateResponse {
   /**
    * The response object.
    */
@@ -4254,9 +4254,9 @@ export type ReviewUpdateResponse = {
    * A list of messages the API client should show to the user.
    */
   messages: LogEntryUpdateMessage[];
-};
+}
 
-export type SearchResponse = {
+export interface SearchResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -4266,9 +4266,9 @@ export type SearchResponse = {
    * The list of search results.
    */
   items: AbstractSearchItem[];
-};
+}
 
-export type Service = {
+export interface Service {
   /**
    * The LID of the service.
    */
@@ -4283,9 +4283,9 @@ export type Service = {
    * The URL of the thumbnail image for the service.
    */
   icon: string;
-};
+}
 
-export type StoriesResponse = {
+export interface StoriesResponse {
   /**
    * The cursor to the next page of results.
    */
@@ -4295,9 +4295,9 @@ export type StoriesResponse = {
    * The list of stories.
    */
   items: StorySummary[];
-};
+}
 
-export type Story = {
+export interface Story {
   /**
    * The LID of the story.
    */
@@ -4359,7 +4359,7 @@ export type Story = {
    * The story’s hero image, in multiple resolutions.
    */
   image: Image;
-};
+}
 
 export type StoryActivity = AbstractActivity & {
   /**
@@ -4375,7 +4375,7 @@ export type StorySearchItem = AbstractSearchItem & {
   story: StorySummary;
 };
 
-export type StorySummary = {
+export interface StorySummary {
   /**
    * The LID of the story.
    */
@@ -4442,9 +4442,9 @@ export type StorySummary = {
    * The story’s hero image, in multiple resolutions.
    */
   image: Image;
-};
+}
 
-export type Tag = {
+export interface Tag {
   /**
    * @deprecated Use `displayTag` instead.
    * @see Tag.displayTag
@@ -4460,7 +4460,7 @@ export type Tag = {
    * The tag text as entered by the tagger.
    */
   displayTag: string;
-};
+}
 
 export type TagSearchItem = AbstractSearchItem & {
   /**
@@ -4469,14 +4469,14 @@ export type TagSearchItem = AbstractSearchItem & {
   tag: Tag;
 };
 
-export type TagsResponse = {
+export interface TagsResponse {
   /**
    * The list of tags, ordered by frequency of use.
    */
   items: string[];
-};
+}
 
-export type Theme = {
+export interface Theme {
   /**
    * The identifying code for the theme.
    */
@@ -4486,16 +4486,16 @@ export type Theme = {
    * The name of the theme.
    */
   name: string;
-};
+}
 
-export type TopicsResponse = {
+export interface TopicsResponse {
   /**
    * The list of topics.
    */
   items: AListTopic[];
-};
+}
 
-export type UsernameCheckResponse = {
+export interface UsernameCheckResponse {
   /**
    * Will be `Available` if the username is available to register, or `NotAvailable` if used by
    * another member (or attached to a deactivated account, or otherwise reserved). May return an
@@ -4504,7 +4504,7 @@ export type UsernameCheckResponse = {
    * or the underscore (`_`) character.
    */
   result: 'Available' | 'NotAvailable' | 'TooShort' | 'TooLong' | 'Invalid';
-};
+}
 
 export type WatchlistActivity = AbstractActivity & {
   /**

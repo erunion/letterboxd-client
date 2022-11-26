@@ -1,9 +1,8 @@
 import type * as defs from './definitions';
 import type { Auth } from './lib/core';
 
-import { MissingAccessTokenError } from 'lib/errors';
-
 import { request } from './lib/core';
+import { MissingAccessTokenError } from './lib/errors';
 
 export default class Client {
   private credentials: Auth = {};
