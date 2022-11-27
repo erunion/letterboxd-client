@@ -1,9 +1,2 @@
-node_modules
-
-.vscode
-
-*.js
-*/*.js
-!src
-!jest.config.js
-src/tests/config.json
+coverage/
+node_modules/

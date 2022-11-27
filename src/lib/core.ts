@@ -17,13 +17,6 @@ export interface APIResponse {
   data?: any;
 }
 
-function applyAuth(accessToken: string, headers: Record<string, string> = {}) {
-  return {
-    ...headers,
-    Authorization: `Bearer ${accessToken}`,
-  };
-}
-
 function buildUrl(url: string, params?: Record<string, any>) {
   const urlObj = new URL(`${BASE_URL}${url}`);
 
@@ -54,9 +47,9 @@ function buildParams(
     body ? (body instanceof URLSearchParams ? body.toString() : JSON.stringify(body)) : '',
   ].join('\u0000');
 
-  const signature = crypto.createHmac('sha256', auth.apiSecret).update(sigBase).digest('hex').toLowerCase();
+  fullParams.signature = crypto.createHmac('sha256', auth.apiSecret).update(sigBase).digest('hex').toLowerCase();
 
-  return { signature, fullParams };
+  return fullParams;
 }
 
 export function request<T extends APIResponse>(opts: {
@@ -77,27 +70,33 @@ export function request<T extends APIResponse>(opts: {
     }
   }
 
-  const { signature, fullParams } = buildParams(opts.auth, opts.method, opts.path, formBody || opts.body, opts.params);
+  const params = buildParams(opts.auth, opts.method, opts.path, formBody || opts.body, opts.params);
+  const url = buildUrl(opts.path, params);
 
-  applyAuth(opts.auth.accessToken, opts.headers);
-
-  return fetch(buildUrl(opts.path, fullParams), {
+  return fetch(url, {
     method: opts.method,
     body: formBody || (opts.body ? JSON.stringify(opts.body) : undefined),
     headers: {
       ...opts.headers,
-      Authorization: `Signature ${signature}`,
+      ...(opts.auth.accessToken ? { Authorization: `Bearer ${opts.auth.accessToken}` } : {}),
     },
   }).then(async res => {
-    const response: {
-      res: Response;
-      status: T['status'];
-      data: T['data'];
-    } = {
+    // This mess allows us to easily handle `res.json()`, and falling back to `res.text()` if our
+    // JSON response isn't actually JSON, without having to clone the response.
+    const buffer = await (await res.arrayBuffer().then(Buffer.from)).toString();
+
+    let data;
+    try {
+      data = JSON.parse(buffer);
+    } catch (err) {
+      data = buffer;
+    }
+
+    const response = {
       res,
       status: res.status,
-      data: await res.json(),
-    };
+      data,
+    } as { res: Response } & T;
 
     return response;
   });

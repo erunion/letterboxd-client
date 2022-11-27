@@ -42,7 +42,7 @@ export default class Client {
      */
     getLoginToken: () => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<{ status: 200; res: defs.LoginTokenResponse } | { status: 400 } | { status: 401 }>({
@@ -73,14 +73,29 @@ export default class Client {
      */
     requestAuthToken: (username: string, password: string) => {
       if (this.credentials.accessToken) {
-        throw new Error(
-          'You cannot retrieve tokens on a client that has already been configured with a token. Create a new client instance without providing any `accessToken` parameter to the constructor.'
+        return Promise.reject(
+          new Error(
+            'You cannot retrieve tokens on a client that has already been configured with a token. Create a new client instance without providing any `accessToken` parameter to the constructor.'
+          )
         );
       }
 
-      return request({
+      return request<
+        | { status: 200; data: defs.AccessToken }
+        | {
+            status: 400;
+            data: defs.OAuthError;
+            reason: 'The credentials were not correct for the member, or the account was not found';
+          }
+        | {
+            status: 401;
+            data: { message: string; type: string };
+            reason: 'An invalid API key or computed signature was supplied.';
+          }
+      >({
         method: 'post',
         path: '/auth/token',
+        auth: this.credentials,
         body: {
           grant_type: 'password',
           username,
@@ -130,7 +145,7 @@ export default class Client {
      */
     update: (id: string, params: defs.CommentUpdateRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -161,7 +176,7 @@ export default class Client {
      */
     report: (id: string, params: defs.ReportCommentRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -1110,7 +1125,7 @@ export default class Client {
      */
     getMemberRelationship: (id: string) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -1229,7 +1244,7 @@ export default class Client {
      */
     report: (id: string, params: defs.ReportFilmRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -1414,7 +1429,7 @@ export default class Client {
      */
     create: (params: defs.ListCreationRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -1440,7 +1455,7 @@ export default class Client {
      */
     updateLists: (params?: defs.ListAdditionRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -1496,7 +1511,7 @@ export default class Client {
      */
     update: (id: string, params?: defs.ListUpdateRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -1527,7 +1542,7 @@ export default class Client {
      */
     delete: (id: string) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -1601,7 +1616,7 @@ export default class Client {
      */
     createComment: (id: string, params: defs.CommentCreationRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -1872,7 +1887,7 @@ export default class Client {
      */
     getRelationship: (id: string) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -1898,7 +1913,7 @@ export default class Client {
      */
     updateRelationship: (id: string, params?: defs.ListRelationshipUpdateRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -1929,7 +1944,7 @@ export default class Client {
      */
     report: (id: string, params: defs.ReportListRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -2306,7 +2321,7 @@ export default class Client {
      */
     create: (params: defs.LogEntryCreationRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -2352,7 +2367,7 @@ export default class Client {
      */
     update: (id: string, params?: defs.LogEntryUpdateRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -2383,7 +2398,7 @@ export default class Client {
      */
     delete: (id: string) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -2457,7 +2472,7 @@ export default class Client {
      */
     createComment: (id: string, params: defs.CommentCreationRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -2486,7 +2501,7 @@ export default class Client {
      */
     getRelationship: (id: string) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -2512,7 +2527,7 @@ export default class Client {
      */
     updateRelationship: (id: string, params?: defs.ReviewRelationshipUpdateRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -2544,7 +2559,7 @@ export default class Client {
      */
     report: (id: string, params: defs.ReportReviewRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -2588,7 +2603,7 @@ export default class Client {
      */
     get: () => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -2612,7 +2627,7 @@ export default class Client {
      */
     update: (params?: defs.MemberSettingsUpdateRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -2638,7 +2653,7 @@ export default class Client {
      */
     deregisterPushNotifications: (params: defs.DeregisterPushNotificationsRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -2662,7 +2677,7 @@ export default class Client {
      */
     deactivate: (params: defs.DisableAccountRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -2687,7 +2702,7 @@ export default class Client {
      */
     registerPushNotifications: (params: defs.RegisterPushNotificationsRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -2712,7 +2727,7 @@ export default class Client {
      */
     validationRequest: () => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -3095,7 +3110,7 @@ export default class Client {
      */
     getMemberRelationship: (id: string) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -3125,7 +3140,7 @@ export default class Client {
      */
     updateMemberRelationship: (id: string, params?: defs.MemberRelationshipUpdateRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
@@ -3156,7 +3171,7 @@ export default class Client {
      */
     report: (id: string, params: defs.ReportMemberRequest) => {
       if (!this.credentials.accessToken) {
-        throw new MissingAccessTokenError();
+        return Promise.reject(new MissingAccessTokenError());
       }
 
       return request<
