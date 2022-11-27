@@ -38,6 +38,3 @@ jobs:
 
       - name: Run tests
         run: npm test
-
-      - name: Lint docs
-        run: npm run lint:docs
