@@ -79,6 +79,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 >
 > All of these methods are available on the `client.auth.*` namespace.
 
+<!-- prettier-ignore-start -->
 | Method | Description |
 | :--- | :--- |
 | `#forgottenPasswordRequest()` | Request a link via email to reset the password for a member's account. |
@@ -86,6 +87,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 | `#requestAuthToken()` | Use a member's credentials to sign in and receive an authentication token. |
 | `#revokeAuth()`* | Revoke a users' access token. |
 | `#usernameCheck()` | Check if a username is available to register. |
+<!-- prettier-ignore-end -->
 
 ### Comments
 
@@ -93,10 +95,12 @@ If successful you will receive back an `AccessToken` response that will contain 
 >
 > All of these methods are available on the `client.comment.*` namespace.
 
+<!-- prettier-ignore-start -->
 | Method | Description |
 | :--- | :--- |
 | `#report()`* | Report a comment by ID. |
 | `#update()`* | Update the message portion of a comment. |
+<!-- prettier-ignore-end -->
 
 ### Contributors
 
@@ -104,10 +108,12 @@ If successful you will receive back an `AccessToken` response that will contain 
 >
 > All of these methods are available on the `client.contributor.*` namespace.
 
+<!-- prettier-ignore-start -->
 | Method | Description |
 | :--- | :--- |
 | `#getContributor()` | Get details about a film contributor by ID. |
 | `#getContributions()` | A cursored window over the list of contributions to films for a contributor. |
+<!-- prettier-ignore-end -->
 
 ### Film Collections
 
@@ -115,9 +121,11 @@ If successful you will receive back an `AccessToken` response that will contain 
 >
 > All of these methods are available on the `client.filmCollection.*` namespace.
 
+<!-- prettier-ignore-start -->
 | Method | Description |
 | :--- | :--- |
 | `#get()` | Get details about a film collection by ID. |
+<!-- prettier-ignore-end -->
 
 ### Films
 
@@ -125,6 +133,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 >
 > All of these methods are available on the `client.film.*` namespace.
 
+<!-- prettier-ignore-start -->
 | Method | Description |
 | :--- | :--- |
 | `#all()` | A cursored window over the list of films. |
@@ -138,6 +147,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 | `#report()`* | Report a film by ID. |
 | `#services()` | Get a list of services supported by the /films endpoint. |
 | `#statistics()` | Get statistical data about a film by ID. |
+<!-- prettier-ignore-end -->
 
 ### Lists
 
@@ -145,6 +155,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 >
 > All of these methods are available on the `client.list.*` namespace.
 
+<!-- prettier-ignore-start -->
 | Method | Description |
 | :--- | :--- |
 | `#all()` | A cursored window over a list of lists. |
@@ -161,6 +172,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 | `#update()`* | Update a list by ID. |
 | `#updateLists()`* | Add one or more films to one or more lists. |
 | `#updateRelationship()`* | Update the authenticated member's relationship with a list by ID. |
+<!-- prettier-ignore-end -->
 
 ### Log Entries
 
@@ -169,6 +181,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 > All of these methods are available on the `client.logEntry.*` namespace.
 .*` namespace.
 
+<!-- prettier-ignore-start -->
 | Method | Description |
 | :--- | :--- |
 | `#all()` | A cursored window over the log entries for a film or member. |
@@ -182,6 +195,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 | `#statistics()` | Get statistical data about a log-entry's review by ID. |
 | `#update()`* | Update a log entry by ID. |
 | `#updateRelationship()`* | Update the authenticated member's relationship with a log entry's review by ID. |
+<!-- prettier-ignore-end -->
 
 ### Me
 
@@ -189,6 +203,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 >
 > All of these methods are available on the `client.me.*` namespace.
 
+<!-- prettier-ignore-start -->
 | Method | Description |
 | :--- | :--- |
 | `#deactivate()`* | Deactivate account. |
@@ -197,6 +212,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 | `#registerPushNotifications()`* | Register a device so it can receive push notifications. |
 | `#update()`* | Update the profile settings for the authenticated member. |
 | `#validationRequest()`* | Request a validation link via email. |
+<!-- prettier-ignore-end -->
 
 ### Members
 
@@ -204,6 +220,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 >
 > All of these methods are available on the `client.member.*` namespace.
 
+<!-- prettier-ignore-start -->
 | Method | Description |
 | :--- | :--- |
 | `#all()` | A cursored window over the list of members. |
@@ -218,6 +235,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 | `#statistics()` | Get statistical data about a member by ID. |
 | `#updateMemberRelationship()`* | Update the authenticated member’s relationship with another member by ID. |
 | `#watchlist()` | Get details of a member's public watchlist by ID. |
+<!-- prettier-ignore-end -->
 
 ### News
 
@@ -233,10 +251,12 @@ If successful you will receive back an `AccessToken` response that will contain 
 >
 > All of these methods are available on the `client.story.*` namespace.
 
+<!-- prettier-ignore-start -->
 | Method | Description |
 | :--- | :--- |
 | `#all()` | A cursored window over a list of stories. |
 | `#get()` | Get details of a story by ID. |
+<!-- prettier-ignore-end -->
 
 ## FAQ
 
