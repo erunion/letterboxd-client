@@ -75,9 +75,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Auth
 
-> **Note**
->
-> All of these methods are available on the `client.auth.*` namespace.
+The following methods are available on the `client.auth.*` namespace:
 
 <!-- prettier-ignore-start -->
 | Method | Description |
@@ -91,9 +89,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Comments
 
-> **Note**
->
-> All of these methods are available on the `client.comment.*` namespace.
+The following methods are available on the `client.comment.*` namespace:
 
 <!-- prettier-ignore-start -->
 | Method | Description |
@@ -104,9 +100,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Contributors
 
-> **Note**
->
-> All of these methods are available on the `client.contributor.*` namespace.
+The following methods are available on the `client.contributor.*` namespace:
 
 <!-- prettier-ignore-start -->
 | Method | Description |
@@ -117,9 +111,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Film Collections
 
-> **Note**
->
-> All of these methods are available on the `client.filmCollection.*` namespace.
+The following methods are available on the `client.filmCollection.*` namespace:
 
 <!-- prettier-ignore-start -->
 | Method | Description |
@@ -129,9 +121,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Films
 
-> **Note**
->
-> All of these methods are available on the `client.film.*` namespace.
+The following methods are available on the `client.film.*` namespace:
 
 <!-- prettier-ignore-start -->
 | Method | Description |
@@ -151,9 +141,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Lists
 
-> **Note**
->
-> All of these methods are available on the `client.list.*` namespace.
+The following methods are available on the `client.list.*` namespace:
 
 <!-- prettier-ignore-start -->
 | Method | Description |
@@ -176,10 +164,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Log Entries
 
-> **Note**
->
-> All of these methods are available on the `client.logEntry.*` namespace.
-.*` namespace.
+The following methods are available on the `client.logEntry.*` namespace:
 
 <!-- prettier-ignore-start -->
 | Method | Description |
@@ -199,9 +184,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Me
 
-> **Note**
->
-> All of these methods are available on the `client.me.*` namespace.
+The following methods are available on the `client.me.*` namespace:
 
 <!-- prettier-ignore-start -->
 | Method | Description |
@@ -216,9 +199,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Members
 
-> **Note**
->
-> All of these methods are available on the `client.member.*` namespace.
+The following methods are available on the `client.member.*` namespace:
 
 <!-- prettier-ignore-start -->
 | Method | Description |
@@ -247,9 +228,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Stories
 
-> **Note**
->
-> All of these methods are available on the `client.story.*` namespace.
+The following methods are available on the `client.story.*` namespace:
 
 <!-- prettier-ignore-start -->
 | Method | Description |
