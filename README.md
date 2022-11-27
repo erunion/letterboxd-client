@@ -71,7 +71,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 >
 > For all documentation on parameters or responses see the TypeScript types that we export to the package or consult <a href="https://api-docs.letterboxd.com/">https://api-docs.letterboxd.com/</a> for the endpoint you're using.
 
-<sub><font color="red">*</font> Requires an authenticated Letterboxd user access token.</sub>
+<sub>* Requires an authenticated Letterboxd user access token.</sub>
 
 ### Auth
 
@@ -82,9 +82,9 @@ If successful you will receive back an `AccessToken` response that will contain 
 | Method | Description |
 | :--- | :--- |
 | `#forgottenPasswordRequest()` | Request a link via email to reset the password for a member's account. |
-| `#getLoginToken()`<font color="red">*</font> | Generate a single-use token for the current member, which can be used to sign the member into the Letterboxd website by passing it as the value of the `urt` query parameter. |
+| `#getLoginToken()`* | Generate a single-use token for the current member, which can be used to sign the member into the Letterboxd website by passing it as the value of the `urt` query parameter. |
 | `#requestAuthToken()` | Use a member's credentials to sign in and receive an authentication token. |
-| `#revokeAuth()`<font color="red">*</font> | Revoke a users' access token. |
+| `#revokeAuth()`* | Revoke a users' access token. |
 | `#usernameCheck()` | Check if a username is available to register. |
 
 ### Comments
@@ -95,8 +95,8 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 | Method | Description |
 | :--- | :--- |
-| `#report()`<font color="red">*</font> | Report a comment by ID. |
-| `#update()`<font color="red">*</font> | Update the message portion of a comment. |
+| `#report()`* | Report a comment by ID. |
+| `#update()`* | Update the message portion of a comment. |
 
 ### Contributors
 
@@ -132,10 +132,10 @@ If successful you will receive back an `AccessToken` response that will contain 
 | `#genres()` | Get a list of genres supported by the /films endpoint. |
 | `#get()` | Get details about a film by ID.  |
 | `#getMemberFriends()` | Get details of the authenticated member's friends' relationship with a film by ID. |
-| `#getMemberRelationship()`<font color="red">*</font> | Get details of the authenticated member's relationship with a film by ID. |
+| `#getMemberRelationship()`* | Get details of the authenticated member's relationship with a film by ID. |
 | `#getMembers()` | Get details of members' relationships with a film by ID. |
 | `#languages()` | Get a list of languages supported by the /films endpoint. |
-| `#report()`<font color="red">*</font> | Report a film by ID. |
+| `#report()`* | Report a film by ID. |
 | `#services()` | Get a list of services supported by the /films endpoint. |
 | `#statistics()` | Get statistical data about a film by ID. |
 
@@ -148,19 +148,19 @@ If successful you will receive back an `AccessToken` response that will contain 
 | Method | Description |
 | :--- | :--- |
 | `#all()` | A cursored window over a list of lists. |
-| `#create()`<font color="red">*</font> | Create a list. |
-| `#createComment()`<font color="red">*</font> | Create a comment on a list. |
-| `#delete()`<font color="red">*</font> | Delete a list by ID. |
+| `#create()`* | Create a list. |
+| `#createComment()`* | Create a comment on a list. |
+| `#delete()`* | Delete a list by ID. |
 | `#get()` | Get details of a list by ID. |
 | `#getComments()` | A cursored window over the comments for a list. |
 | `#getEntries()` | Get entries for a list by ID. |
-| `#getRelationship()`<font color="red">*</font> | Get details of the authenticated member's relationship with a list by ID. |
-| `#report()`<font color="red">*</font> | Report a list by ID. |
+| `#getRelationship()`* | Get details of the authenticated member's relationship with a list by ID. |
+| `#report()`* | Report a list by ID. |
 | `#statistics()` | Get statistical data about a list by ID. |
 | `#topics()` | Get a list of featured topics/lists (e.g. for display in the Browse tab of our apps). |
-| `#update()`<font color="red">*</font> | Update a list by ID. |
-| `#updateLists()`<font color="red">*</font> | Add one or more films to one or more lists. |
-| `#updateRelationship()`<font color="red">*</font> | Update the authenticated member's relationship with a list by ID. |
+| `#update()`* | Update a list by ID. |
+| `#updateLists()`* | Add one or more films to one or more lists. |
+| `#updateRelationship()`* | Update the authenticated member's relationship with a list by ID. |
 
 ### Log Entries
 
@@ -172,16 +172,16 @@ If successful you will receive back an `AccessToken` response that will contain 
 | Method | Description |
 | :--- | :--- |
 | `#all()` | A cursored window over the log entries for a film or member. |
-| `#create()`<font color="red">*</font> | Create a log entry. |
-| `#createComment()`<font color="red">*</font> | Create a comment on a review. |
-| `#delete()`<font color="red">*</font> | Delete a log entry by ID. |
+| `#create()`* | Create a log entry. |
+| `#createComment()`* | Create a comment on a review. |
+| `#delete()`* | Delete a log entry by ID. |
 | `#get()` | Get details about a log entry by ID. |
-| `#getRelationship()`<font color="red">*</font> | Get details of the authenticated member's relationship with a log entry's review by ID. |
+| `#getRelationship()`* | Get details of the authenticated member's relationship with a log entry's review by ID. |
 | `#getComments()` | A cursored window over the comments for a log entry's review. |
-| `#report()`<font color="red">*</font> | Report a log entry's review by ID. |
+| `#report()`* | Report a log entry's review by ID. |
 | `#statistics()` | Get statistical data about a log-entry's review by ID. |
-| `#update()`<font color="red">*</font> | Update a log entry by ID. |
-| `#updateRelationship()`<font color="red">*</font> | Update the authenticated member's relationship with a log entry's review by ID. |
+| `#update()`* | Update a log entry by ID. |
+| `#updateRelationship()`* | Update the authenticated member's relationship with a log entry's review by ID. |
 
 ### Me
 
@@ -191,12 +191,12 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 | Method | Description |
 | :--- | :--- |
-| `#deactivate()`<font color="red">*</font> | Deactivate account. |
-| `#deregisterPushNotifications()`<font color="red">*</font> | Deregister a device so it no longer receives push notifications. |
-| `#get()`<font color="red">*</font> | Get details about the authenticated member. |
-| `#registerPushNotifications()`<font color="red">*</font> | Register a device so it can receive push notifications. |
-| `#update()`<font color="red">*</font> | Update the profile settings for the authenticated member. |
-| `#validationRequest()`<font color="red">*</font> | Request a validation link via email. |
+| `#deactivate()`* | Deactivate account. |
+| `#deregisterPushNotifications()`* | Deregister a device so it no longer receives push notifications. |
+| `#get()`* | Get details about the authenticated member. |
+| `#registerPushNotifications()`* | Register a device so it can receive push notifications. |
+| `#update()`* | Update the profile settings for the authenticated member. |
+| `#validationRequest()`* | Request a validation link via email. |
 
 ### Members
 
@@ -211,12 +211,12 @@ If successful you will receive back an `AccessToken` response that will contain 
 | `#getMemberActivity()` | A cursored window over the activity for a member. |
 | `#getMemberListTags()` | Get the list of a member's tags, or those that match an optional search prefix. |
 | `#getMemberLogEntryTags()` | Get the list of a member's tags, or those that match an optional search prefix. |
-| `#getMemberRelationship()`<font color="red">*</font> | Get details of the authenticated member's relationship with another member by ID. |
+| `#getMemberRelationship()`* | Get details of the authenticated member's relationship with another member by ID. |
 | `#pronouns()` | Get a list of pronouns supported by the `PATCH /me` endpoint |
 | `#register()` | Create a new account. |
-| `#report()`<font color="red">*</font> | Report a member by ID. |
+| `#report()`* | Report a member by ID. |
 | `#statistics()` | Get statistical data about a member by ID. |
-| `#updateMemberRelationship()`<font color="red">*</font> | Update the authenticated member’s relationship with another member by ID. |
+| `#updateMemberRelationship()`* | Update the authenticated member’s relationship with another member by ID. |
 | `#watchlist()` | Get details of a member's public watchlist by ID. |
 
 ### News
