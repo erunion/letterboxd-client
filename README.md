@@ -67,7 +67,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ## Available APIs
 
-> **Note:**
+> **Note**
 >
 > For all documentation on parameters or responses see the TypeScript types that we export to the package or consult <a href="https://api-docs.letterboxd.com/">https://api-docs.letterboxd.com/</a> for the endpoint you're using.
 
@@ -75,7 +75,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Auth
 
-> **Note:**
+> **Note**
 >
 > All of these methods are available on the `client.auth.*` namespace.
 
@@ -91,7 +91,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Comments
 
-> **Note:**
+> **Note**
 >
 > All of these methods are available on the `client.comment.*` namespace.
 
@@ -104,7 +104,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Contributors
 
-> **Note:**
+> **Note**
 >
 > All of these methods are available on the `client.contributor.*` namespace.
 
@@ -117,7 +117,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Film Collections
 
-> **Note:**
+> **Note**
 >
 > All of these methods are available on the `client.filmCollection.*` namespace.
 
@@ -129,7 +129,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Films
 
-> **Note:**
+> **Note**
 >
 > All of these methods are available on the `client.film.*` namespace.
 
@@ -151,7 +151,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Lists
 
-> **Note:**
+> **Note**
 >
 > All of these methods are available on the `client.list.*` namespace.
 
@@ -176,7 +176,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Log Entries
 
-> **Note:**
+> **Note**
 >
 > All of these methods are available on the `client.logEntry.*` namespace.
 .*` namespace.
@@ -199,7 +199,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Me
 
-> **Note:**
+> **Note**
 >
 > All of these methods are available on the `client.me.*` namespace.
 
@@ -216,7 +216,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Members
 
-> **Note:**
+> **Note**
 >
 > All of these methods are available on the `client.member.*` namespace.
 
@@ -247,7 +247,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 
 ### Stories
 
-> **Note:**
+> **Note**
 >
 > All of these methods are available on the `client.story.*` namespace.
 
