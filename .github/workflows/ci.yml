@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 14
+          - 16
+          - 18
+          - 19
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Node 14 still ships with npm@6 which doesn't install peerDeps by default.
+      - name: Install npm@7
+        if: matrix.node == '14'
+        run: npm install -g npm@7
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build dist
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
