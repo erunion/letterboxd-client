@@ -1,28 +1,16 @@
 {
-    "compilerOptions": {
-        "outDir": "./",
-        "target": "es2015",
-        "module": "CommonJS",
-        "moduleResolution": "node",
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "noImplicitThis": true,
-        "alwaysStrict": true,
-        "baseUrl": ".",
-        "paths": {
-            "*": [
-                "node_modules/*",
-                "src/types/*"
-            ]
-        },
-        "allowSyntheticDefaultImports": true,
-        "declaration": true,
-        "declarationDir": "./types"
-    },
-    "exclude": [
-        "./types"
-    ],
-    "include": [
-        "./src/**/*.ts"
-    ]
+  "compilerOptions": {
+    "baseUrl": "./src/",
+    "declaration": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "outDir": "./dist",
+
+    // There's an issue with the types on node-fetch@2 where its `AbortSignal` type now clash
+    // with `@types/node`.
+    //
+    // https://github.com/node-fetch/node-fetch/issues/1652
+    "skipLibCheck": true
+  },
+  "include": ["./src/**/*.ts"]
 }
