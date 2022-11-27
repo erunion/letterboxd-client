@@ -33,7 +33,7 @@ export default class Client {
 
     /**
      * Generate a single-use token for the current member, which can be used to sign the member into
-     * the Letterboxd website by passing it as the value of the urt query parameter.
+     * the Letterboxd website by passing it as the value of the `urt` query parameter.
      *
      * Calls to this endpoint must include the access token for an authenticated member (see
      * [Authentication](https://api-docs.letterboxd.com/#auth)).
@@ -53,9 +53,15 @@ export default class Client {
     },
 
     /**
+     * Revoke a users' access token.
+     *
      * @see {@link https://api-docs.letterboxd.com/#path--auth-revoke}
      */
     revokeAuth: () => {
+      if (this.credentials.accessToken) {
+        return Promise.reject(new MissingAccessTokenError());
+      }
+
       return request({
         method: 'post',
         path: '/auth/revoke',
@@ -485,7 +491,7 @@ export default class Client {
      * @param params
      * @see {@link https://api-docs.letterboxd.com/#path--film-collection--id-}
      */
-    getCollection: (
+    get: (
       id: string,
       params?: {
         /**
@@ -1475,7 +1481,7 @@ export default class Client {
      *
      * @see {@link https://api-docs.letterboxd.com/#path--lists-topics}
      */
-    getTopics: () => {
+    topics: () => {
       return request<{ status: 200; data: defs.TopicsResponse }>({
         method: 'get',
         path: '/lists/topics',
@@ -1988,7 +1994,7 @@ export default class Client {
      * @param params
      * @see {@link https://api-docs.letterboxd.com/#operation--log-entries-get}
      */
-    getEntries: (params?: {
+    all: (params?: {
       /**
        * The pagination cursor.
        */

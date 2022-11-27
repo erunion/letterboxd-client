@@ -2,15 +2,244 @@
   <img src="https://user-images.githubusercontent.com/33762/190890947-fae23b13-1149-4572-a967-46575b2031c0.png" alt="letterboxd logo" width="500" />
 </p>
 
+<p align="center">
+  An unofficial <a href="https://letterboxd.com">Letterboxd</a> API client. 📽️
+</p>
 
-This is an unofficial letterboxd API client, to learn more, go to https://letterboxd.com/api-beta/.
+<p align="center">
+  <a href="https://npm.im/letterboxd-client"><img src="https://img.shields.io/npm/v/letterboxd-client.svg?style=for-the-badge" alt="NPM Version"></a>
+  <a href="https://npm.im/letterboxd-client"><img src="https://img.shields.io/node/v/letterboxd-client.svg?style=for-the-badge" alt="Node Version"></a>
+  <a href="https://npm.im/letterboxd-client"><img src="https://img.shields.io/npm/l/letterboxd-client.svg?style=for-the-badge" alt="MIT License"></a>
+  <a href="https://github.com/dashron/letterboxd-client"><img src="https://img.shields.io/github/workflow/status/dashron/letterboxd-client/CI.svg?style=for-the-badge" alt="Build status"></a>
+</p>
 
-```shell
+---
+
+- [Installation](https://api.readme.dev/docs/installation)
+- [Usage](#usage)
+  - [User Authentication](#user-authentication)
+- [Available APIs](#apis)
+  - [Auth](#auth)
+  - [Comments](#comments)
+  - [Contributors](#contributors)
+  - [Film Collections](#film-collections)
+  - [Films](#films)
+  - [Lists](#lists)
+  - [Log Entries](#log-entries)
+  - [Me](#me)
+  - [Members](#members)
+  - [News](#news)
+  - [Search](#search)
+  - [Stories](#stories)
+- [FAQ](#faq)
+
+## Installation
+
+```
 npm install letterboxd-client
 ```
 
-Check out the tests for examples on how this library works.
+## Usage
 
-`npm build` will compile everything you need. make sure to build before you run `npm publish`. If `tsc` fails, install typescript globally with `npm install -g typescript`
+```js
+import Client from 'letterboxd-client';
+// const { default: Client } = require('letterboxd-client')
 
-`npm test` will run unit tests
+const apiKey = 'your letterboxd api key';
+const apiSecret = 'your letterboxd api secret';
+
+const client = new Client(apiKey, apiSecret);
+const { status, data } = await client.film.get('ljDs');
+
+console.log(data.name) // RRR
+console.log(data.tagline) // Rise Roar Revolt
+```
+
+### User Authentication
+
+To authenticate a user you will need their Letterboxd credentials (`username` + `password`), which you will supply to `client.auth.requestAuthToken` like so:
+
+```js
+const { status, data } = await client.auth.requestAuthToken(username, password);
+```
+
+If successful you will receive back an `AccessToken` response that will contain the users `acessToken` that you can then pass back into the main `Client` instance in order to authenticate all API requests as that user.
+
+## Available APIs
+
+> **Note:**
+>
+> For all documentation on parameters or responses see the TypeScript types that we export to the package or consult <a href="https://api-docs.letterboxd.com/">https://api-docs.letterboxd.com/</a> for the endpoint you're using.
+
+<sub><font color="red">*</font> Requires an authenticated Letterboxd user access token.</sub>
+
+### Auth
+
+> **Note:**
+>
+> All of these methods are available on the `client.auth.*` namespace.
+
+| Method | Description |
+| :--- | :--- |
+| `#forgottenPasswordRequest()` | Request a link via email to reset the password for a member's account. |
+| `#getLoginToken()`<font color="red">*</font> | Generate a single-use token for the current member, which can be used to sign the member into the Letterboxd website by passing it as the value of the `urt` query parameter. |
+| `#requestAuthToken()` | Use a member's credentials to sign in and receive an authentication token. |
+| `#revokeAuth()`<font color="red">*</font> | Revoke a users' access token. |
+| `#usernameCheck()` | Check if a username is available to register. |
+
+### Comments
+
+> **Note:**
+>
+> All of these methods are available on the `client.comment.*` namespace.
+
+| Method | Description |
+| :--- | :--- |
+| `#report()`<font color="red">*</font> | Report a comment by ID. |
+| `#update()`<font color="red">*</font> | Update the message portion of a comment. |
+
+### Contributors
+
+> **Note:**
+>
+> All of these methods are available on the `client.contributor.*` namespace.
+
+| Method | Description |
+| :--- | :--- |
+| `#getContributor()` | Get details about a film contributor by ID. |
+| `#getContributions()` | A cursored window over the list of contributions to films for a contributor. |
+
+### Film Collections
+
+> **Note:**
+>
+> All of these methods are available on the `client.filmCollection.*` namespace.
+
+| Method | Description |
+| :--- | :--- |
+| `#get()` | Get details about a film collection by ID. |
+
+### Films
+
+> **Note:**
+>
+> All of these methods are available on the `client.film.*` namespace.
+
+| Method | Description |
+| :--- | :--- |
+| `#all()` | A cursored window over the list of films. |
+| `#countries()` | Get a list of countries supported by the /films endpoint. |
+| `#genres()` | Get a list of genres supported by the /films endpoint. |
+| `#get()` | Get details about a film by ID.  |
+| `#getMemberFriends()` | Get details of the authenticated member's friends' relationship with a film by ID. |
+| `#getMemberRelationship()`<font color="red">*</font> | Get details of the authenticated member's relationship with a film by ID. |
+| `#getMembers()` | Get details of members' relationships with a film by ID. |
+| `#languages()` | Get a list of languages supported by the /films endpoint. |
+| `#report()`<font color="red">*</font> | Report a film by ID. |
+| `#services()` | Get a list of services supported by the /films endpoint. |
+| `#statistics()` | Get statistical data about a film by ID. |
+
+### Lists
+
+> **Note:**
+>
+> All of these methods are available on the `client.list.*` namespace.
+
+| Method | Description |
+| :--- | :--- |
+| `#all()` | A cursored window over a list of lists. |
+| `#create()`<font color="red">*</font> | Create a list. |
+| `#createComment()`<font color="red">*</font> | Create a comment on a list. |
+| `#delete()`<font color="red">*</font> | Delete a list by ID. |
+| `#get()` | Get details of a list by ID. |
+| `#getComments()` | A cursored window over the comments for a list. |
+| `#getEntries()` | Get entries for a list by ID. |
+| `#getRelationship()`<font color="red">*</font> | Get details of the authenticated member's relationship with a list by ID. |
+| `#report()`<font color="red">*</font> | Report a list by ID. |
+| `#statistics()` | Get statistical data about a list by ID. |
+| `#topics()` | Get a list of featured topics/lists (e.g. for display in the Browse tab of our apps). |
+| `#update()`<font color="red">*</font> | Update a list by ID. |
+| `#updateLists()`<font color="red">*</font> | Add one or more films to one or more lists. |
+| `#updateRelationship()`<font color="red">*</font> | Update the authenticated member's relationship with a list by ID. |
+
+### Log Entries
+
+> **Note:**
+>
+> All of these methods are available on the `client.logEntry.*` namespace.
+.*` namespace.
+
+| Method | Description |
+| :--- | :--- |
+| `#all()` | A cursored window over the log entries for a film or member. |
+| `#create()`<font color="red">*</font> | Create a log entry. |
+| `#createComment()`<font color="red">*</font> | Create a comment on a review. |
+| `#delete()`<font color="red">*</font> | Delete a log entry by ID. |
+| `#get()` | Get details about a log entry by ID. |
+| `#getRelationship()`<font color="red">*</font> | Get details of the authenticated member's relationship with a log entry's review by ID. |
+| `#getComments()` | A cursored window over the comments for a log entry's review. |
+| `#report()`<font color="red">*</font> | Report a log entry's review by ID. |
+| `#statistics()` | Get statistical data about a log-entry's review by ID. |
+| `#update()`<font color="red">*</font> | Update a log entry by ID. |
+| `#updateRelationship()`<font color="red">*</font> | Update the authenticated member's relationship with a log entry's review by ID. |
+
+### Me
+
+> **Note:**
+>
+> All of these methods are available on the `client.me.*` namespace.
+
+| Method | Description |
+| :--- | :--- |
+| `#deactivate()`<font color="red">*</font> | Deactivate account. |
+| `#deregisterPushNotifications()`<font color="red">*</font> | Deregister a device so it no longer receives push notifications. |
+| `#get()`<font color="red">*</font> | Get details about the authenticated member. |
+| `#registerPushNotifications()`<font color="red">*</font> | Register a device so it can receive push notifications. |
+| `#update()`<font color="red">*</font> | Update the profile settings for the authenticated member. |
+| `#validationRequest()`<font color="red">*</font> | Request a validation link via email. |
+
+### Members
+
+> **Note:**
+>
+> All of these methods are available on the `client.member.*` namespace.
+
+| Method | Description |
+| :--- | :--- |
+| `#all()` | A cursored window over the list of members. |
+| `#get()` | Get details about a member by ID. |
+| `#getMemberActivity()` | A cursored window over the activity for a member. |
+| `#getMemberListTags()` | Get the list of a member's tags, or those that match an optional search prefix. |
+| `#getMemberLogEntryTags()` | Get the list of a member's tags, or those that match an optional search prefix. |
+| `#getMemberRelationship()`<font color="red">*</font> | Get details of the authenticated member's relationship with another member by ID. |
+| `#pronouns()` | Get a list of pronouns supported by the `PATCH /me` endpoint |
+| `#register()` | Create a new account. |
+| `#report()`<font color="red">*</font> | Report a member by ID. |
+| `#statistics()` | Get statistical data about a member by ID. |
+| `#updateMemberRelationship()`<font color="red">*</font> | Update the authenticated member’s relationship with another member by ID. |
+| `#watchlist()` | Get details of a member's public watchlist by ID. |
+
+### News
+
+`client.news` will return you back recent news from the Letterboxd editors at <a href="https://letterboxd.com/journal/">https://letterboxd.com/journal/</a>.
+
+### Search
+
+`client.search` is the main entry point for searching Letterboxd. See the parameter types or <a href="https://api-docs.letterboxd.com/#path--search>https://api-docs.letterboxd.com/#path--search</a> for documentation.
+
+### Stories
+
+> **Note:**
+>
+> All of these methods are available on the `client.story.*` namespace.
+
+| Method | Description |
+| :--- | :--- |
+| `#all()` | A cursored window over a list of stories. |
+| `#get()` | Get details of a story by ID. |
+
+## FAQ
+
+#### How can I get access to the Letterboxd API?
+
+https://letterboxd.com/api-beta/
