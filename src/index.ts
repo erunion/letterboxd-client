@@ -1,3 +1,4 @@
+/* eslint-disable typescript-sort-keys/interface */
 import type * as defs from './definitions';
 import type { Auth } from './lib/core';
 
