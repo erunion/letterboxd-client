@@ -9,9 +9,9 @@ import chaiPlugins from './helpers/chai-plugins';
 chai.use(chaiPlugins);
 
 interface MockedResponse {
-  status: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: Record<string, any>;
+  status: number;
 }
 
 const apiKey = 'example-api-key';

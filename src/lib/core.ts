@@ -7,14 +7,14 @@ import { v4 as uuidv4 } from 'uuid';
 export const BASE_URL = 'https://api.letterboxd.com/api/v0';
 
 export interface Auth {
+  accessToken?: string;
   apiKey?: string;
   apiSecret?: string;
-  accessToken?: string;
 }
 
 export interface APIResponse {
-  status: number;
   data?: any;
+  status: number;
 }
 
 function buildUrl(url: string, params?: Record<string, any>) {
@@ -53,12 +53,12 @@ function buildParams(
 }
 
 export function request<T extends APIResponse>(opts: {
-  method: 'get' | 'post' | 'patch' | 'delete';
-  path: string;
   auth?: Auth;
-  params?: Record<string, any>;
   body?: Record<string, any>;
   headers?: Record<string, string>;
+  method: 'get' | 'post' | 'patch' | 'delete';
+  params?: Record<string, any>;
+  path: string;
 }) {
   let formBody;
 
