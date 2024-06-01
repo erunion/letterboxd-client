@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as crypto from 'crypto';
 
-import 'isomorphic-fetch';
 import { v4 as uuidv4 } from 'uuid';
 
 export const BASE_URL = 'https://api.letterboxd.com/api/v0';
@@ -21,9 +20,9 @@ function buildUrl(url: string, params?: Record<string, any>) {
   const urlObj = new URL(`${BASE_URL}${url}`);
 
   if (params) {
-    for (const key in params) {
-      urlObj.searchParams.set(key, params[key]);
-    }
+    Object.entries(params).forEach(([key, value]) => {
+      urlObj.searchParams.set(key, value);
+    });
   }
 
   return urlObj.toString();
@@ -60,22 +59,22 @@ export function request<T extends APIResponse>(opts: {
   params?: Record<string, any>;
   path: string;
 }) {
-  let formBody;
+  let form: URLSearchParams;
 
   if (opts.headers && opts.body && opts.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
-    formBody = new URLSearchParams();
+    form = new URLSearchParams();
 
-    for (const key in opts.body) {
-      formBody.append(key, opts.body[key]);
-    }
+    Object.entries(opts.body).forEach(([key, value]) => {
+      form.append(key, value);
+    });
   }
 
-  const params = buildParams(opts.auth, opts.method, opts.path, formBody || opts.body, opts.params);
+  const params = buildParams(opts.auth, opts.method, opts.path, form || opts.body, opts.params);
   const url = buildUrl(opts.path, params);
 
   return fetch(url, {
     method: opts.method,
-    body: formBody || (opts.body ? JSON.stringify(opts.body) : undefined),
+    body: form || (opts.body ? JSON.stringify(opts.body) : undefined),
     headers: {
       ...opts.headers,
       ...(opts.auth.accessToken ? { Authorization: `Bearer ${opts.auth.accessToken}` } : {}),

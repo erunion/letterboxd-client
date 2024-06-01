@@ -3,7 +3,5 @@
   "root": true,
   "rules": {
     "class-methods-use-this": "off",
-    "guard-for-in": "off",
-    "no-restricted-syntax": "off",
   },
 }
