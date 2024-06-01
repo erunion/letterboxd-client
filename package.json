@@ -7,7 +7,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   },
   "files": [],
   "keywords": [
@@ -23,14 +23,14 @@
   "homepage": "https://github.com/erunion/letterboxd-client#readme",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint . --ext .js,.ts",
-    "lint:docs": "npx alex . && npm run prettier:docs",
+    "lint": "npm run lint:types && npm run lint:js && npm run prettier",
+    "lint:js": "eslint . --ext .js,.ts",
+    "lint:types": "tsc --noEmit",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
     "pretest": "npm run lint",
-    "prettier": "prettier --list-different --write \"./**/**.{md,js,ts}\"",
-    "prettier:docs": "prettier --list-different \"./**/**.md\"",
-    "prettier:write": "prettier --list-different --write \"./**/**.{md,js,ts}\"",
+    "prettier": "prettier --check .",
+    "prettier:write": "prettier --check --write .",
     "test": "mocha \"test/**/*.test.ts\""
   },
   "dependencies": {
@@ -39,17 +39,17 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@readme/eslint-config": "^10.3.2",
+    "@readme/eslint-config": "^14.0.0",
     "@types/caseless": "^0.12.2",
     "@types/chai": "^4.3.4",
     "@types/mocha": "^10.0.1",
     "@types/node": "^20.2.5",
     "caseless": "^0.12.0",
     "chai": "^4.3.7",
-    "eslint": "^8.31.0",
+    "eslint": "^8.57.0",
     "fetch-mock": "^9.11.0",
     "mocha": "^10.2.0",
-    "prettier": "^2.8.1",
+    "prettier": "^3.2.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.3"
   },

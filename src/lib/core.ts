@@ -34,7 +34,7 @@ function buildParams(
   method: string,
   url: string,
   body?: Record<string, any>,
-  params: Record<string, any> = {}
+  params: Record<string, any> = {},
 ) {
   const fullParams = params;
   fullParams.apikey = auth.apiKey;
@@ -56,7 +56,7 @@ export function request<T extends APIResponse>(opts: {
   auth?: Auth;
   body?: Record<string, any>;
   headers?: Record<string, string>;
-  method: 'get' | 'post' | 'patch' | 'delete';
+  method: 'delete' | 'get' | 'patch' | 'post';
   params?: Record<string, any>;
   path: string;
 }) {
@@ -96,7 +96,7 @@ export function request<T extends APIResponse>(opts: {
       res,
       status: res.status,
       data,
-    } as { res: Response } & T;
+    } as T & { res: Response };
 
     return response;
   });

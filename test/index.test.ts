@@ -33,7 +33,7 @@ describe('letterboxd-client', function () {
         }
 
         return { url, headers: Object.fromEntries(headers), body };
-      }
+      },
     );
   });
 
