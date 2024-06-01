@@ -1,5 +1,9 @@
-/* eslint-disable typescript-sort-keys/interface */
 export interface AbstractActivity {
+  /**
+   * The member associated with the activity.
+   */
+  member: MemberSummary;
+
   /**
    * The type of activity.
    */
@@ -21,11 +25,6 @@ export interface AbstractActivity {
     | WatchlistActivity;
 
   /**
-   * The member associated with the activity.
-   */
-  member: MemberSummary;
-
-  /**
    * The timestamp of the activity, in ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
    *
    * @example 1997-08-29T07:14:00Z
@@ -35,9 +34,39 @@ export interface AbstractActivity {
 
 export interface AbstractComment {
   /**
-   * The type of comment.
+   * If the authenticated member has blocked the commenter, `blocked` will be true and `comment`
+   * will not be included.
    */
-  type: ListComment | ReviewComment;
+  blocked: boolean;
+
+  /**
+   * If the content owner has blocked the commenter, `blockedByOwner` will be true and `comment`
+   * will not be included.
+   */
+  blockedByOwner: boolean;
+
+  /**
+   * The message portion of the comment formatted as HTML.
+   */
+  comment: string;
+
+  /**
+   * The message portion of the comment in LBML. May contain the following HTML tags: `<br>`
+   * `<strong>` `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
+   */
+  commentLbml: string;
+
+  /**
+   * If the comment owner has removed the comment from the site, `deleted` will be true and
+   * `comment` will not be included.
+   */
+  deleted: boolean;
+
+  /**
+   * If the authenticated member posted this comment, and the comment is still editable, this value
+   * shows the number of seconds remaining until the editing window closes.
+   */
+  editableWindowExpiresIn: number;
 
   /**
    * The LID of the comment/reply.
@@ -48,26 +77,6 @@ export interface AbstractComment {
    * The member who posted the comment.
    */
   member: MemberSummary;
-
-  /**
-   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
-   *
-   * @example 1997-08-29T07:14:00Z
-   */
-  whenCreated: string;
-
-  /**
-   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
-   *
-   * @example 1997-08-29T07:14:00Z
-   */
-  whenUpdated: string;
-
-  /**
-   * The message portion of the comment in LBML. May contain the following HTML tags: `<br>`
-   * `<strong>` `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
-   */
-  commentLbml: string;
 
   /**
    * If Letterboxd moderators have removed the comment from the site, `removedByAdmin` will be true
@@ -82,36 +91,31 @@ export interface AbstractComment {
   removedByContentOwner: boolean;
 
   /**
-   * If the comment owner has removed the comment from the site, `deleted` will be true and
-   * `comment` will not be included.
+   * The type of comment.
    */
-  deleted: boolean;
+  type: ListComment | ReviewComment;
 
   /**
-   * If the authenticated member has blocked the commenter, `blocked` will be true and `comment`
-   * will not be included.
+   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
+   *
+   * @example 1997-08-29T07:14:00Z
    */
-  blocked: boolean;
+  whenCreated: string;
 
   /**
-   * If the content owner has blocked the commenter, `blockedByOwner` will be true and `comment`
-   * will not be included.
+   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
+   *
+   * @example 1997-08-29T07:14:00Z
    */
-  blockedByOwner: boolean;
-
-  /**
-   * If the authenticated member posted this comment, and the comment is still editable, this value
-   * shows the number of seconds remaining until the editing window closes.
-   */
-  editableWindowExpiresIn: number;
-
-  /**
-   * The message portion of the comment formatted as HTML.
-   */
-  comment: string;
+  whenUpdated: string;
 }
 
 export interface AbstractSearchItem {
+  /**
+   * A relevancy value that can be used to order results.
+   */
+  score: number;
+
   /**
    * The type of the search result.
    */
@@ -125,11 +129,6 @@ export interface AbstractSearchItem {
     | ReviewSearchItem
     | StorySearchItem
     | TagSearchItem;
-
-  /**
-   * A relevancy value that can be used to order results.
-   */
-  score: number;
 }
 
 export interface AccessToken {
@@ -140,9 +139,11 @@ export interface AccessToken {
   access_token: string;
 
   /**
-   * The type of the access token. Use value: `bearer`
+   * The number of seconds before the access token expires.
    */
-  token_type: string;
+  expires_in: number;
+
+  issuer: string;
 
   /**
    * The refresh token is used to obtain a new access token, after the access token expires, without
@@ -153,67 +154,65 @@ export interface AccessToken {
   refresh_token: string;
 
   /**
-   * The number of seconds before the access token expires.
+   * The type of the access token. Use value: `bearer`
    */
-  expires_in: number;
-
-  issuer: string;
+  token_type: string;
 }
 
 export interface ActivityResponse {
   /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
-  /**
    * The list of activity items.
    */
   items: AbstractActivity[];
+
+  /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
 }
 
 export interface AListAddition {
   /**
-   * The list.
-   */
-  list: ListIdentifier;
-
-  /**
    * The number of films added to the list.
    */
   additions: number;
+
+  /**
+   * The list.
+   */
+  list: ListIdentifier;
 }
 
 export interface AListEntryOccurrence {
   /**
-   * If the list is ranked, this is the entry's rank in the list, numbered from 1.
-   */
-  rank: number;
-
-  /**
    * The film LID for this entry.
    */
   filmId: string;
+
+  /**
+   * If the list is ranked, this is the entry's rank in the list, numbered from 1.
+   */
+  rank: number;
 }
 
 export interface AListTopic {
   /**
-   * The topic name.
-   */
-  name: string;
-
-  /**
    * The list of featured lists for the topic.
    */
   items: ListSummary[];
+
+  /**
+   * The topic name.
+   */
+  name: string;
 }
 
-export type ArticleSearchItem = AbstractSearchItem & {
+export interface ArticleSearchItem extends AbstractSearchItem {
   /**
    * The article.
    */
   article: NewsItem;
-};
+}
 
 export interface CommentCreationRequest {
   /**
@@ -225,11 +224,6 @@ export interface CommentCreationRequest {
 }
 
 export interface CommentUpdateMessage {
-  /**
-   * The type of message.
-   */
-  type: 'Error' | 'Success';
-
   /**
    * The error message code.
    */
@@ -245,6 +239,11 @@ export interface CommentUpdateMessage {
    * The error message text in human-readable form.
    */
   title: string;
+
+  /**
+   * The type of message.
+   */
+  type: 'Error' | 'Success';
 }
 
 export interface CommentUpdateRequest {
@@ -270,6 +269,11 @@ export interface CommentUpdateResponse {
 
 export interface ContributionStatistics {
   /**
+   * The number of films for this contribution type.
+   */
+  filmCount: number;
+
+  /**
    *  The type of contribution.
    */
   type:
@@ -289,11 +293,6 @@ export interface ContributionStatistics {
     | 'Studio'
     | 'VisualEffects'
     | 'Writer';
-
-  /**
-   * The number of films for this contribution type.
-   */
-  filmCount: number;
 }
 
 export interface Contributor {
@@ -303,14 +302,14 @@ export interface Contributor {
   id: string;
 
   /**
+   * A list of relevant URLs for this entity, on Letterboxd and external sites.
+   */
+  links: Link[];
+
+  /**
    * The name of the contributor.
    */
   name: string;
-
-  /**
-   * The ID of the contributor on TMDB, if known
-   */
-  tmdbid: string;
 
   /**
    * An array of the types of contributions made, with a count of films for each contribution type.
@@ -318,17 +317,17 @@ export interface Contributor {
   statistics: ContributorStatistics;
 
   /**
-   * A list of relevant URLs for this entity, on Letterboxd and external sites.
+   * The ID of the contributor on TMDB, if known
    */
-  links: Link[];
+  tmdbid: string;
 }
 
-export type ContributorSearchItem = AbstractSearchItem & {
+export interface ContributorSearchItem extends AbstractSearchItem {
   /**
    * Details of the contributor.
    */
   contributor: Contributor;
-};
+}
 
 export interface ContributorStatistics {
   /**
@@ -339,6 +338,14 @@ export interface ContributorStatistics {
 
 export interface ContributorSummary {
   /**
+   * The character name if available (only if the contribution is as an `Actor`; see the `type`
+   * field in FilmContributions).
+   *
+   * @see FilmContributions
+   */
+  characterName: string;
+
+  /**
    * The LID of the contributor.
    */
   id: string;
@@ -347,14 +354,6 @@ export interface ContributorSummary {
    * The name of the contributor.
    */
   name: string;
-
-  /**
-   * The character name if available (only if the contribution is as an `Actor`; see the `type`
-   * field in FilmContributions).
-   *
-   * @see FilmContributions
-   */
-  characterName: string;
 
   /**
    * The ID of the contributor on TMDB, if known
@@ -407,12 +406,12 @@ export interface DiaryDetails {
   rewatch: boolean;
 }
 
-export type DiaryEntryActivity = AbstractActivity & {
+export interface DiaryEntryActivity extends AbstractActivity {
   /**
    * The log entry associated with this activity
    */
   diaryEntry: LogEntry;
-};
+}
 
 export interface DisableAccountRequest {
   /**
@@ -428,41 +427,9 @@ export interface DisableAccountRequest {
 
 export interface Film {
   /**
-   * The LID of the film.
+   * `true` if the film is in TMDb's 'Adult' category.
    */
-  id: string;
-
-  /**
-   * The title of the film.
-   */
-  name: string;
-
-  /**
-   * The original title of the film, if it was first released with a non-English title.
-   */
-  originalName: string;
-
-  /**
-   * The other names by which the film is known (including alternative titles and/or foreign
-   * translations).
-   */
-  alternativeNames: string[];
-
-  /**
-   * The year in which the film was first released.
-   */
-  releaseYear: number;
-
-  /**
-   * The list of directors for the film.
-   */
-  directors: ContributorSummary[];
-
-  /**
-   * The film's poster image (2:3 aspect ratio in multiple sizes). Will contain only a single
-   * obfuscated image if the `adult` flag is `true.
-   */
-  poster: Image;
+  adult: boolean;
 
   /**
    * The film's unobfuscated poster image (2:3 aspect ratio in multiple sizes), only populated if
@@ -471,56 +438,10 @@ export interface Film {
   adultPoster: Image;
 
   /**
-   * The film's position in the official Letterboxd Top 250 list of narrative feature films, null
-   * if the film is not in the list.
+   * The other names by which the film is known (including alternative titles and/or foreign
+   * translations).
    */
-  top250Position: number;
-
-  /**
-   * `true` if the film is in TMDb's 'Adult' category.
-   */
-  adult: boolean;
-
-  /**
-   * `true` if reviews for the film are hidden due to a high volume of moderation traffic.
-   */
-  reviewsHidden: boolean;
-
-  /**
-   * The LID of the collection containing this film.
-   */
-  filmCollectionId: string;
-
-  /**
-   * A list of relevant URLs for this entity, on Letterboxd and external sites.
-   */
-  links: Link[];
-
-  /**
-   * Relationships to the film for the authenticated member (if any) and other members where
-   * relevant.
-   */
-  relationships: MemberFilmRelationship[];
-
-  /**
-   * The film's genres.
-   */
-  genres: Genre[];
-
-  /**
-   * The tagline for the film.
-   */
-  tagline: string;
-
-  /**
-   * A synopsis of the film.
-   */
-  description: string;
-
-  /**
-   * The film's duration (in minutes).
-   */
-  runTime: number;
+  alternativeNames: string[];
 
   /**
    * The film's backdrop image (16:9 ratio in multiple sizes).
@@ -535,9 +456,9 @@ export interface Film {
   backdropFocalPoint: number;
 
   /**
-   * The film's trailer.
+   * The film's contributors (director, cast and crew) grouped by discipline.
    */
-  trailer: FilmTrailer;
+  contributions: FilmContributions[];
 
   /**
    * The film's production countries.
@@ -545,38 +466,39 @@ export interface Film {
   countries: Country[];
 
   /**
+   * A synopsis of the film.
+   */
+  description: string;
+
+  /**
+   * The list of directors for the film.
+   */
+  directors: ContributorSummary[];
+
+  /**
+   * The LID of the collection containing this film.
+   */
+  filmCollectionId: string;
+
+  /**
+   * The film's genres.
+   */
+  genres: Genre[];
+
+  /**
+   * The LID of the film.
+   */
+  id: string;
+
+  /**
    * The film's spoken languages.
    */
   languages: Language[];
 
   /**
-   * The film's contributors (director, cast and crew) grouped by discipline.
+   * A list of relevant URLs for this entity, on Letterboxd and external sites.
    */
-  contributions: FilmContributions[];
-
-  /**
-   * The related news items for the film.
-   */
-  news: NewsItem[];
-
-  /**
-   * The related recent stories for the film.
-   */
-  recentStories: Story[];
-
-  /**
-   * The other films most similar to the film.
-   *
-   * @private First party API clients only
-   */
-  similarTo: FilmSummary[];
-
-  /**
-   * The film's themes.
-   *
-   * @private First party API clients only
-   */
-  themes: Theme[];
+  links: Link[];
 
   /**
    * The film's minigenres.
@@ -586,30 +508,91 @@ export interface Film {
   minigenres: Minigenre[];
 
   /**
+   * The title of the film.
+   */
+  name: string;
+
+  /**
    * The film's nanogenres.
    *
    * @private First party API clients only
    */
   nanogenres: Nanogenre[];
+
+  /**
+   * The related news items for the film.
+   */
+  news: NewsItem[];
+
+  /**
+   * The original title of the film, if it was first released with a non-English title.
+   */
+  originalName: string;
+
+  /**
+   * The film's poster image (2:3 aspect ratio in multiple sizes). Will contain only a single
+   * obfuscated image if the `adult` flag is `true.
+   */
+  poster: Image;
+
+  /**
+   * The related recent stories for the film.
+   */
+  recentStories: Story[];
+
+  /**
+   * Relationships to the film for the authenticated member (if any) and other members where
+   * relevant.
+   */
+  relationships: MemberFilmRelationship[];
+
+  /**
+   * The year in which the film was first released.
+   */
+  releaseYear: number;
+
+  /**
+   * `true` if reviews for the film are hidden due to a high volume of moderation traffic.
+   */
+  reviewsHidden: boolean;
+
+  /**
+   * The film's duration (in minutes).
+   */
+  runTime: number;
+
+  /**
+   * The other films most similar to the film.
+   *
+   * @private First party API clients only
+   */
+  similarTo: FilmSummary[];
+
+  /**
+   * The tagline for the film.
+   */
+  tagline: string;
+
+  /**
+   * The film's themes.
+   *
+   * @private First party API clients only
+   */
+  themes: Theme[];
+
+  /**
+   * The film's position in the official Letterboxd Top 250 list of narrative feature films, null
+   * if the film is not in the list.
+   */
+  top250Position: number;
+
+  /**
+   * The film's trailer.
+   */
+  trailer: FilmTrailer;
 }
 
 export interface FilmAvailability {
-  /**
-   * @deprecated Use `displayName` instead.
-   * @see FilmAvailability.displayName
-   */
-  service: 'Amazon' | 'AmazonPrime' | 'AmazonVideo' | 'iTunes' | 'Netflix';
-
-  /**
-   * The name of the service.
-   */
-  displayName: string;
-
-  /**
-   * The URL of the thumbnail image for the service.
-   */
-  icon: string;
-
   /**
    * The regional store for the service. Not all countries are supported on all services.
    */
@@ -769,14 +752,30 @@ export interface FilmAvailability {
     | 'ZWE';
 
   /**
+   * The name of the service.
+   */
+  displayName: string;
+
+  /**
+   * The URL of the thumbnail image for the service.
+   */
+  icon: string;
+
+  /**
    * The unique ID (if any) for the film on this service.
    */
   id: string;
 
   /**
-   * The URL for the film on this service.
+   * @deprecated Use `displayName` instead.
+   * @see FilmAvailability.displayName
    */
-  url: string;
+  service: 'Amazon' | 'AmazonPrime' | 'AmazonVideo' | 'iTunes' | 'Netflix';
+
+  /**
+   * The code for the service.
+   */
+  serviceCode: string;
 
   /**
    * The types of the availability, possible options included buy, rent and stream
@@ -784,9 +783,9 @@ export interface FilmAvailability {
   types: string[];
 
   /**
-   * The code for the service.
+   * The URL for the film on this service.
    */
-  serviceCode: string;
+  url: string;
 }
 
 export interface FilmAvailabilityResponse {
@@ -800,47 +799,31 @@ export interface FilmAvailabilityResponse {
 
 export interface FilmCollection {
   /**
-   * The LID of the film collection.
-   */
-  id: string;
-
-  /**
-   * The name of the collection.
-   */
-  name: string;
-
-  /**
    * The list of films in the collection.
    */
   films: FilmSummary[];
 
   /**
+   * The LID of the film collection.
+   */
+  id: string;
+
+  /**
    * A list of relevant URLs for this entity, on Letterboxd and external sites.
    */
   links: Link[];
+
+  /**
+   * The name of the collection.
+   */
+  name: string;
 }
 
 export interface FilmContribution {
   /**
-   * The type of contribution.
+   * The name of the character (only when type is Actor).
    */
-  type:
-    | 'Actor'
-    | 'ArtDirection'
-    | 'Cinematography'
-    | 'CoDirector'
-    | 'Composer'
-    | 'Costumes'
-    | 'Director'
-    | 'Editor'
-    | 'MakeUp'
-    | 'Producer'
-    | 'ProductionDesign'
-    | 'SetDecoration'
-    | 'Sound'
-    | 'Studio'
-    | 'VisualEffects'
-    | 'Writer';
+  characterName: string;
 
   /**
    * The film.
@@ -848,12 +831,33 @@ export interface FilmContribution {
   film: FilmSummary;
 
   /**
-   * The name of the character (only when type is Actor).
+   * The type of contribution.
    */
-  characterName: string;
+  type:
+    | 'Actor'
+    | 'ArtDirection'
+    | 'Cinematography'
+    | 'CoDirector'
+    | 'Composer'
+    | 'Costumes'
+    | 'Director'
+    | 'Editor'
+    | 'MakeUp'
+    | 'Producer'
+    | 'ProductionDesign'
+    | 'SetDecoration'
+    | 'Sound'
+    | 'Studio'
+    | 'VisualEffects'
+    | 'Writer';
 }
 
 export interface FilmContributions {
+  /**
+   * The list of contributors of the specified type for the film.
+   */
+  contributors: ContributorSummary[];
+
   /**
    * The type of contribution.
    */
@@ -874,19 +878,9 @@ export interface FilmContributions {
     | 'Studio'
     | 'VisualEffects'
     | 'Writer';
-
-  /**
-   * The list of contributors of the specified type for the film.
-   */
-  contributors: ContributorSummary[];
 }
 
 export interface FilmContributionsResponse {
-  /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
   /**
    * The list of contributions.
    */
@@ -896,6 +890,11 @@ export interface FilmContributionsResponse {
    * Metadata about the contributor's contributions.
    */
   metadata: FilmContributorMetadata[];
+
+  /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
 
   /**
    * The relationships to the contributor for the members referenced in the request.
@@ -917,6 +916,11 @@ export interface FilmContributorMemberRelationship {
 
 export interface FilmContributorMetadata {
   /**
+   * The details for this contribution type.
+   */
+  data: FilmsMetadata;
+
+  /**
    * The type of contribution.
    */
   type:
@@ -936,15 +940,15 @@ export interface FilmContributorMetadata {
     | 'Studio'
     | 'VisualEffects'
     | 'Writer';
-
-  /**
-   * The details for this contribution type.
-   */
-  data: FilmsMetadata;
 }
 
 export interface FilmContributorRelationship {
   /**
+   * The relationship the member has with the (filtered) films.
+   */
+  relationship: FilmsRelationship;
+
+  /**
    * The type of contribution.
    */
   type:
@@ -964,11 +968,6 @@ export interface FilmContributorRelationship {
     | 'Studio'
     | 'VisualEffects'
     | 'Writer';
-
-  /**
-   * The relationship the member has with the (filtered) films.
-   */
-  relationship: FilmsRelationship;
 }
 
 export interface FilmIdentifier {
@@ -978,7 +977,7 @@ export interface FilmIdentifier {
   id: string;
 }
 
-export type FilmLikeActivity = AbstractActivity & {
+export interface FilmLikeActivity extends AbstractActivity {
   /**
    * The film associated with the activity. Includes a `MemberFilmRelationship` for the member who
    * added the activity.
@@ -986,9 +985,9 @@ export type FilmLikeActivity = AbstractActivity & {
    * @see MemberFilmRelationship
    */
   film: FilmSummary;
-};
+}
 
-export type FilmRatingActivity = AbstractActivity & {
+export interface FilmRatingActivity extends AbstractActivity {
   /**
    * The film associated with the activity. Includes a `MemberFilmRelationship` for the member who
    * added the activity.
@@ -1002,31 +1001,14 @@ export type FilmRatingActivity = AbstractActivity & {
    * of `0.5`.
    */
   rating: number;
-};
+}
 
 export interface FilmRelationship {
   /**
-   * Will be `true` if the member has indicated they've seen the film (via the 'eye' icon) or has a
-   * log entry for the film.
+   * A list of LIDs for log entries the member has added for the film in diary order, with most
+   * recent entries first.
    */
-  watched: boolean;
-
-  /**
-   * If `watched=true`, `whenWatched` will contain the time when the member marked the film as
-   * watched. ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
-   */
-  whenWatched: string;
-
-  /**
-   * Will be `true` if the member likes the film (via the 'heart' icon).
-   */
-  liked: boolean;
-
-  /**
-   * If `liked=true`, `whenLiked` will contain the time when the member marked the film as liked.
-   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
-   */
-  whenLiked: string;
+  diaryEntries: string[];
 
   /**
    * Will be `true` if the member listed the film as one of their four favorites.
@@ -1037,6 +1019,28 @@ export interface FilmRelationship {
    * Will be `true` if the film is in the member's watchlist.
    */
   inWatchlist: boolean;
+
+  /**
+   * Will be `true` if the member likes the film (via the 'heart' icon).
+   */
+  liked: boolean;
+
+  /**
+   * The member's rating for the film.
+   */
+  rating: number;
+
+  /**
+   * A list of LIDs for reviews the member has written for the film in the order they were added,
+   * with most recent reviews first.
+   */
+  reviews: string[];
+
+  /**
+   * Will be `true` if the member has indicated they've seen the film (via the 'eye' icon) or has a
+   * log entry for the film.
+   */
+  watched: boolean;
 
   /**
    * If `inWatchlist=true`, `whenAddedToWatchlist` will contain the time when the member added the
@@ -1052,29 +1056,19 @@ export interface FilmRelationship {
   whenCompletedInWatchlist: string;
 
   /**
-   * The member's rating for the film.
+   * If `liked=true`, `whenLiked` will contain the time when the member marked the film as liked.
+   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
    */
-  rating: number;
+  whenLiked: string;
 
   /**
-   * A list of LIDs for reviews the member has written for the film in the order they were added,
-   * with most recent reviews first.
+   * If `watched=true`, `whenWatched` will contain the time when the member marked the film as
+   * watched. ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
    */
-  reviews: string[];
-
-  /**
-   * A list of LIDs for log entries the member has added for the film in diary order, with most
-   * recent entries first.
-   */
-  diaryEntries: string[];
+  whenWatched: string;
 }
 
 export interface FilmRelationshipUpdateMessage {
-  /**
-   * The type of message.
-   */
-  type: 'Error' | 'Success';
-
   /**
    * The error message code.
    */
@@ -1084,6 +1078,11 @@ export interface FilmRelationshipUpdateMessage {
    * The error message text in human-readable form.
    */
   title: string;
+
+  /**
+   * The type of message.
+   */
+  type: 'Error' | 'Success';
 }
 
 /**
@@ -1093,14 +1092,9 @@ export interface FilmRelationshipUpdateMessage {
  */
 export interface FilmRelationshipUpdateRequest {
   /**
-   * Set to `true` to change the film's status for the authenticated member to 'watched' or `false`
-   * for 'not watched'. If the status is changed to 'watched' and the film is in the member's
-   * watchlist, it will be removed as part of this action. You may not change the status of a film
-   * to 'not watched' if there is existing activity (a rating, review or diary entry) for the
-   * authenticated member—check the messages returned from this endpoint to ensure no such business
-   * rules have been violated.
+   * Set to `true` to add the film to the authenticated member's watchlist, or `false` to remove it.
    */
-  watched: boolean;
+  inWatchlist: boolean;
 
   /**
    * Set to `true` to change the film's status for the authenticated member to 'liked' or `false`
@@ -1109,15 +1103,20 @@ export interface FilmRelationshipUpdateRequest {
   liked: boolean;
 
   /**
-   * Set to `true` to add the film to the authenticated member's watchlist, or `false` to remove it.
-   */
-  inWatchlist: boolean;
-
-  /**
    * Accepts values between `0.5` and `5.0`, with increments of `0.5`, or `null` (to remove the
    * rating). If set, `watched` is assumed to be `true`.
    */
   rating: number;
+
+  /**
+   * Set to `true` to change the film's status for the authenticated member to 'watched' or `false`
+   * for 'not watched'. If the status is changed to 'watched' and the film is in the member's
+   * watchlist, it will be removed as part of this action. You may not change the status of a film
+   * to 'not watched' if there is existing activity (a rating, review or diary entry) for the
+   * authenticated member—check the messages returned from this endpoint to ensure no such business
+   * rules have been violated.
+   */
+  watched: boolean;
 }
 
 export interface FilmRelationshipUpdateResponse {
@@ -1139,12 +1138,12 @@ export interface FilmsAutocompleteResponse {
   items: FilmSummary[];
 }
 
-export type FilmSearchItem = AbstractSearchItem & {
+export interface FilmSearchItem extends AbstractSearchItem {
   /**
    * The film returned by the search.
    */
   film: FilmSummary;
-};
+}
 
 export interface FilmServicesResponse {
   /**
@@ -1167,14 +1166,14 @@ export interface FilmsMemberRelationship {
 
 export interface FilmsMetadata {
   /**
-   * The total number of films.
-   */
-  totalFilmCount: number;
-
-  /**
    * The number of films that match the filter for this request.
    */
   filteredFilmCount: number;
+
+  /**
+   * The total number of films.
+   */
+  totalFilmCount: number;
 }
 
 export interface FilmsRelationship {
@@ -1186,39 +1185,39 @@ export interface FilmsRelationship {
 
 export interface FilmsRelationshipCounts {
   /**
+   * The number of films the member has indicated they liked.
+   */
+  likes: number;
+
+  /**
    * The number of films the member has indicated they've seen (via the 'eye' icon) or has a log
    * entry for.
    */
   watches: number;
-
-  /**
-   * The number of films the member has indicated they liked.
-   */
-  likes: number;
 }
 
 export interface FilmsResponse {
   /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
-  /**
    * The list of films.
    */
   items: FilmSummary[];
+
+  /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
 }
 
 export interface FilmStatistics {
   /**
-   * The film for which statistics were requested.
-   */
-  film: FilmIdentifier;
-
-  /**
    * The number of watches, ratings, likes, etc. for the film.
    */
   counts: FilmStatisticsCounts;
+
+  /**
+   * The film for which statistics were requested.
+   */
+  film: FilmIdentifier;
 
   /**
    * The weighted average rating of the film between `0.5` and `5.0`. Will not be present if the
@@ -1234,9 +1233,9 @@ export interface FilmStatistics {
 
 export interface FilmStatisticsCounts {
   /**
-   * The number of members who have watched the film.
+   * The number of members who have the film as one of their four favorites.
    */
-  watches: number;
+  fans: number;
 
   /**
    * The number of members who have liked the film.
@@ -1244,31 +1243,67 @@ export interface FilmStatisticsCounts {
   likes: number;
 
   /**
-   * The number of members who have rated the film.
-   */
-  ratings: number;
-
-  /**
-   * The number of members who have the film as one of their four favorites.
-   */
-  fans: number;
-
-  /**
    * The number of lists in which the film appears.
    */
   lists: number;
 
   /**
+   * The number of members who have rated the film.
+   */
+  ratings: number;
+
+  /**
    * The number of reviews for the film.
    */
   reviews: number;
+
+  /**
+   * The number of members who have watched the film.
+   */
+  watches: number;
 }
 
 export interface FilmSummary {
   /**
+   * `true` if the film is in TMDb's 'Adult' category.
+   */
+  adult: boolean;
+
+  /**
+   * The film's unobfuscated poster image (2:3 aspect ratio in multiple sizes), only populated if
+   * the `adult` flag is `true`, may contain adult content.
+   */
+  adultPoster: Image;
+
+  /**
+   * The other names by which the film is known (including alternative titles and/or foreign translations).
+   */
+  alternativeNames: string[];
+
+  /**
+   * The list of directors for the film.
+   */
+  directors: ContributorSummary[];
+
+  /**
+   * The LID of the collection containing this film.
+   */
+  filmCollectionId: string;
+
+  /**
+   * The film's genres.
+   */
+  genres: Genre[];
+
+  /**
    * The LID of the film.
    */
   id: string;
+
+  /**
+   * A list of relevant URLs for this entity, on Letterboxd and external sites.
+   */
+  links: Link[];
 
   /**
    * The title of the film.
@@ -1281,57 +1316,10 @@ export interface FilmSummary {
   originalName: string;
 
   /**
-   * The other names by which the film is known (including alternative titles and/or foreign translations).
-   */
-  alternativeNames: string[];
-
-  /**
-   * The year in which the film was first released.
-   */
-  releaseYear: number;
-
-  /**
-   * The list of directors for the film.
-   */
-  directors: ContributorSummary[];
-
-  /**
    * The film's poster image (2:3 aspect ratio in multiple sizes). Will contain only a single
    * obfuscated image if the `adult` flag is `true`.
    */
   poster: Image;
-
-  /**
-   * The film's unobfuscated poster image (2:3 aspect ratio in multiple sizes), only populated if
-   * the `adult` flag is `true`, may contain adult content.
-   */
-  adultPoster: Image;
-
-  /**
-   * The film's position in the official Letterboxd Top 250 list of narrative feature films, `null`
-   * if the film is not in the list.
-   */
-  top250Position: number | null;
-
-  /**
-   * `true` if the film is in TMDb's 'Adult' category.
-   */
-  adult: boolean;
-
-  /**
-   * `true` if reviews for the film are hidden due to a high volume of moderation traffic.
-   */
-  reviewsHidden: boolean;
-
-  /**
-   * The LID of the collection containing this film.
-   */
-  filmCollectionId: string;
-
-  /**
-   * A list of relevant URLs for this entity, on Letterboxd and external sites.
-   */
-  links: Link[];
 
   /**
    * Relationships to the film for the authenticated member (if any) and other members where
@@ -1340,9 +1328,20 @@ export interface FilmSummary {
   relationships: MemberFilmRelationship[];
 
   /**
-   * The film's genres.
+   * The year in which the film was first released.
    */
-  genres: Genre[];
+  releaseYear: number;
+
+  /**
+   * `true` if reviews for the film are hidden due to a high volume of moderation traffic.
+   */
+  reviewsHidden: boolean;
+
+  /**
+   * The film's position in the official Letterboxd Top 250 list of narrative feature films, `null`
+   * if the film is not in the list.
+   */
+  top250Position: number | null;
 }
 
 export interface FilmTrailer {
@@ -1361,7 +1360,7 @@ export interface FilmTrailer {
   url: string;
 }
 
-export type FilmWatchActivity = AbstractActivity & {
+export interface FilmWatchActivity extends AbstractActivity {
   /**
    * The film associated with the activity. Includes a `MemberFilmRelationship` for the member who
    * added the activity.
@@ -1369,14 +1368,14 @@ export type FilmWatchActivity = AbstractActivity & {
    * @see MemberFilmRelationship
    */
   film: FilmSummary;
-};
+}
 
-export type FollowActivity = AbstractActivity & {
+export interface FollowActivity extends AbstractActivity {
   /**
    * A summary of the member that was followed.
    */
   followed: MemberSummary;
-};
+}
 
 export interface ForgottenPasswordRequest {
   emailAddress: string;
@@ -1384,14 +1383,14 @@ export interface ForgottenPasswordRequest {
 
 export interface FriendFilmRelationshipsResponse {
   /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
-  /**
    * The list of film relationships for members.
    */
   items: MemberFilmViewingRelationship[];
+
+  /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
 
   /**
    * The number of friends who have watched the film
@@ -1432,11 +1431,6 @@ export interface Image {
 
 export interface ImageSize {
   /**
-   * The image width in pixels.
-   */
-  width: number;
-
-  /**
    * The image height in pixels.
    */
   height: number;
@@ -1445,12 +1439,17 @@ export interface ImageSize {
    * The URL to the image file.
    */
   url: string;
+
+  /**
+   * The image width in pixels.
+   */
+  width: number;
 }
 
-export type InvitationAcceptedActivity = AbstractActivity & {
-  type: InvitationAcceptedActivity;
+export interface InvitationAcceptedActivity extends AbstractActivity {
   invitor: MemberSummary;
-};
+  type: InvitationAcceptedActivity;
+}
 
 export interface Language {
   /**
@@ -1473,6 +1472,11 @@ export interface LanguagesResponse {
 
 export interface Link {
   /**
+   * The object ID for the linked entity on the destination site.
+   */
+  id: string;
+
+  /**
    * Denotes which site the link is for.
    */
   type:
@@ -1488,124 +1492,12 @@ export interface Link {
     | 'youtube';
 
   /**
-   * The object ID for the linked entity on the destination site.
-   */
-  id: string;
-
-  /**
    * The fully qualified URL on the destination site.
    */
   url: string;
 }
 
 export interface List {
-  /**
-   * The LID of the list.
-   */
-  id: string;
-
-  /**
-   * The name of the list.
-   */
-  name: string;
-
-  /**
-   * The number of films in the list.
-   */
-  filmCount: number;
-
-  /**
-   * Will be `true` if the owner has elected to publish the list for other members to see.
-   */
-  published: boolean;
-
-  /**
-   * Will be `true` if the owner has elected to make this a ranked list.
-   */
-  ranked: boolean;
-
-  /**
-   * Will be `true` if the owner has added notes to any entries.
-   */
-  hasEntriesWithNotes: boolean;
-
-  /**
-   * The list description in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>`
-   * `<b>` `<i>` `<a href="">` `<blockquote>`.
-   */
-  descriptionLbml: string;
-
-  /**
-   * @deprecated Use `tags2` instead.
-   * @see List.tags2
-   */
-  tags: string[];
-
-  /**
-   * The tags for the list.
-   */
-  tags2: Tag[];
-
-  /**
-   * The third-party service or services to which this list can be shared. Only included if the
-   * authenticated member is the list's owner.
-   *
-   * @deprecated No longer supported by Facebook.
-   */
-  canShareOn: 'Facebook';
-
-  /**
-   * The third-party service or services to which this list has been shared. Only included if the
-   * authenticated member is the list's owner.
-   *
-   * @deprecated No longer supported by Facebook.
-   */
-  sharedOn: 'Facebook';
-
-  /**
-   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
-   *
-   * @example 1997-08-29T07:14:00Z
-   */
-  whenCreated: string;
-
-  /**
-   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
-   *
-   * @example 1997-08-29T07:14:00Z"
-   */
-  whenPublished: string;
-
-  /**
-   * The policy determining who can post comments to the list. `You` in this context refers to the
-   * content owner. Use the `commentThreadState` property of the `ListRelationship` to determine
-   * the signed-in member's ability to comment (or not).
-   *
-   * @see ListRelationship
-   */
-  commentPolicy: 'Anyone' | 'Friends' | 'You';
-
-  /**
-   * The member who owns the list.
-   */
-  owner: MemberSummary;
-
-  /**
-   * The list this was cloned from, if applicable.
-   */
-  clonedFrom: ListIdentifier;
-
-  /**
-   * The first 12 entries in the list. To fetch more than 12 entries, and to fetch the entry notes,
-   * use the `/list/{id}/entries` endpoint.
-   */
-  previewEntries: ListEntrySummary[];
-
-  /**
-   * A list of relevant URLs for this entity, on Letterboxd and external sites.
-   */
-  links: Link[];
-
   /**
    * The list's backdrop image at multiple sizes, sourced from the first film in the list, if
    * available. Only returned for [Patron](https://letterboxd.com/patrons/) members.
@@ -1620,52 +1512,102 @@ export interface List {
   backdropFocalPoint: number;
 
   /**
+   * The third-party service or services to which this list can be shared. Only included if the
+   * authenticated member is the list's owner.
+   *
+   * @deprecated No longer supported by Facebook.
+   */
+  canShareOn: 'Facebook';
+
+  /**
+   * The list this was cloned from, if applicable.
+   */
+  clonedFrom: ListIdentifier;
+
+  /**
+   * The policy determining who can post comments to the list. `You` in this context refers to the
+   * content owner. Use the `commentThreadState` property of the `ListRelationship` to determine
+   * the signed-in member's ability to comment (or not).
+   *
+   * @see ListRelationship
+   */
+  commentPolicy: 'Anyone' | 'Friends' | 'You';
+
+  /**
    * The list description formatted as HTML.
    */
   description: string;
-}
 
-export type ListActivity = AbstractActivity & {
   /**
-   * The list associated with the activity.
+   * The list description in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>`
+   * `<b>` `<i>` `<a href="">` `<blockquote>`.
    */
-  list: ListSummary;
+  descriptionLbml: string;
 
   /**
-   * The list that was cloned, if applicable
+   * The number of films in the list.
    */
-  clonedFrom: ListSummary;
-};
+  filmCount: number;
 
-export interface ListAdditionRequest {
   /**
-   * Specify the LIDs of lists to be added to.
+   * Will be `true` if the owner has added notes to any entries.
    */
-  lists?: string[];
+  hasEntriesWithNotes: boolean;
 
   /**
-   * Specify the LIDs of films to be added to each of the specified lists.
-   */
-  films?: string[];
-}
-
-export interface ListAdditionResponse {
-  /**
-   * The list of additions to each list.
-   */
-  items: AListAddition[];
-}
-
-export interface ListComment {
-  /**
-   * The LID of the comment/reply.
+   * The LID of the list.
    */
   id: string;
 
   /**
-   * The member who posted the comment.
+   * A list of relevant URLs for this entity, on Letterboxd and external sites.
    */
-  member: MemberSummary;
+  links: Link[];
+
+  /**
+   * The name of the list.
+   */
+  name: string;
+
+  /**
+   * The member who owns the list.
+   */
+  owner: MemberSummary;
+
+  /**
+   * The first 12 entries in the list. To fetch more than 12 entries, and to fetch the entry notes,
+   * use the `/list/{id}/entries` endpoint.
+   */
+  previewEntries: ListEntrySummary[];
+
+  /**
+   * Will be `true` if the owner has elected to publish the list for other members to see.
+   */
+  published: boolean;
+
+  /**
+   * Will be `true` if the owner has elected to make this a ranked list.
+   */
+  ranked: boolean;
+
+  /**
+   * The third-party service or services to which this list has been shared. Only included if the
+   * authenticated member is the list's owner.
+   *
+   * @deprecated No longer supported by Facebook.
+   */
+  sharedOn: 'Facebook';
+
+  /**
+   * @deprecated Use `tags2` instead.
+   * @see List.tags2
+   */
+  tags: string[];
+
+  /**
+   * The tags for the list.
+   */
+  tags2: Tag[];
 
   /**
    * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
@@ -1677,15 +1619,92 @@ export interface ListComment {
   /**
    * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
    *
-   * @example 1997-08-29T07:14:00Z
+   * @example 1997-08-29T07:14:00Z"
    */
-  whenUpdated: string;
+  whenPublished: string;
+}
+
+export interface ListActivity extends AbstractActivity {
+  /**
+   * The list that was cloned, if applicable
+   */
+  clonedFrom: ListSummary;
+
+  /**
+   * The list associated with the activity.
+   */
+  list: ListSummary;
+}
+
+export interface ListAdditionRequest {
+  /**
+   * Specify the LIDs of films to be added to each of the specified lists.
+   */
+  films?: string[];
+
+  /**
+   * Specify the LIDs of lists to be added to.
+   */
+  lists?: string[];
+}
+
+export interface ListAdditionResponse {
+  /**
+   * The list of additions to each list.
+   */
+  items: AListAddition[];
+}
+
+export interface ListComment {
+  /**
+   * If the authenticated member has blocked the commenter, `blocked` will be true and `comment`
+   * will not be included.
+   */
+  blocked: boolean;
+
+  /**
+   * If the list owner has blocked the commenter, `blockedByOwner` will be true and `comment` will
+   * not be included.
+   */
+  blockedByOwner: boolean;
+
+  /**
+   * The message portion of the comment formatted as HTML.
+   */
+  comment: string;
 
   /**
    * The message portion of the comment in LBML. May contain the following HTML tags: `<br>`
    * `<strong>` `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
    */
   commentLbml: string;
+
+  /**
+   * If the comment owner has removed the comment from the site, `deleted` will be `true` and
+   * comment will not be included.
+   */
+  deleted: boolean;
+
+  /**
+   * If the authenticated member posted this comment, and the comment is still editable, this value
+   * shows the number of seconds remaining until the editing window closes.
+   */
+  editableWindowExpiresIn: number;
+
+  /**
+   * The LID of the comment/reply.
+   */
+  id: string;
+
+  /**
+   * The list on which the comment was posted.
+   */
+  list: ListIdentifier;
+
+  /**
+   * The member who posted the comment.
+   */
+  member: MemberSummary;
 
   /**
    * If Letterboxd moderators have removed the comment from the site, `removedByAdmin` will be
@@ -1700,76 +1719,55 @@ export interface ListComment {
   removedByContentOwner: boolean;
 
   /**
-   * If the comment owner has removed the comment from the site, `deleted` will be `true` and
-   * comment will not be included.
+   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
+   *
+   * @example 1997-08-29T07:14:00Z
    */
-  deleted: boolean;
+  whenCreated: string;
 
   /**
-   * If the authenticated member has blocked the commenter, `blocked` will be true and `comment`
-   * will not be included.
+   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
+   *
+   * @example 1997-08-29T07:14:00Z
    */
-  blocked: boolean;
-
-  /**
-   * If the list owner has blocked the commenter, `blockedByOwner` will be true and `comment` will
-   * not be included.
-   */
-  blockedByOwner: boolean;
-
-  /**
-   * If the authenticated member posted this comment, and the comment is still editable, this value
-   * shows the number of seconds remaining until the editing window closes.
-   */
-  editableWindowExpiresIn: number;
-
-  /**
-   * The list on which the comment was posted.
-   */
-  list: ListIdentifier;
-
-  /**
-   * The message portion of the comment formatted as HTML.
-   */
-  comment: string;
+  whenUpdated: string;
 }
 
-export type ListCommentActivity = AbstractActivity & {
-  /**
-   * The list associated with the activity.
-   */
-  list: ListSummary;
-
+export interface ListCommentActivity extends AbstractActivity {
   /**
    * The comment associated with the activity.
    */
   comment: ListComment;
-};
+
+  /**
+   * The list associated with the activity.
+   */
+  list: ListSummary;
+}
 
 export interface ListCommentsResponse {
-  /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
   /**
    * The list of comments.
    */
   items: ListComment[];
+
+  /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
 }
 
 export interface ListCreateEntry {
   /**
+   * Set to `true` if the member has indicated that the `notes` field contains plot spoilers for
+   * the film.
+   */
+  containsSpoilers?: boolean;
+
+  /**
    * The LID of the film.
    */
   film: string;
-
-  /**
-   * If the list is ranked, this is the entry's rank in the list, numbered from 1. If not set, the
-   * entry will be appended to the end of the list. Sending two or more `ListCreateEntry`s with the
-   * same rank will return an error.
-   */
-  rank?: number;
 
   /**
    * The notes for the list entry in LBML. May contain the following HTML tags: `<br>` `<strong>`
@@ -1778,18 +1776,14 @@ export interface ListCreateEntry {
   notes?: string;
 
   /**
-   * Set to `true` if the member has indicated that the `notes` field contains plot spoilers for
-   * the film.
+   * If the list is ranked, this is the entry's rank in the list, numbered from 1. If not set, the
+   * entry will be appended to the end of the list. Sending two or more `ListCreateEntry`s with the
+   * same rank will return an error.
    */
-  containsSpoilers?: boolean;
+  rank?: number;
 }
 
 export interface ListCreateMessage {
-  /**
-   * The type of message.
-   */
-  type: 'Error' | 'Success';
-
   /**
    * The error message code.
    */
@@ -1809,6 +1803,11 @@ export interface ListCreateMessage {
    * The error message text in human-readable form.
    */
   title: string;
+
+  /**
+   * The type of message.
+   */
+  type: 'Error' | 'Success';
 }
 
 export interface ListCreateResponse {
@@ -1825,14 +1824,9 @@ export interface ListCreateResponse {
 
 export interface ListCreationRequest {
   /**
-   * Set to `true` if the owner has elected to publish the list for other members to see.
+   * The LID of a list to clone from. Only supported for paying members.
    */
-  published: boolean;
-
-  /**
-   * The name of the list.
-   */
-  name: string;
+  clonedFrom?: string;
 
   /**
    * The policy determining who can post comments to the list. `You` in this context refers to the
@@ -1844,30 +1838,30 @@ export interface ListCreationRequest {
   commentPolicy?: 'Anyone' | 'Friends' | 'You';
 
   /**
-   * Set to `true` if the owner has elected to make this a ranked list.
-   */
-  ranked: boolean;
-
-  /**
    * The list description in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>`
    * `<b>` `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000 characters.
    */
   description?: string;
 
   /**
-   * The LID of a list to clone from. Only supported for paying members.
-   */
-  clonedFrom?: string;
-
-  /**
-   * The tags for the list.
-   */
-  tags?: string[];
-
-  /**
    * The films that comprise the list. Required unless `source` is set.
    */
   entries?: ListCreateEntry[];
+
+  /**
+   * The name of the list.
+   */
+  name: string;
+
+  /**
+   * Set to `true` if the owner has elected to publish the list for other members to see.
+   */
+  published: boolean;
+
+  /**
+   * Set to `true` if the owner has elected to make this a ranked list.
+   */
+  ranked: boolean;
 
   /**
    * The third-party service or services to which this list should be shared. Valid options are
@@ -1878,14 +1872,14 @@ export interface ListCreationRequest {
    * @see MemberAccount
    */
   share?: 'Facebook';
+
+  /**
+   * The tags for the list.
+   */
+  tags?: string[];
 }
 
 export interface ListEntriesResponse {
-  /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
   /**
    * The list of entries.
    */
@@ -1897,6 +1891,11 @@ export interface ListEntriesResponse {
   metadata: FilmsMetadata;
 
   /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
+
+  /**
    * The relationships to the films in the list for the members referenced in the request.
    */
   relationships: FilmsMemberRelationship[];
@@ -1904,26 +1903,15 @@ export interface ListEntriesResponse {
 
 export interface ListEntry {
   /**
-   * If the list is ranked, this is the entry's rank in the list, numbered from 1.
+   * Will be `true` if the member has indicated that the `notes` field contains plot spoilers for
+   * the film.
    */
-  rank: number;
+  containsSpoilers: boolean;
 
   /**
    * A unique id for this entry in the list
    */
   entryId: number;
-
-  /**
-   * The notes for the list entry in LBML. May contain the following HTML tags: `<br>` `<strong>`
-   * `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
-   */
-  notesLbml: string;
-
-  /**
-   * Will be `true` if the member has indicated that the `notes` field contains plot spoilers for
-   * the film.
-   */
-  containsSpoilers: boolean;
 
   /**
    * The film for this entry. Includes a `MemberFilmRelationship` for the member who created the list.
@@ -1936,18 +1924,29 @@ export interface ListEntry {
    * The notes for the list entry formatted as HTML.
    */
   notes: string;
-}
 
-export interface ListEntrySummary {
+  /**
+   * The notes for the list entry in LBML. May contain the following HTML tags: `<br>` `<strong>`
+   * `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
+   */
+  notesLbml: string;
+
   /**
    * If the list is ranked, this is the entry's rank in the list, numbered from 1.
    */
   rank: number;
+}
 
+export interface ListEntrySummary {
   /**
    * The film for this entry.
    */
   film: FilmSummary;
+
+  /**
+   * If the list is ranked, this is the entry's rank in the list, numbered from 1.
+   */
+  rank: number;
 }
 
 export interface ListIdentifier {
@@ -1957,38 +1956,14 @@ export interface ListIdentifier {
   id: string;
 }
 
-export type ListLikeActivity = AbstractActivity & {
+export interface ListLikeActivity extends AbstractActivity {
   /**
    * The list associated with the activity.
    */
   list: ListSummary;
-};
+}
 
 export interface ListRelationship {
-  /**
-   * Will be `true` if the member likes the list (via the 'heart' icon). A member may not like their
-   * own list.
-   */
-  liked: boolean;
-
-  /**
-   * Will be `true` if the member is subscribed to comment notifications for the list.
-   */
-  subscribed: boolean;
-
-  /**
-   * Defaults to `Subscribed` for the list's owner, and `NotSubscribed` for other members. The
-   * subscription value may change when a member (other than the owner) posts a comment, as follows:
-   * the member will become automatically `Subscribed` unless they have previously `Unsubscribed`
-   * from the comment thread via the web interface or API, or unless they have disabled comment
-   * notifications in their profile settings.
-   *
-   * `NotSubscribed` and `Unsubscribed` are maintained as separate states so the UI can, if needed,
-   * indicate to the member how their subscription state will be affected if/when they post a
-   * comment.
-   */
-  subscriptionState: 'NotSubscribed' | 'Subscribed' | 'Unsubscribed';
-
   /**
    * The authenticated member's state with respect to posting comments to the list.
    *
@@ -2017,14 +1992,33 @@ export interface ListRelationship {
     | 'Moderated'
     | 'NotCommentable'
     | 'NotValidated';
+
+  /**
+   * Will be `true` if the member likes the list (via the 'heart' icon). A member may not like their
+   * own list.
+   */
+  liked: boolean;
+
+  /**
+   * Will be `true` if the member is subscribed to comment notifications for the list.
+   */
+  subscribed: boolean;
+
+  /**
+   * Defaults to `Subscribed` for the list's owner, and `NotSubscribed` for other members. The
+   * subscription value may change when a member (other than the owner) posts a comment, as follows:
+   * the member will become automatically `Subscribed` unless they have previously `Unsubscribed`
+   * from the comment thread via the web interface or API, or unless they have disabled comment
+   * notifications in their profile settings.
+   *
+   * `NotSubscribed` and `Unsubscribed` are maintained as separate states so the UI can, if needed,
+   * indicate to the member how their subscription state will be affected if/when they post a
+   * comment.
+   */
+  subscriptionState: 'NotSubscribed' | 'Subscribed' | 'Unsubscribed';
 }
 
 export interface ListRelationshipUpdateMessage {
-  /**
-   * The type of message.
-   */
-  type: 'Error' | 'Success';
-
   /**
    * The error message code.
    */
@@ -2040,6 +2034,11 @@ export interface ListRelationshipUpdateMessage {
    * The error message text in human-readable form.
    */
   title: string;
+
+  /**
+   * The type of message.
+   */
+  type: 'Error' | 'Success';
 }
 
 export interface ListRelationshipUpdateRequest {
@@ -2069,35 +2068,35 @@ export interface ListRelationshipUpdateResponse {
   messages: ListRelationshipUpdateMessage[];
 }
 
-export type ListSearchItem = AbstractSearchItem & {
+export interface ListSearchItem extends AbstractSearchItem {
   /**
    * The list.
    */
   list: ListSummary;
-};
+}
 
 export interface ListsResponse {
-  /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
   /**
    * The list of lists.
    */
   items: ListSummary[];
+
+  /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
 }
 
 export interface ListStatistics {
   /**
-   * The list for which statistics were requested.
-   */
-  list: ListIdentifier;
-
-  /**
    * The number of comments and likes for the list.
    */
   counts: ListStatisticsCounts;
+
+  /**
+   * The list for which statistics were requested.
+   */
+  list: ListIdentifier;
 }
 
 export interface ListStatisticsCounts {
@@ -2114,29 +2113,15 @@ export interface ListStatisticsCounts {
 
 export interface ListSummary {
   /**
-   * The LID of the list.
+   * The list this was cloned from, if applicable.
    */
-  id: string;
+  clonedFrom: ListIdentifier;
 
   /**
-   * The name of the list.
+   * The list description formatted as HTML. The text is a preview extract, and may be truncated if
+   * it's too long.
    */
-  name: string;
-
-  /**
-   * The number of films in the list.
-   */
-  filmCount: number;
-
-  /**
-   * Will be `true` if the owner has elected to publish the list for other members to see.
-   */
-  published: boolean;
-
-  /**
-   * Will be `true` if the owner has elected to make this a ranked list.
-   */
-  ranked: boolean;
+  description: string;
 
   /**
    * The list description in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>`
@@ -2151,14 +2136,30 @@ export interface ListSummary {
   descriptionTruncated: boolean;
 
   /**
+   * Returned when one or more `filmsOfNote` is specified in the request. Contains, for each list
+   * in the response, the rank position of each film of note (if in the list) or `-1` (if not).
+   */
+  entriesOfNote: AListEntryOccurrence[];
+
+  /**
+   * The number of films in the list.
+   */
+  filmCount: number;
+
+  /**
+   * The LID of the list.
+   */
+  id: string;
+
+  /**
+   * The name of the list.
+   */
+  name: string;
+
+  /**
    * The member who owns the list.
    */
   owner: MemberSummary;
-
-  /**
-   * The list this was cloned from, if applicable.
-   */
-  clonedFrom: ListIdentifier;
 
   /**
    * The first 12 entries in the list. To fetch more than 12 entries, and to fetch the entry notes,
@@ -2167,45 +2168,17 @@ export interface ListSummary {
   previewEntries: ListEntrySummary[];
 
   /**
-   * Returned when one or more `filmsOfNote` is specified in the request. Contains, for each list
-   * in the response, the rank position of each film of note (if in the list) or `-1` (if not).
+   * Will be `true` if the owner has elected to publish the list for other members to see.
    */
-  entriesOfNote: AListEntryOccurrence[];
+  published: boolean;
 
   /**
-   * The list description formatted as HTML. The text is a preview extract, and may be truncated if
-   * it's too long.
+   * Will be `true` if the owner has elected to make this a ranked list.
    */
-  description: string;
+  ranked: boolean;
 }
 
 export interface ListUpdateEntry {
-  /**
-   * The LID of the film.
-   */
-  film?: string;
-
-  /**
-   * If the list is ranked, this is the entry's rank in the list, numbered from 1. If not set, the
-   * entry will stay in the same place (if already in the list) or be appended to the end of the
-   * list (if not in the list). If set, any entries at or after this position will be incremented
-   * by one. Sending two or more `ListUpdateEntry`s with the same rank will return an error.
-   */
-  rank?: number;
-
-  /**
-   * The notes for the list entry in LBML. May contain the following HTML tags: `<br>` `<strong>`
-   * `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000
-   * characters.
-   */
-  notes?: string;
-
-  /**
-   * Set to `true` if the member has indicated that the `notes` field contains plot spoilers for
-   * the film.
-   */
-  containsSpoilers?: boolean;
-
   /**
    * The update action to take. If not set then any existing entry for the film will be updated, if
    * there is no existing entry for the film it will be added into the list.
@@ -2223,10 +2196,15 @@ export interface ListUpdateEntry {
     | 'UPDATE';
 
   /**
-   * The entry position (numbered from 0) to update or delete. Required for UPDATE and DELETE
-   * actions.
+   * Set to `true` if the member has indicated that the `notes` field contains plot spoilers for
+   * the film.
    */
-  position?: number;
+  containsSpoilers?: boolean;
+
+  /**
+   * The LID of the film.
+   */
+  film?: string;
 
   /**
    * The new entry position (numbered from 0) for the updated or added entry. If not set, the
@@ -2234,14 +2212,30 @@ export interface ListUpdateEntry {
    * (for ADD actions).
    */
   newPosition?: number;
+
+  /**
+   * The notes for the list entry in LBML. May contain the following HTML tags: `<br>` `<strong>`
+   * `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000
+   * characters.
+   */
+  notes?: string;
+
+  /**
+   * The entry position (numbered from 0) to update or delete. Required for UPDATE and DELETE
+   * actions.
+   */
+  position?: number;
+
+  /**
+   * If the list is ranked, this is the entry's rank in the list, numbered from 1. If not set, the
+   * entry will stay in the same place (if already in the list) or be appended to the end of the
+   * list (if not in the list). If set, any entries at or after this position will be incremented
+   * by one. Sending two or more `ListUpdateEntry`s with the same rank will return an error.
+   */
+  rank?: number;
 }
 
 export interface ListUpdateMessage {
-  /**
-   * The type of message.
-   */
-  type: 'Error' | 'Success';
-
   /**
    * The error message code.
    */
@@ -2260,19 +2254,14 @@ export interface ListUpdateMessage {
    * The error message text in human-readable form.
    */
   title: string;
+
+  /**
+   * The type of message.
+   */
+  type: 'Error' | 'Success';
 }
 
 export interface ListUpdateRequest {
-  /**
-   * Set to `true` if the owner has elected to publish the list for other members to see.
-   */
-  published?: boolean;
-
-  /**
-   * The name of the list.
-   */
-  name?: string;
-
   /**
    * The policy determining who can post comments to the list. `You` in this context refers to the
    * content owner. Use the `commentThreadState` property of the `ListRelationship` to determine
@@ -2283,20 +2272,16 @@ export interface ListUpdateRequest {
   commentPolicy?: 'Anyone' | 'Friends' | 'You';
 
   /**
-   * Set to `true` if the owner has elected to make this a ranked list.
-   */
-  ranked?: boolean;
-
-  /**
    * The list description in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>`
    * `<b>` `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000 characters.
    */
   description?: string;
 
   /**
-   * The tags for the list.
+   * The specified entries will be inserted/appended to the list if they are not already present,
+   * or updated if they are present.
    */
-  tags?: string[];
+  entries?: ListUpdateEntry[];
 
   /**
    * Specify the LIDs of films to be removed from the list.
@@ -2304,10 +2289,19 @@ export interface ListUpdateRequest {
   filmsToRemove?: string[];
 
   /**
-   * The specified entries will be inserted/appended to the list if they are not already present,
-   * or updated if they are present.
+   * The name of the list.
    */
-  entries?: ListUpdateEntry[];
+  name?: string;
+
+  /**
+   * Set to `true` if the owner has elected to publish the list for other members to see.
+   */
+  published?: boolean;
+
+  /**
+   * Set to `true` if the owner has elected to make this a ranked list.
+   */
+  ranked?: boolean;
 
   /**
    * The third-party service or services to which this list should be shared. Valid options are
@@ -2318,6 +2312,11 @@ export interface ListUpdateRequest {
    * @see ListRelationship
    */
   share?: 'Facebook';
+
+  /**
+   * The tags for the list.
+   */
+  tags?: string[];
 }
 
 export interface ListUpdateResponse {
@@ -2334,21 +2333,71 @@ export interface ListUpdateResponse {
 
 export interface LogEntriesResponse {
   /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
-  /**
    * The list of log entries.
    */
   items: LogEntry[];
+
+  /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
 }
 
 export interface LogEntry {
   /**
+   * The log entry's backdrop image at multiple sizes, sourced from the film being logged, if
+   * available. Only returned for [Patron](https://letterboxd.com/patrons/) members.
+   */
+  backdrop: Image;
+
+  /**
+   * The vertical focal point of the log entry's backdrop image, if available. Expressed as a
+   * proportion of the image's height, using values between `0.0` and `1.0`. Use when cropping the
+   * image into a shorter space, such as in the page for a film on the Letterboxd site.
+   */
+  backdropFocalPoint: number;
+
+  /**
+   * The policy determining who can post comments to the log entry. `You` in this context refers to
+   * the content owner. Use the commentThreadState property of the ListRelationship to determine
+   * the signed-in member's ability to comment (or not).
+   */
+  commentPolicy: 'Anyone' | 'Friends' | 'You';
+
+  /**
+   * Will be `true` if comments can be posted to the log entry by the member. This is determined
+   * according to the existence of review text and other factors such as the content owner's
+   * comment policy.
+   */
+  commentable: boolean;
+
+  /**
+   * Details about the log entry, if present.
+   */
+  diaryDetails: DiaryDetails;
+
+  /**
+   * The film being logged. Includes a `MemberFilmRelationship` for the member who created the log
+   * entry.
+   *
+   * @see MemberFilmRelationship
+   */
+  film: FilmSummary;
+
+  /**
    * The LID of the log entry.
    */
   id: string;
+
+  /**
+   * Will be `true` if the member likes the film (via the 'heart' icon).
+   */
+  like: boolean;
+
+  /**
+   * A list of relevant URLs for this entity, on Letterboxd and external sites.
+   */
+  links: Link[];
 
   /**
    * A descriptive title for the log entry.
@@ -2361,17 +2410,10 @@ export interface LogEntry {
   owner: MemberSummary;
 
   /**
-   * The film being logged. Includes a `MemberFilmRelationship` for the member who created the log
-   * entry.
-   *
-   * @see MemberFilmRelationship
+   * The member's rating for the film. Allowable values are between `0.5` and `5.0`, with
+   * increments of `0.5`.
    */
-  film: FilmSummary;
-
-  /**
-   * Details about the log entry, if present.
-   */
-  diaryDetails: DiaryDetails;
+  rating: number;
 
   /**
    * Review details for the log entry, if present.
@@ -2404,61 +2446,38 @@ export interface LogEntry {
    * @example 1997-08-29T07:14:00Z
    */
   whenUpdated: string;
-
-  /**
-   * The member's rating for the film. Allowable values are between `0.5` and `5.0`, with
-   * increments of `0.5`.
-   */
-  rating: number;
-
-  /**
-   * Will be `true` if the member likes the film (via the 'heart' icon).
-   */
-  like: boolean;
-
-  /**
-   * Will be `true` if comments can be posted to the log entry by the member. This is determined
-   * according to the existence of review text and other factors such as the content owner's
-   * comment policy.
-   */
-  commentable: boolean;
-
-  /**
-   * The policy determining who can post comments to the log entry. `You` in this context refers to
-   * the content owner. Use the commentThreadState property of the ListRelationship to determine
-   * the signed-in member's ability to comment (or not).
-   */
-  commentPolicy: 'Anyone' | 'Friends' | 'You';
-
-  /**
-   * A list of relevant URLs for this entity, on Letterboxd and external sites.
-   */
-  links: Link[];
-
-  /**
-   * The log entry's backdrop image at multiple sizes, sourced from the film being logged, if
-   * available. Only returned for [Patron](https://letterboxd.com/patrons/) members.
-   */
-  backdrop: Image;
-
-  /**
-   * The vertical focal point of the log entry's backdrop image, if available. Expressed as a
-   * proportion of the image's height, using values between `0.0` and `1.0`. Use when cropping the
-   * image into a shorter space, such as in the page for a film on the Letterboxd site.
-   */
-  backdropFocalPoint: number;
 }
 
 export interface LogEntryCreationRequest {
+  /**
+   * The policy determining who can post comments to the log entry. `You` in this context refers to
+   * the content owner. Use the `commentThreadState` property of the `ListRelationship` to determine
+   * the signed-in member's ability to comment (or not).
+   *
+   * @see ListRelationship.commentThreadState
+   */
+  commentPolicy?: 'Anyone' | 'Friends' | 'You';
+
+  /**
+   * Information about this log entry if adding to the member's diary.
+   */
+  diaryDetails?: LogEntryCreationRequestDiaryDetails;
+
   /**
    * The film being logged.
    */
   filmId: string;
 
   /**
-   * Information about this log entry if adding to the member's diary.
+   * Set to `true` if the member likes the review (via the 'heart' icon). A member may not like
+   * their own review.
    */
-  diaryDetails?: LogEntryCreationRequestDiaryDetails;
+  like?: boolean;
+
+  /**
+   * Allowable values are between `0.5` and `5.0`, with increments of `0.5`.
+   */
+  rating?: number;
 
   /**
    * Information about the review if adding a review.
@@ -2469,26 +2488,6 @@ export interface LogEntryCreationRequest {
    * The tags for the log entry.
    */
   tags?: string[];
-
-  /**
-   * Allowable values are between `0.5` and `5.0`, with increments of `0.5`.
-   */
-  rating?: number;
-
-  /**
-   * Set to `true` if the member likes the review (via the 'heart' icon). A member may not like
-   * their own review.
-   */
-  like?: boolean;
-
-  /**
-   * The policy determining who can post comments to the log entry. `You` in this context refers to
-   * the content owner. Use the `commentThreadState` property of the `ListRelationship` to determine
-   * the signed-in member's ability to comment (or not).
-   *
-   * @see ListRelationship.commentThreadState
-   */
-  commentPolicy?: 'Anyone' | 'Friends' | 'You';
 }
 
 export interface LogEntryCreationRequestDiaryDetails {
@@ -2506,12 +2505,6 @@ export interface LogEntryCreationRequestDiaryDetails {
 
 export interface LogEntryCreationRequestReview {
   /**
-   * The review text in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
-   * `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000 characters.
-   */
-  text: string;
-
-  /**
    * Set to `true` if the member has indicated that the `review` field contains plot spoilers for
    * the film.
    */
@@ -2526,9 +2519,20 @@ export interface LogEntryCreationRequestReview {
    * @see MemberAccount
    */
   share: 'Facebook';
+
+  /**
+   * The review text in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
+   * `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000 characters.
+   */
+  text: string;
 }
 
 export interface LogEntrySummary {
+  /**
+   * Does this log entry specify a diary entry.
+   */
+  diaryEntry: boolean;
+
   /**
    * The LID of the log entry.
    */
@@ -2537,28 +2541,18 @@ export interface LogEntrySummary {
   name: string;
 
   /**
-   * Does this log entry contain a review.
-   */
-  review: boolean;
-
-  /**
-   * Does this log entry specify a diary entry.
-   */
-  diaryEntry: boolean;
-
-  /**
    * The member's rating for this viewing of the film. Allowable values are between `0.5` and `5.0`,
    * with increments of `0.5`.
    */
   rating: number;
+
+  /**
+   * Does this log entry contain a review.
+   */
+  review: boolean;
 }
 
 export interface LogEntryUpdateMessage {
-  /**
-   * The type of message.
-   */
-  type: 'Error' | 'Success';
-
   /**
    * The error message code.
    */
@@ -2573,14 +2567,40 @@ export interface LogEntryUpdateMessage {
    * The error message text in human-readable form.
    */
   title: string;
+
+  /**
+   * The type of message.
+   */
+  type: 'Error' | 'Success';
 }
 
 export interface LogEntryUpdateRequest {
+  /**
+   * The policy determining who can post comments to the log entry. `You` in this context refers to
+   * the content owner. Use the `commentThreadState` property of the `ListRelationship` to
+   * determine the signed-in member's ability to comment (or not).
+   *
+   * @see ListRelationship.commentThreadState
+   */
+  commentPolicy?: 'Anyone' | 'Friends' | 'You';
+
   /**
    * Information about this log entry if adding to the member's diary. Set to `null` to remove this
    * log entry from the diary.
    */
   diaryDetails?: LogEntryUpdateRequestDiaryDetails | null;
+
+  /**
+   * Set to `true` if the member likes the review (via the 'heart' icon). A member may not like
+   * their own review.
+   */
+  like?: boolean;
+
+  /**
+   * Accepts values between `0.5` and `5.0`, with increments of `0.5`, or null (to remove the
+   * rating).
+   */
+  rating?: number;
 
   /**
    * Information about the review. Set to `null` to remove the review from this log entry.
@@ -2591,27 +2611,6 @@ export interface LogEntryUpdateRequest {
    * The tags for the log entry.
    */
   tags?: string[];
-
-  /**
-   * Accepts values between `0.5` and `5.0`, with increments of `0.5`, or null (to remove the
-   * rating).
-   */
-  rating?: number;
-
-  /**
-   * Set to `true` if the member likes the review (via the 'heart' icon). A member may not like
-   * their own review.
-   */
-  like?: boolean;
-
-  /**
-   * The policy determining who can post comments to the log entry. `You` in this context refers to
-   * the content owner. Use the `commentThreadState` property of the `ListRelationship` to
-   * determine the signed-in member's ability to comment (or not).
-   *
-   * @see ListRelationship.commentThreadState
-   */
-  commentPolicy?: 'Anyone' | 'Friends' | 'You';
 }
 
 export interface LogEntryUpdateRequestDiaryDetails {
@@ -2629,12 +2628,6 @@ export interface LogEntryUpdateRequestDiaryDetails {
 
 export interface LogEntryUpdateRequestReview {
   /**
-   * The review text in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
-   * `<i>` `<a href="">` `<blockquote>`.
-   */
-  text?: string;
-
-  /**
    * Set to `true` if the member has indicated that the `review` field contains plot spoilers for
    * the film.
    */
@@ -2649,6 +2642,12 @@ export interface LogEntryUpdateRequestReview {
    * @see ReviewRelationship.canShareOn
    */
   share?: 'Facebook';
+
+  /**
+   * The review text in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
+   * `<i>` `<a href="">` `<blockquote>`.
+   */
+  text?: string;
 }
 
 export interface LoginTokenResponse {
@@ -2660,102 +2659,15 @@ export interface LoginTokenResponse {
 
 export interface Member {
   /**
-   * The LID of the member.
+   * The member's account status.
    */
-  id: string;
-
-  /**
-   * The member's Letterboxd username. Usernames must be between 2 and 15 characters long and may
-   * only contain upper or lowercase letters, numbers or the underscore (`_`) character.
-   */
-  username: string;
-
-  /**
-   * The given name of the member.
-   */
-  givenName: string;
-
-  /**
-   * The family name of the member.
-   */
-  familyName: string;
-
-  /**
-   * A convenience method that returns the member's given name and family name concatenated with a
-   * space, if both are set, or just their given name or family name, if one is set, or their
-   * username, if neither is set. Will never be empty.
-   */
-  displayName: string;
-
-  /**
-   * A convenience method that returns the member's given name, if set, or their username. Will
-   * never be empty.
-   */
-  shortName: string;
-
-  /**
-   * The member's preferred pronoun. Use the
-   * [/members/pronouns](https://api-docs.letterboxd.com/#path--members-pronouns) endpoint to
-   * request all available pronouns.
-   */
-  pronoun: Pronoun;
+  accountStatus: 'Active' | 'Locked' | 'Memorialized';
 
   /**
    * The member's avatar image at multiple sizes. Avatar images to not have an enforced aspect
    * ratio, so should be center-cropped to a square if they are not 1:1.
    */
   avatar: Image;
-
-  /**
-   * The member's account type.
-   */
-  memberStatus: 'Alum' | 'Crew' | 'Hq' | 'Member' | 'Patron' | 'Pro';
-
-  /**
-   * `true` if ads should not be shown on the member's content.
-   */
-  hideAdsInContent: boolean;
-
-  /**
-   * The member's default policy determing who can post comments to their content. Supported
-   * options are `Anyone`, `Friends` and `You`. `You` in this context refers to the content owner.
-   * Use the `commentThreadState` property of the `ListRelationship` to determine the signed-in
-   * member's ability to comment (or not).
-   *
-   * @see ListRelationship.commentThreadState
-   */
-  commentPolicy: 'Anyone' | 'Friends' | 'You';
-
-  /**
-   * The member's account status.
-   */
-  accountStatus: 'Active' | 'Locked' | 'Memorialized';
-
-  /**
-   * `true` if member should not be shown ads.
-   */
-  hideAds: boolean;
-
-  /**
-   * The member's Twitter username, if they have authenticated their account.
-   */
-  twitterUsername: string;
-
-  /**
-   * The member's bio in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
-   * `<i>` `<a href="">` `<blockquote>`.
-   */
-  bioLbml: string;
-
-  /**
-   * The member's location.
-   */
-  location: string;
-
-  /**
-   * The member's website URL. URLs are not validated, so sanitizing may be required.
-   */
-  website: string;
 
   /**
    * The member's backdrop image at multiple sizes, sourced from the first film in the member's
@@ -2772,26 +2684,42 @@ export interface Member {
   backdropFocalPoint: number;
 
   /**
+   * The member's bio formatted as HTML.
+   */
+  bio: string;
+
+  /**
+   * The member's bio in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
+   * `<i>` `<a href="">` `<blockquote>`.
+   */
+  bioLbml: string;
+
+  /**
+   * The member's default policy determing who can post comments to their content. Supported
+   * options are `Anyone`, `Friends` and `You`. `You` in this context refers to the content owner.
+   * Use the `commentThreadState` property of the `ListRelationship` to determine the signed-in
+   * member's ability to comment (or not).
+   *
+   * @see ListRelationship.commentThreadState
+   */
+  commentPolicy: 'Anyone' | 'Friends' | 'You';
+
+  /**
+   * A convenience method that returns the member's given name and family name concatenated with a
+   * space, if both are set, or just their given name or family name, if one is set, or their
+   * username, if neither is set. Will never be empty.
+   */
+  displayName: string;
+
+  /**
+   * The family name of the member.
+   */
+  familyName: string;
+
+  /**
    * A summary of the member's favorite films, up to a maximum of four.
    */
   favoriteFilms: FilmSummary[];
-
-  /**
-   * The reviews the member has pinned on their profile page, up to a maximum of two. *Only
-   * returned for paying members.*
-   */
-  pinnedReviews: LogEntry[];
-
-  /**
-   * A link to the member's profile page on the Letterboxd website.
-   */
-  links: Link[];
-
-  /**
-   * Defaults to `false` for new accounts. Indicates whether the member has elected to hide their
-   * watchlist from other members.
-   */
-  privateWatchlist: boolean;
 
   /**
    * A summary of the member's featured list. Only returned for HQ members.
@@ -2799,9 +2727,39 @@ export interface Member {
   featuredList: ListSummary;
 
   /**
-   * A summary of the member's team members. Only returned for HQ members.
+   * The given name of the member.
    */
-  teamMembers: MemberSummary[];
+  givenName: string;
+
+  /**
+   * `true` if member should not be shown ads.
+   */
+  hideAds: boolean;
+
+  /**
+   * `true` if ads should not be shown on the member's content.
+   */
+  hideAdsInContent: boolean;
+
+  /**
+   * The LID of the member.
+   */
+  id: string;
+
+  /**
+   * A link to the member's profile page on the Letterboxd website.
+   */
+  links: Link[];
+
+  /**
+   * The member's location.
+   */
+  location: string;
+
+  /**
+   * The member's account type.
+   */
+  memberStatus: 'Alum' | 'Crew' | 'Hq' | 'Member' | 'Patron' | 'Pro';
 
   /**
    * The member's organisation type. Only returned for HQ members.
@@ -2821,181 +2779,63 @@ export interface Member {
     | 'Studio';
 
   /**
-   * The member's bio formatted as HTML.
+   * The reviews the member has pinned on their profile page, up to a maximum of two. *Only
+   * returned for paying members.*
    */
-  bio: string;
-}
-
-export interface MemberAccount {
-  /**
-   * The member's email address.
-   */
-  emailAddress: string;
-
-  /**
-   * Will be `true` if the member has validated their `emailAddress` via an emailed link.
-   */
-  emailAddressValidated: boolean;
-
-  /**
-   * Defaults to `false` for new accounts. Indicates whether the member has elected for their
-   * content to appear in the API (other than in the
-   * [/me](https://api-docs.letterboxd.com/#path--me) endpoint).
-   */
-  privateAccount: boolean;
-
-  /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to appear in the
-   * [People](https://letterboxd.com/people/) section of the Letterboxd website.
-   */
-  includeInPeopleSection: boolean;
+  pinnedReviews: LogEntry[];
 
   /**
    * Defaults to `false` for new accounts. Indicates whether the member has elected to hide their
    * watchlist from other members.
-   *
-   * @deprecated Found in `member` instead.
    */
   privateWatchlist: boolean;
 
   /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive an
-   * email notification when another member follows them.
+   * The member's preferred pronoun. Use the
+   * [/members/pronouns](https://api-docs.letterboxd.com/#path--members-pronouns) endpoint to
+   * request all available pronouns.
    */
-  emailWhenFollowed: boolean;
+  pronoun: Pronoun;
 
   /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive an
-   * email notification when films on their watchlist become available to stream on one of their
-   * favorite services.
+   * A convenience method that returns the member's given name, if set, or their username. Will
+   * never be empty.
    */
-  emailAvailability: boolean;
+  shortName: string;
 
   /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive an
-   * email notification when films on their watchlist become available to buy on one of their
-   * favorite services.
+   * A summary of the member's team members. Only returned for HQ members.
    */
-  emailBuyAvailability: boolean;
+  teamMembers: MemberSummary[];
 
   /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive an
-   * email notification when films on their watchlist become available to rent on one of their
-   * favorite services.
+   * The member's Twitter username, if they have authenticated their account.
    */
-  emailRentAvailability: boolean;
+  twitterUsername: string;
 
   /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive email
-   * notifications when new comments are posted in threads they are subscribed to.
+   * The member's Letterboxd username. Usernames must be between 2 and 15 characters long and may
+   * only contain upper or lowercase letters, numbers or the underscore (`_`) character.
    */
-  emailComments: boolean;
+  username: string;
 
   /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive
-   * regular email news (including 'Call Sheet') from Letterboxd.
+   * The member's website URL. URLs are not validated, so sanitizing may be required.
    */
-  emailNews: boolean;
+  website: string;
+}
+
+export interface MemberAccount {
+  /**
+   * The member's account status.
+   */
+  accountStatus: 'Active' | 'Locked' | 'Memorialized';
 
   /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive a
-   * weekly email digest of new and popular content (called 'Rushes').
+   * The member's adult content policy determing whether or not they see adult content. Supported
+   * options are `Always` or `Default`. `Default` means never show adult content.
    */
-  emailRushes: boolean;
-
-  /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive
-   * offers from trusted partners via Letterboxd.
-   */
-  emailPartnerMessages: boolean;
-
-  /**
-   * The list of device IDs that may receive push notifications for this account.
-   */
-  devicesRegisteredForPushNotifications: string[];
-
-  /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
-   * notifications for platform and account alerts.
-   */
-  pushNotificationsForGeneralAnnouncements: boolean;
-
-  /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
-   * notifications with offers from trusted partners.
-   */
-  pushNotificationsForPartnerMessages: boolean;
-
-  /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
-   * notifications when new comments are posted in threads they are subscribed to.
-   */
-  pushNotificationsForComments: boolean;
-
-  /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
-   * notifications when another member likes one of their lists.
-   */
-  pushNotificationsForListLikes: boolean;
-
-  /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
-   * notifications when another member likes one of their reviews.
-   */
-  pushNotificationsForReviewLikes: boolean;
-
-  /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
-   * notifications when another member follows them.
-   */
-  pushNotificationsForNewFollowers: boolean;
-
-  /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
-   * notifications when films on a members watchlist become available to stream on one of their
-   * favorite services.
-   */
-  pushNotificationsForAvailability: boolean;
-
-  /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
-   * notifications when films on a members watchlist become available to buy on one of their
-   * favorite services.
-   */
-  pushNotificationsForBuyAvailability: boolean;
-
-  /**
-   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
-   * notifications when films on a members watchlist become available to rent on one of their
-   * favorite services.
-   */
-  pushNotificationsForRentAvailability: boolean;
-
-  /**
-   * Defaults to `false` for new accounts. Indicates whether the member has commenting privileges.
-   * Commenting is disabled on new accounts until the member's `emailAddress` is validated. At
-   * present `canComment` is synonymous with `emailAddressValidated` (unless the member is
-   * `suspended`) but this may change in future.
-   */
-  canComment: boolean;
-
-  /**
-   * Indicates whether the member is suspended from commenting due to a breach of the
-   * [Community Policy](https://letterboxd.com/legal/community-policy/).
-   */
-  suspended: boolean;
-
-  /**
-   * Indicates whether the member is able to clone other members' lists. Determined by Letterboxd
-   * based upon `memberStatus`.
-   */
-  canCloneLists: boolean;
-
-  /**
-   * Indicates whether the member is able to filter activity by type. Determined by Letterboxd
-   * based upon `memberStatus`.
-   */
-  canFilterActivity: boolean;
+  adultContentPolicy: 'Always' | 'Default';
 
   /**
    * The services the member has authorized Letterboxd to share lists to. More services may be
@@ -3014,6 +2854,136 @@ export interface MemberAccount {
   authorizedSharingServicesForReviews: 'Facebook';
 
   /**
+   * The list of campaigns this account is involved in.
+   */
+  campaigns: string[];
+
+  /**
+   * Indicates whether the member is able to clone other members' lists. Determined by Letterboxd
+   * based upon `memberStatus`.
+   */
+  canCloneLists: boolean;
+
+  /**
+   * Defaults to `false` for new accounts. Indicates whether the member has commenting privileges.
+   * Commenting is disabled on new accounts until the member's `emailAddress` is validated. At
+   * present `canComment` is synonymous with `emailAddressValidated` (unless the member is
+   * `suspended`) but this may change in future.
+   */
+  canComment: boolean;
+
+  /**
+   * Indicates whether the member is able to filter activity by type. Determined by Letterboxd
+   * based upon `memberStatus`.
+   */
+  canFilterActivity: boolean;
+
+  /**
+   * Indicates whether the member is able to customise film posters. Determined by Letterboxd based
+   * upon `memberStatus`.
+   */
+  canHaveCustomPosters: boolean;
+
+  /**
+   * The member's default policy determing who can post comments to their content. Supported
+   * options are `Anyone`, `Friends` and `You`. `You` in this context refers to the content owner.
+   * Use the `commentThreadState` property of the `ListRelationship` to determine the signed-in
+   * member's ability to comment (or not).
+   *
+   * @see ListRelationship.commentThreadState
+   */
+  commentPolicy: 'Anyone' | 'Friends' | 'You';
+
+  /**
+   * The list of device IDs that may receive push notifications for this account.
+   */
+  devicesRegisteredForPushNotifications: string[];
+
+  /**
+   * The member's email address.
+   */
+  emailAddress: string;
+
+  /**
+   * Will be `true` if the member has validated their `emailAddress` via an emailed link.
+   */
+  emailAddressValidated: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive an
+   * email notification when films on their watchlist become available to stream on one of their
+   * favorite services.
+   */
+  emailAvailability: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive an
+   * email notification when films on their watchlist become available to buy on one of their
+   * favorite services.
+   */
+  emailBuyAvailability: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive email
+   * notifications when new comments are posted in threads they are subscribed to.
+   */
+  emailComments: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive
+   * regular email news (including 'Call Sheet') from Letterboxd.
+   */
+  emailNews: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive
+   * offers from trusted partners via Letterboxd.
+   */
+  emailPartnerMessages: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive an
+   * email notification when films on their watchlist become available to rent on one of their
+   * favorite services.
+   */
+  emailRentAvailability: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive a
+   * weekly email digest of new and popular content (called 'Rushes').
+   */
+  emailRushes: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive an
+   * email notification when another member follows them.
+   */
+  emailWhenFollowed: boolean;
+
+  /**
+   * Indicates whether the member has an active subscription that will auto-renew. Will return
+   * `false` for members who did subscribe and then set their subscription to no longer renew,
+   * even if the original subscription period has not yet expired.
+   */
+  hasActiveSubscription: boolean;
+
+  /**
+   * `true` if member should not be shown ads.
+   */
+  hideAds: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to appear in the
+   * [People](https://letterboxd.com/people/) section of the Letterboxd website.
+   */
+  includeInPeopleSection: boolean;
+
+  /**
+   * Standard member details.
+   */
+  member: Member;
+
+  /**
    * The number of days the member has left in their subscription. *Only returned for paying
    * members.*
    */
@@ -3024,35 +2994,6 @@ export interface MemberAccount {
    * subscription. *Only returned for members who have subscribed through IAP.*
    */
   membershipWillAutoRenewViaIAP: boolean;
-
-  /**
-   * Indicates whether the member has an active subscription that will auto-renew. Will return
-   * `false` for members who did subscribe and then set their subscription to no longer renew,
-   * even if the original subscription period has not yet expired.
-   */
-  hasActiveSubscription: boolean;
-
-  /**
-   * Indicates the member's subscription type, possible values are `apple` or `paddle`. *Only
-   * returned for members who have an active subscription.*
-   */
-  subscriptionType: string;
-
-  /**
-   * Standard member details.
-   */
-  member: Member;
-
-  /**
-   * The list of campaigns this account is involved in.
-   */
-  campaigns: string[];
-
-  /**
-   * The member's adult content policy determing whether or not they see adult content. Supported
-   * options are `Always` or `Default`. `Default` means never show adult content.
-   */
-  adultContentPolicy: 'Always' | 'Default';
 
   /**
    * The member's poster mode determing whether or not they see custom posters. Supported options
@@ -3066,24 +3007,76 @@ export interface MemberAccount {
   posterModeOptions: 'All' | 'None' | 'Yours';
 
   /**
-   * The member's default policy determing who can post comments to their content. Supported
-   * options are `Anyone`, `Friends` and `You`. `You` in this context refers to the content owner.
-   * Use the `commentThreadState` property of the `ListRelationship` to determine the signed-in
-   * member's ability to comment (or not).
+   * Defaults to `false` for new accounts. Indicates whether the member has elected for their
+   * content to appear in the API (other than in the
+   * [/me](https://api-docs.letterboxd.com/#path--me) endpoint).
+   */
+  privateAccount: boolean;
+
+  /**
+   * Defaults to `false` for new accounts. Indicates whether the member has elected to hide their
+   * watchlist from other members.
    *
-   * @see ListRelationship.commentThreadState
+   * @deprecated Found in `member` instead.
    */
-  commentPolicy: 'Anyone' | 'Friends' | 'You';
+  privateWatchlist: boolean;
 
   /**
-   * The member's account status.
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
+   * notifications when films on a members watchlist become available to stream on one of their
+   * favorite services.
    */
-  accountStatus: 'Active' | 'Locked' | 'Memorialized';
+  pushNotificationsForAvailability: boolean;
 
   /**
-   * `true` if member should not be shown ads.
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
+   * notifications when films on a members watchlist become available to buy on one of their
+   * favorite services.
    */
-  hideAds: boolean;
+  pushNotificationsForBuyAvailability: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
+   * notifications when new comments are posted in threads they are subscribed to.
+   */
+  pushNotificationsForComments: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
+   * notifications for platform and account alerts.
+   */
+  pushNotificationsForGeneralAnnouncements: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
+   * notifications when another member likes one of their lists.
+   */
+  pushNotificationsForListLikes: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
+   * notifications when another member follows them.
+   */
+  pushNotificationsForNewFollowers: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
+   * notifications with offers from trusted partners.
+   */
+  pushNotificationsForPartnerMessages: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
+   * notifications when films on a members watchlist become available to rent on one of their
+   * favorite services.
+   */
+  pushNotificationsForRentAvailability: boolean;
+
+  /**
+   * Defaults to `true` for new accounts. Indicates whether the member has elected to receive push
+   * notifications when another member likes one of their reviews.
+   */
+  pushNotificationsForReviewLikes: boolean;
 
   /**
    * `true` if member should be shown ads for custom posters.
@@ -3091,10 +3084,16 @@ export interface MemberAccount {
   showCustomPostersAds: boolean;
 
   /**
-   * Indicates whether the member is able to customise film posters. Determined by Letterboxd based
-   * upon `memberStatus`.
+   * Indicates the member's subscription type, possible values are `apple` or `paddle`. *Only
+   * returned for members who have an active subscription.*
    */
-  canHaveCustomPosters: boolean;
+  subscriptionType: string;
+
+  /**
+   * Indicates whether the member is suspended from commenting due to a breach of the
+   * [Community Policy](https://letterboxd.com/legal/community-policy/).
+   */
+  suspended: boolean;
 }
 
 export interface MemberFilmRelationship {
@@ -3111,17 +3110,19 @@ export interface MemberFilmRelationship {
 
 export interface MemberFilmRelationshipsResponse {
   /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
-  /**
    * The list of film relationships for members.
    */
   items: MemberFilmRelationship[];
+
+  /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
 }
 
 export interface MemberFilmViewingRelationship {
+  logEntry: LogEntrySummary;
+
   /**
    * The member.
    */
@@ -3131,8 +3132,6 @@ export interface MemberFilmViewingRelationship {
    * The relationship details.
    */
   relationship: FilmRelationship;
-
-  logEntry: LogEntrySummary;
 }
 
 export interface MemberIdentifier {
@@ -3144,14 +3143,9 @@ export interface MemberIdentifier {
 
 export interface MemberRelationship {
   /**
-   * Will be `true` if the authenticated member follows the member identified by ID.
+   * Will be `true` if the member identified by ID has blocked the authenticated member.
    */
-  following: boolean;
-
-  /**
-   * Will be `true` if the member identified by ID follows the authenticated member.
-   */
-  followedBy: boolean;
+  blockedBy: boolean;
 
   /**
    * Will be `true` if the authenticated member has blocked the member identified by ID.
@@ -3159,17 +3153,17 @@ export interface MemberRelationship {
   blocking: boolean;
 
   /**
-   * Will be `true` if the member identified by ID has blocked the authenticated member.
+   * Will be `true` if the member identified by ID follows the authenticated member.
    */
-  blockedBy: boolean;
+  followedBy: boolean;
+
+  /**
+   * Will be `true` if the authenticated member follows the member identified by ID.
+   */
+  following: boolean;
 }
 
 export interface MemberRelationshipUpdateMessage {
-  /**
-   * The type of message.
-   */
-  type: 'Error' | 'Success';
-
   /**
    * The error message code.
    */
@@ -3179,21 +3173,26 @@ export interface MemberRelationshipUpdateMessage {
    * The error message text in human-readable form.
    */
   title: string;
+
+  /**
+   * The type of message.
+   */
+  type: 'Error' | 'Success';
 }
 
 export interface MemberRelationshipUpdateRequest {
+  /**
+   * Set to `true` if the authenticated member wishes to block the member identified by ID, or
+   * `false` if they wish to unblock. A member may not block their own account.
+   */
+  blocking?: boolean;
+
   /**
    * Set to `true` if the authenticated member wishes to follow the member identified by ID, or
    * `false` if they wish to unfollow. A member may not follow their own account, or the account of
    * a member they have blocked or that has blocked them.
    */
   following?: boolean;
-
-  /**
-   * Set to `true` if the authenticated member wishes to block the member identified by ID, or
-   * `false` if they wish to unblock. A member may not block their own account.
-   */
-  blocking?: boolean;
 }
 
 export interface MemberRelationshipUpdateResponse {
@@ -3208,19 +3207,14 @@ export interface MemberRelationshipUpdateResponse {
   messages: MemberRelationshipUpdateMessage[];
 }
 
-export type MemberSearchItem = AbstractSearchItem & {
+export interface MemberSearchItem extends AbstractSearchItem {
   /**
    * The member returned by the search.
    */
   member: MemberSummary;
-};
+}
 
 export interface MemberSettingsUpdateMessage {
-  /**
-   * The type of message.
-   */
-  type: 'Error' | 'Success';
-
   /**
    * The error message code.
    */
@@ -3238,40 +3232,25 @@ export interface MemberSettingsUpdateMessage {
    * The error message text in human-readable form.
    */
   title: string;
+
+  /**
+   * The type of message.
+   */
+  type: 'Error' | 'Success';
 }
 
 export interface MemberSettingsUpdateRequest {
   /**
-   * The member's email address.
+   * The member's adult content policy determing whether or not they see adult content. Supported
+   * options are `Always` or `Default`. `Default` means never show adult content.
    */
-  emailAddress?: string;
+  adultContentPolicy?: string;
 
   /**
-   * The member's current password. Required when updating the password.
+   * The member's bio in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
+   * `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000 characters.
    */
-  currentPassword?: string;
-
-  /**
-   * The member's new password.
-   */
-  password?: string;
-
-  /**
-   * The given name of the member.
-   */
-  givenName?: string;
-
-  /**
-   * The family name of the member.
-   */
-  familyName?: string;
-
-  /**
-   * The LID of the member's preferred pronoun. Use the
-   * [/members/pronouns](https://api-docs.letterboxd.com/#path--members-pronouns) endpoint to
-   * request all available pronouns.
-   */
-  pronoun?: string;
+  bio?: string;
 
   /**
    * The member's default policy determing who can post comments to their content. Supported
@@ -3284,59 +3263,18 @@ export interface MemberSettingsUpdateRequest {
   commentPolicy?: string;
 
   /**
-   * The member's adult content policy determing whether or not they see adult content. Supported
-   * options are `Always` or `Default`. `Default` means never show adult content.
+   * The member's current password. Required when updating the password.
    */
-  adultContentPolicy?: string;
+  currentPassword?: string;
 
   /**
-   * The member's poster mode determing whether or not they see custom posters. Supported options
-   * are `All`, `Yours` or `None`.
+   * The member's email address.
    */
-  posterMode?: string;
-
-  /**
-   * The member's location.
-   */
-  location?: string;
-
-  /**
-   * The member's website URL. URLs are not validated, so sanitizing may be required.
-   */
-  website?: string;
-
-  /**
-   * The member's bio in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
-   * `<i>` `<a href="">` `<blockquote>`. This field has a maximum size of 100,000 characters.
-   */
-  bio?: string;
-
-  /**
-   * The LIDs of the member's favorite films, in order, up to a maximum of four.
-   */
-  favoriteFilms?: string[];
-
-  /**
-   * Set to `true` to prevent the member's content from appearing in API requests other than the
-   * [/me](https://api-docs.letterboxd.com/#path--me) endpoint.
-   */
-  privateAccount?: boolean;
-
-  /**
-   * Set to `false` to remove the account from the [Members](https://letterboxd.com/members/)
-   * section of the Letterboxd website.
-   */
-  includeInPeopleSection?: boolean;
-
-  /**
-   * Set to `true` if the member wishes to receive an email notification when another member
-   * follows them.
-   */
-  emailWhenFollowed?: boolean;
+  emailAddress?: string;
 
   emailAvailability?: boolean;
+
   emailBuyAvailability?: boolean;
-  emailRentAvailability?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive email notifications when new comments are posted
@@ -3351,27 +3289,75 @@ export interface MemberSettingsUpdateRequest {
   emailNews?: boolean;
 
   /**
+   * Set to `true` if the member wishes to receive offers from trusted partners via Letterboxd.
+   */
+  emailPartnerMessages?: boolean;
+
+  emailRentAvailability?: boolean;
+
+  /**
    * Set to `true` if the member wishes to receive a weekly email digest of new and popular content
    * (called 'Rushes').
    */
   emailRushes?: boolean;
 
   /**
-   * Set to `true` if the member wishes to receive offers from trusted partners via Letterboxd.
+   * Set to `true` if the member wishes to receive an email notification when another member
+   * follows them.
    */
-  emailPartnerMessages?: boolean;
+  emailWhenFollowed?: boolean;
 
   /**
-   * Set to `true` if the member wishes to receive push notifications for platform and account
-   * alerts.
+   * The family name of the member.
    */
-  pushNotificationsForGeneralAnnouncements?: boolean;
+  familyName?: string;
 
   /**
-   * Set to `true` if the member wishes to receive push notifications with offers from trusted
-   * partners.
+   * The LIDs of the member's favorite films, in order, up to a maximum of four.
    */
-  pushNotificationsForPartnerMessages?: boolean;
+  favoriteFilms?: string[];
+
+  /**
+   * The given name of the member.
+   */
+  givenName?: string;
+
+  /**
+   * Set to `false` to remove the account from the [Members](https://letterboxd.com/members/)
+   * section of the Letterboxd website.
+   */
+  includeInPeopleSection?: boolean;
+  /**
+   * The member's location.
+   */
+  location?: string;
+  /**
+   * The member's new password.
+   */
+  password?: string;
+
+  /**
+   * The member's poster mode determing whether or not they see custom posters. Supported options
+   * are `All`, `Yours` or `None`.
+   */
+  posterMode?: string;
+
+  /**
+   * Set to `true` to prevent the member's content from appearing in API requests other than the
+   * [/me](https://api-docs.letterboxd.com/#path--me) endpoint.
+   */
+  privateAccount?: boolean;
+
+  /**
+   * The LID of the member's preferred pronoun. Use the
+   * [/members/pronouns](https://api-docs.letterboxd.com/#path--members-pronouns) endpoint to
+   * request all available pronouns.
+   */
+  pronoun?: string;
+
+  pushNotificationsForAvailability?: boolean;
+
+  pushNotificationsForBuyAvailability?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive push notifications when new comments are posted
@@ -3380,10 +3366,10 @@ export interface MemberSettingsUpdateRequest {
   pushNotificationsForComments?: boolean;
 
   /**
-   * Set to `true` if the member wishes to receive push notifications when another member likes one
-   * of their reviews.
+   * Set to `true` if the member wishes to receive push notifications for platform and account
+   * alerts.
    */
-  pushNotificationsForReviewLikes?: boolean;
+  pushNotificationsForGeneralAnnouncements?: boolean;
 
   /**
    * Set to `true` if the member wishes to receive push notifications when another member likes one
@@ -3397,9 +3383,22 @@ export interface MemberSettingsUpdateRequest {
    */
   pushNotificationsForNewFollowers?: boolean;
 
-  pushNotificationsForAvailability?: boolean;
-  pushNotificationsForBuyAvailability?: boolean;
+  /**
+   * Set to `true` if the member wishes to receive push notifications with offers from trusted
+   * partners.
+   */
+  pushNotificationsForPartnerMessages?: boolean;
+
   pushNotificationsForRentAvailability?: boolean;
+  /**
+   * Set to `true` if the member wishes to receive push notifications when another member likes one
+   * of their reviews.
+   */
+  pushNotificationsForReviewLikes?: boolean;
+  /**
+   * The member's website URL. URLs are not validated, so sanitizing may be required.
+   */
+  website?: string;
 }
 
 export interface MemberSettingsUpdateResponse {
@@ -3416,26 +3415,26 @@ export interface MemberSettingsUpdateResponse {
 
 export interface MembersResponse {
   /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
-  /**
    * The list of members.
    */
   items: MemberSummary[];
+
+  /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
 }
 
 export interface MemberStatistics {
   /**
-   * The member for which statistics were requested.
-   */
-  member: MemberIdentifier;
-
-  /**
    * The number of watches, ratings, likes, etc. for the member.
    */
   counts: MemberStatisticsCounts;
+
+  /**
+   * The member for which statistics were requested.
+   */
+  member: MemberIdentifier;
 
   /**
    * A summary of the number of ratings the member has made for each increment between `0.5` and
@@ -3452,37 +3451,6 @@ export interface MemberStatistics {
 
 export interface MemberStatisticsCounts {
   /**
-   * The number of films the member has liked.
-   */
-  filmLikes: number;
-
-  /**
-   * The number of lists the member has liked.
-   */
-  listLikes: number;
-
-  /**
-   * The number of reviews the member has liked.
-   */
-  reviewLikes: number;
-
-  /**
-   * The number of films the member has watched. This is a distinct total — films with multiple log
-   * entries are only counted once.
-   */
-  watches: number;
-
-  /**
-   * The number of films the member has rated.
-   */
-  ratings: number;
-
-  /**
-   * The number of films the member has reviewed.
-   */
-  reviews: number;
-
-  /**
    * The number of entries the member has in their diary.
    */
   diaryEntries: number;
@@ -3494,27 +3462,20 @@ export interface MemberStatisticsCounts {
   diaryEntriesThisYear: number;
 
   /**
+   * The number of films the member has liked.
+   */
+  filmLikes: number;
+
+  /**
+   * The number of tags the member has used for diary entries and reviews.
+   */
+  filmTags: number;
+
+  /**
    * The number of unique films the member has in their diary for the current year. The current
    * year rolls over at midnight on 31 December in New Zealand Daylight Time (GMT + 13).
    */
   filmsInDiaryThisYear: number;
-
-  /**
-   * The number of films the member has in their watchlist.
-   */
-  watchlist: number;
-
-  /**
-   * The number of lists for the member. Includes unpublished lists if the request is made for the
-   * authenticated member.
-   */
-  lists: number;
-
-  /**
-   * The number of unpublished lists for the member. Only included if the request is made for the
-   * authenticated member.
-   */
-  unpublishedLists: number;
 
   /**
    * The number of members who follow the member.
@@ -3527,73 +3488,65 @@ export interface MemberStatisticsCounts {
   following: number;
 
   /**
+   * The number of lists the member has liked.
+   */
+  listLikes: number;
+
+  /**
    * The number of tags the member has used for lists.
    */
   listTags: number;
 
   /**
-   * The number of tags the member has used for diary entries and reviews.
+   * The number of lists for the member. Includes unpublished lists if the request is made for the
+   * authenticated member.
    */
-  filmTags: number;
+  lists: number;
+
+  /**
+   * The number of films the member has rated.
+   */
+  ratings: number;
+
+  /**
+   * The number of reviews the member has liked.
+   */
+  reviewLikes: number;
+
+  /**
+   * The number of films the member has reviewed.
+   */
+  reviews: number;
+
+  /**
+   * The number of unpublished lists for the member. Only included if the request is made for the
+   * authenticated member.
+   */
+  unpublishedLists: number;
+
+  /**
+   * The number of films the member has watched. This is a distinct total — films with multiple log
+   * entries are only counted once.
+   */
+  watches: number;
+
+  /**
+   * The number of films the member has in their watchlist.
+   */
+  watchlist: number;
 }
 
 export interface MemberSummary {
   /**
-   * The LID of the member.
+   * The member's account status.
    */
-  id: string;
-
-  /**
-   * The member's Letterboxd username. Usernames must be between 2 and 15 characters long and may
-   * only contain upper or lowercase letters, numbers or the underscore (`_`) character.
-   */
-  username: string;
-
-  /**
-   * The given name of the member.
-   */
-  givenName: string;
-
-  /**
-   * The family name of the member.
-   */
-  familyName: string;
-
-  /**
-   * A convenience method that returns the member's given name and family name concatenated with a
-   * space, if both are set, or just their given name or family name, if one is set, or their
-   * username, if neither is set. Will never be empty.
-   */
-  displayName: string;
-
-  /**
-   * A convenience method that returns the member's given name, if set, or their username. Will
-   * never be empty.
-   */
-  shortName: string;
-
-  /**
-   * The member's preferred pronoun. Use the
-   * [/members/pronouns](https://api-docs.letterboxd.com/#path--members-pronouns) endpoint to
-   * request all available pronouns.
-   */
-  pronoun: Pronoun;
+  accountStatus: 'Active' | 'Locked' | 'Memorialized';
 
   /**
    * The member's avatar image at multiple sizes. Avatar images to not have an enforced aspect
    * ratio, so should be center-cropped to a square if they are not 1:1.
    */
   avatar: Image;
-
-  /**
-   * The member's account type.
-   */
-  memberStatus: 'Alum' | 'Crew' | 'Hq' | 'Member' | 'Patron' | 'Pro';
-
-  /**
-   * `true` if ads should not be shown on the member's content.
-   */
-  hideAdsInContent: boolean;
 
   /**
    * The member's default policy determing who can post comments to their content. Supported
@@ -3606,27 +3559,72 @@ export interface MemberSummary {
   commentPolicy: 'Anyone' | 'Friends' | 'You';
 
   /**
-   * The member's account status.
+   * A convenience method that returns the member's given name and family name concatenated with a
+   * space, if both are set, or just their given name or family name, if one is set, or their
+   * username, if neither is set. Will never be empty.
    */
-  accountStatus: 'Active' | 'Locked' | 'Memorialized';
+  displayName: string;
+
+  /**
+   * The family name of the member.
+   */
+  familyName: string;
+
+  /**
+   * The given name of the member.
+   */
+  givenName: string;
 
   /**
    * `true` if member should not be shown ads.
    */
   hideAds: boolean;
+
+  /**
+   * `true` if ads should not be shown on the member's content.
+   */
+  hideAdsInContent: boolean;
+
+  /**
+   * The LID of the member.
+   */
+  id: string;
+
+  /**
+   * The member's account type.
+   */
+  memberStatus: 'Alum' | 'Crew' | 'Hq' | 'Member' | 'Patron' | 'Pro';
+
+  /**
+   * The member's preferred pronoun. Use the
+   * [/members/pronouns](https://api-docs.letterboxd.com/#path--members-pronouns) endpoint to
+   * request all available pronouns.
+   */
+  pronoun: Pronoun;
+
+  /**
+   * A convenience method that returns the member's given name, if set, or their username. Will
+   * never be empty.
+   */
+  shortName: string;
+
+  /**
+   * The member's Letterboxd username. Usernames must be between 2 and 15 characters long and may
+   * only contain upper or lowercase letters, numbers or the underscore (`_`) character.
+   */
+  username: string;
 }
 
 export interface MemberTag {
   /**
-   * @deprecated Use `displayTag` instead.
-   * @see MemberTag.displayTag
-   */
-  tag: string;
-
-  /**
    * The tag code.
    */
   code: string;
+
+  /**
+   * Counts of the member's uses of this tag.
+   */
+  counts: MemberTagCounts;
 
   /**
    * The tag text as entered by the tagger.
@@ -3634,16 +3632,27 @@ export interface MemberTag {
   displayTag: string;
 
   /**
-   * Counts of the member's uses of this tag.
+   * @deprecated Use `displayTag` instead.
+   * @see MemberTag.displayTag
    */
-  counts: MemberTagCounts;
+  tag: string;
 }
 
 export interface MemberTagCounts {
   /**
+   * The number of diary entries the member has used this tag on.
+   */
+  diaryEntries: number;
+
+  /**
    * The number of films the member has used this tag on.
    */
   films: number;
+
+  /**
+   * The number of lists the member has used this tag on.
+   */
+  lists: number;
 
   /**
    * The number of log entries the member has used this tag on.
@@ -3651,19 +3660,9 @@ export interface MemberTagCounts {
   logEntries: number;
 
   /**
-   * The number of diary entries the member has used this tag on.
-   */
-  diaryEntries: number;
-
-  /**
    * The number of reviews the member has used this tag on.
    */
   reviews: number;
-
-  /**
-   * The number of lists the member has used this tag on.
-   */
-  lists: number;
 }
 
 export interface MemberTagsResponse {
@@ -3699,25 +3698,14 @@ export interface Nanogenre {
 
 export interface NewsItem {
   /**
-   * The title of the news item.
+   * The podcast episode number, if this news item is for a podcast
    */
-  title: string;
+  episode: number;
 
   /**
    * The image.
    */
   image: Image;
-
-  /**
-   * The URL of the news item.
-   */
-  url: string;
-
-  /**
-   * A short description of the news item in LBML. May contain the following HTML tags: `<br>`
-   * `<strong>` `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
-   */
-  shortDescription: string;
 
   /**
    * A long description of the news item in LBML. May contain the following HTML tags: `<br>`
@@ -3726,26 +3714,37 @@ export interface NewsItem {
   longDescription: string;
 
   /**
-   * The podcast episode number, if this news item is for a podcast
-   */
-  episode: number;
-
-  /**
    * The podcast season number, if this news item is for a podcast
    */
   season: number;
+
+  /**
+   * A short description of the news item in LBML. May contain the following HTML tags: `<br>`
+   * `<strong>` `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
+   */
+  shortDescription: string;
+
+  /**
+   * The title of the news item.
+   */
+  title: string;
+
+  /**
+   * The URL of the news item.
+   */
+  url: string;
 }
 
 export interface NewsResponse {
   /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
-  /**
    * The list of news items.
    */
   items: NewsItem[];
+
+  /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
 }
 
 export interface OAuthError {
@@ -3760,12 +3759,12 @@ export interface OAuthError {
   errorDescription: string;
 }
 
-export type PodcastSearchItem = AbstractSearchItem & {
+export interface PodcastSearchItem extends AbstractSearchItem {
   /**
    * The podcast.
    */
   podcast: NewsItem;
-};
+}
 
 export interface Pronoun {
   /**
@@ -3778,13 +3777,6 @@ The LID for this pronoun.
    * A label to describe this pronoun.
    */
   label: string;
-
-  /**
-   * The pronoun to use when the member is the subject.
-   *
-   * @example She went to the movies.
-   */
-  subjectPronoun: string;
 
   /**
    * The pronoun to use when the member is the object.
@@ -3815,6 +3807,13 @@ The LID for this pronoun.
    * @example He saw himself as a great director.
    */
   reflexive: string;
+
+  /**
+   * The pronoun to use when the member is the subject.
+   *
+   * @example She went to the movies.
+   */
+  subjectPronoun: string;
 }
 
 export interface PronounsResponse {
@@ -3826,9 +3825,9 @@ export interface PronounsResponse {
 
 export interface RatingsHistogramBar {
   /**
-   * The rating increment between `0.5` and `5.0`.
+   * The number of ratings made at this increment.
    */
-  rating: number;
+  count: number;
 
   /**
    * The height of this rating increment's entry in a unit-height histogram, normalized between
@@ -3838,9 +3837,9 @@ export interface RatingsHistogramBar {
   normalizedWeight: number;
 
   /**
-   * The number of ratings made at this increment.
+   * The rating increment between `0.5` and `5.0`.
    */
-  count: number;
+  rating: number;
 }
 
 export interface RegisterPushNotificationsRequest {
@@ -3862,19 +3861,10 @@ export interface RegisterPushNotificationsRequest {
 
 export interface RegisterRequest {
   /**
-   * The username for the new account. Use the `/auth/username-check` endpoint to check availability.
+   * Set to `true` if the person creating the account has agreed to being at least 16 years of age,
+   *  and to accepting Letterboxd's [Terms of Use](https://letterboxd.com/terms-of-use/).
    */
-  username?: string;
-
-  /**
-   * The password for the new account.
-   */
-  password?: string;
-
-  /**
-   * The email address for the new account.
-   */
-  emailAddress?: string;
+  acceptTermsOfUse?: string;
 
   /**
    * The captcha response value
@@ -3882,10 +3872,19 @@ export interface RegisterRequest {
   captchaResponse?: string;
 
   /**
-   * Set to `true` if the person creating the account has agreed to being at least 16 years of age,
-   *  and to accepting Letterboxd's [Terms of Use](https://letterboxd.com/terms-of-use/).
+   * The email address for the new account.
    */
-  acceptTermsOfUse?: string;
+  emailAddress?: string;
+
+  /**
+   * The password for the new account.
+   */
+  password?: string;
+
+  /**
+   * The username for the new account. Use the `/auth/username-check` endpoint to check availability.
+   */
+  username?: string;
 }
 
 export type RegistrationActivity = AbstractActivity & {
@@ -3894,44 +3893,49 @@ export type RegistrationActivity = AbstractActivity & {
 
 export interface ReportCommentRequest {
   /**
-   * The reason why the comment was reported.
-   */
-  reason: 'Abuse' | 'Other' | 'Plagiarism' | 'Spam' | 'Spoilers';
-
-  /**
    * An optional, explanatory message to accompany the report. Required if the `reason` is
    * `Plagiarism` or `Other`.
    */
   message?: string;
+
+  /**
+   * The reason why the comment was reported.
+   */
+  reason: 'Abuse' | 'Other' | 'Plagiarism' | 'Spam' | 'Spoilers';
 }
 
 export interface ReportFilmRequest {
-  /**
-   * The reason why the film was reported.
-   */
-  reason: 'Duplicate' | 'NotAFilm' | 'Other';
-
   /**
    * An optional, explanatory message to accompany the report. Required if the `reason` is
    * `Duplicate` or `Other`.
    */
   message?: string;
+
+  /**
+   * The reason why the film was reported.
+   */
+  reason: 'Duplicate' | 'NotAFilm' | 'Other';
 }
 
 export interface ReportListRequest {
-  /**
-   * The reason why the list was reported.
-   */
-  reason: 'Abuse' | 'Other' | 'Plagiarism' | 'Spam' | 'Spoilers';
-
   /**
    * An optional, explanatory message to accompany the report. Required if the `reason` is
    * `Plagiarism` or `Other`.
    */
   message?: string;
+
+  /**
+   * The reason why the list was reported.
+   */
+  reason: 'Abuse' | 'Other' | 'Plagiarism' | 'Spam' | 'Spoilers';
 }
 
 export interface ReportMemberRequest {
+  /**
+   * An optional, explanatory message to accompany the report. Required if the `reason` is `Other`.
+   */
+  message?: string;
+
   /**
    * The reason why the member was reported.
    */
@@ -3946,32 +3950,29 @@ export interface ReportMemberRequest {
     | 'PlagiaristAccount'
     | 'SolicitousAccount'
     | 'SpamAccount';
-
-  /**
-   * An optional, explanatory message to accompany the report. Required if the `reason` is `Other`.
-   */
-  message?: string;
 }
 
 export interface ReportReviewRequest {
-  /**
-   * The reason why the review was reported.
-   */
-  reason: 'Abuse' | 'Other' | 'Plagiarism' | 'Spam' | 'Spoilers';
-
   /**
    * An optional, explanatory message to accompany the report. Required if the `reason` is
    * `Plagiarism` or `Other`.
    */
   message?: string;
+
+  /**
+   * The reason why the review was reported.
+   */
+  reason: 'Abuse' | 'Other' | 'Plagiarism' | 'Spam' | 'Spoilers';
 }
 
 export interface Review {
   /**
-   * The review text in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
-   * `<i>` `<a href="">` `<blockquote>`.
+   * The third-party service or services to which this review can be shared. Only included if the
+   * authenticated member is the review's owner.
+   *
+   * @deprecated No longer supported by Facebook.
    */
-  lbml: string;
+  canShareOn: 'Facebook';
 
   /**
    * Will be `true` if the member has indicated that the `review` field contains plot spoilers for
@@ -3980,22 +3981,15 @@ export interface Review {
   containsSpoilers: boolean;
 
   /**
-   * Will be `true` if the spoilers flag has been locked by a moderator.
+   * The review text in LBML. May contain the following HTML tags: `<br>` `<strong>` `<em>` `<b>`
+   * `<i>` `<a href="">` `<blockquote>`.
    */
-  spoilersLocked: boolean;
+  lbml: string;
 
   /**
    * Will be `true` if the `review` has been removed by a moderator.
    */
   moderated: boolean;
-
-  /**
-   * The third-party service or services to which this review can be shared. Only included if the
-   * authenticated member is the review's owner.
-   *
-   * @deprecated No longer supported by Facebook.
-   */
-  canShareOn: 'Facebook';
 
   /**
    * The third-party service or services to which this review has been shared. Only included if the
@@ -4006,27 +4000,67 @@ export interface Review {
   sharedOn: 'Facebook';
 
   /**
+   * Will be `true` if the spoilers flag has been locked by a moderator.
+   */
+  spoilersLocked: boolean;
+
+  /**
+   * The review text formatted as HTML.
+   */
+  text: string;
+
+  /**
    * The timestamp when this log entry's review was first published, in ISO 8601 format with UTC
    * timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
    *
    * @example 1997-08-29T07:14:00Z
    */
   whenReviewed: string;
-
-  /**
-   * The review text formatted as HTML.
-   */
-  text: string;
 }
 
-export type ReviewActivity = AbstractActivity & {
+export interface ReviewActivity extends AbstractActivity {
   /**
    * The log entry associated with this activity
    */
   review: LogEntry;
-};
+}
 
 export interface ReviewComment {
+  /**
+   * If the authenticated member has blocked the commenter, `blocked` will be true and `comment`
+   * will not be included.
+   */
+  blocked: boolean;
+
+  /**
+   * If the review owner has blocked the commenter, `blockedByOwner` will be true and `comment`
+   * will not be included.
+   */
+  blockedByOwner: boolean;
+
+  /**
+   * The message portion of the comment formatted as HTML.
+   */
+  comment: string;
+
+  /**
+   * The message portion of the comment in LBML. May contain the following HTML tags: `<br>`
+   * `<strong>` `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
+   */
+  commentLbml: string;
+
+  /**
+   * If the comment owner has removed the comment from the site, `deleted` will be true and
+   * `comment` will not be included.
+   */
+  deleted: boolean;
+
+  /**
+   * If the authenticated member posted this comment, and the comment is still editable, this value
+   * shows the number of seconds remaining until the editing window closes.
+   */
+  editableWindowExpiresIn: number;
+
   /**
    * The LID of the comment/reply.
    */
@@ -4036,26 +4070,6 @@ export interface ReviewComment {
    * The member who posted the comment.
    */
   member: MemberSummary;
-
-  /**
-   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
-   *
-   * @example 1997-08-29T07:14:00Z
-   */
-  whenCreated: string;
-
-  /**
-   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
-   *
-   * @example 1997-08-29T07:14:00Z
-   */
-  whenUpdated: string;
-
-  /**
-   * The message portion of the comment in LBML. May contain the following HTML tags: `<br>`
-   * `<strong>` `<em>` `<b>` `<i>` `<a href="">` `<blockquote>`.
-   */
-  commentLbml: string;
 
   /**
    * If Letterboxd moderators have removed the comment from the site, `removedByAdmin` will be true
@@ -4070,62 +4084,47 @@ export interface ReviewComment {
   removedByContentOwner: boolean;
 
   /**
-   * If the comment owner has removed the comment from the site, `deleted` will be true and
-   * `comment` will not be included.
-   */
-  deleted: boolean;
-
-  /**
-   * If the authenticated member has blocked the commenter, `blocked` will be true and `comment`
-   * will not be included.
-   */
-  blocked: boolean;
-
-  /**
-   * If the review owner has blocked the commenter, `blockedByOwner` will be true and `comment`
-   * will not be included.
-   */
-  blockedByOwner: boolean;
-
-  /**
-   * If the authenticated member posted this comment, and the comment is still editable, this value
-   * shows the number of seconds remaining until the editing window closes.
-   */
-  editableWindowExpiresIn: number;
-
-  /**
    * The review on which the comment was posted.
    */
   review: ReviewIdentifier;
 
   /**
-   * The message portion of the comment formatted as HTML.
+   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
+   *
+   * @example 1997-08-29T07:14:00Z
    */
-  comment: string;
+  whenCreated: string;
+
+  /**
+   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
+   *
+   * @example 1997-08-29T07:14:00Z
+   */
+  whenUpdated: string;
 }
 
-export type ReviewCommentActivity = AbstractActivity & {
-  /**
-   * The review associated with the activity.
-   */
-  review: LogEntry;
-
+export interface ReviewCommentActivity extends AbstractActivity {
   /**
    * The comment associated with the activity.
    */
   comment: ReviewComment;
-};
+
+  /**
+   * The review associated with the activity.
+   */
+  review: LogEntry;
+}
 
 export interface ReviewCommentsResponse {
-  /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
   /**
    * The list of comments.
    */
   items: ReviewComment[];
+
+  /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
 }
 
 export interface ReviewIdentifier {
@@ -4135,38 +4134,14 @@ export interface ReviewIdentifier {
   id: string;
 }
 
-export type ReviewLikeActivity = AbstractActivity & {
+export interface ReviewLikeActivity extends AbstractActivity {
   /**
    * The review associated with the activity.
    */
   review: LogEntry;
-};
+}
 
 export interface ReviewRelationship {
-  /**
-   * Will be `true` if the member likes the review (via the 'heart' icon). A member may not like
-   * their own review.
-   */
-  liked: boolean;
-
-  /**
-   * Will be `true` if the member is subscribed to comment notifications for the review
-   */
-  subscribed: boolean;
-
-  /**
-   * Defaults to `Subscribed` for the review's author, and `NotSubscribed` for other members. The
-   * subscription value may change when a member (other than the owner) posts a comment, as follows:
-   * the member will become automatically `Subscribed` unless they have previously `Unsubscribed`
-   * from the comment thread via the web interface or API, or unless they have disabled comment
-   * notifications in their profile settings.
-   *
-   * `NotSubscribed` and `Unsubscribed` are maintained as separate states so the UI can, if needed,
-   * indicate to the member how their subscription state will be affected if/when they post a
-   * comment.
-   */
-  subscriptionState: 'NotSubscribed' | 'Subscribed' | 'Unsubscribed';
-
   /**
    * The authenticated member's state with respect to adding comments for this review.
    *
@@ -4195,14 +4170,33 @@ export interface ReviewRelationship {
     | 'Moderated'
     | 'NotCommentable'
     | 'NotValidated';
+
+  /**
+   * Will be `true` if the member likes the review (via the 'heart' icon). A member may not like
+   * their own review.
+   */
+  liked: boolean;
+
+  /**
+   * Will be `true` if the member is subscribed to comment notifications for the review
+   */
+  subscribed: boolean;
+
+  /**
+   * Defaults to `Subscribed` for the review's author, and `NotSubscribed` for other members. The
+   * subscription value may change when a member (other than the owner) posts a comment, as follows:
+   * the member will become automatically `Subscribed` unless they have previously `Unsubscribed`
+   * from the comment thread via the web interface or API, or unless they have disabled comment
+   * notifications in their profile settings.
+   *
+   * `NotSubscribed` and `Unsubscribed` are maintained as separate states so the UI can, if needed,
+   * indicate to the member how their subscription state will be affected if/when they post a
+   * comment.
+   */
+  subscriptionState: 'NotSubscribed' | 'Subscribed' | 'Unsubscribed';
 }
 
 export interface ReviewRelationshipUpdateMessage {
-  /**
-   * The type of message.
-   */
-  type: 'Error' | 'Success';
-
   /**
    * The error message code.
    */
@@ -4220,6 +4214,11 @@ export interface ReviewRelationshipUpdateMessage {
    * The error message text in human-readable form.
    */
   title: string;
+
+  /**
+   * The type of message.
+   */
+  type: 'Error' | 'Success';
 }
 
 export interface ReviewRelationshipUpdateRequest {
@@ -4249,23 +4248,23 @@ export interface ReviewRelationshipUpdateResponse {
   messages: ReviewRelationshipUpdateMessage[];
 }
 
-export type ReviewSearchItem = AbstractSearchItem & {
+export interface ReviewSearchItem extends AbstractSearchItem {
   /**
    * Details of the review.
    */
   review: LogEntry;
-};
+}
 
 export interface ReviewStatistics {
-  /**
-   * The log entry for which statistics were requested.
-   */
-  logEntry: ReviewIdentifier;
-
   /**
    * The number of comments and likes for the review.
    */
   counts: ReviewStatisticsCounts;
+
+  /**
+   * The log entry for which statistics were requested.
+   */
+  logEntry: ReviewIdentifier;
 }
 
 export interface ReviewStatisticsCounts {
@@ -4294,17 +4293,22 @@ export interface ReviewUpdateResponse {
 
 export interface SearchResponse {
   /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
-  /**
    * The list of search results.
    */
   items: AbstractSearchItem[];
+
+  /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
 }
 
 export interface Service {
+  /**
+   * The URL of the thumbnail image for the service.
+   */
+  icon: string;
+
   /**
    * The LID of the service.
    */
@@ -4314,55 +4318,25 @@ export interface Service {
    * The name of the service.
    */
   name: string;
-
-  /**
-   * The URL of the thumbnail image for the service.
-   */
-  icon: string;
 }
 
 export interface StoriesResponse {
   /**
-   * The cursor to the next page of results.
-   */
-  next: Cursor;
-
-  /**
    * The list of stories.
    */
   items: StorySummary[];
+
+  /**
+   * The cursor to the next page of results.
+   */
+  next: Cursor;
 }
 
 export interface Story {
   /**
-   * The LID of the story.
-   */
-  id: string;
-
-  /**
-   * The name of the story.
-   */
-  name: string;
-
-  /**
    * The member who published the story.
    */
   author: MemberSummary;
-
-  /**
-   * The external URL linked to by the story (if applicable).
-   */
-  url: string;
-
-  /**
-   * The publication name for the story (if applicable).
-   */
-  source: string;
-
-  /**
-   * The URL of the story's video (if applicable).
-   */
-  videoUrl: string;
 
   /**
    * The story body formatted as HTML. The text is a preview extract, and may be truncated if it's
@@ -4378,11 +4352,34 @@ export interface Story {
   bodyLbml: string;
 
   /**
-   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
-   *
-   * @example 1997-08-29T07:14:00Z
+   * The LID of the story.
    */
-  whenUpdated: string;
+  id: string;
+
+  /**
+   * The story's hero image, in multiple resolutions.
+   */
+  image: Image;
+
+  /**
+   * The name of the story.
+   */
+  name: string;
+
+  /**
+   * The publication name for the story (if applicable).
+   */
+  source: string;
+
+  /**
+   * The external URL linked to by the story (if applicable).
+   */
+  url: string;
+
+  /**
+   * The URL of the story's video (if applicable).
+   */
+  videoUrl: string;
 
   /**
    * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
@@ -4392,55 +4389,32 @@ export interface Story {
   whenCreated: string;
 
   /**
-   * The story's hero image, in multiple resolutions.
+   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
+   *
+   * @example 1997-08-29T07:14:00Z
    */
-  image: Image;
+  whenUpdated: string;
 }
 
-export type StoryActivity = AbstractActivity & {
+export interface StoryActivity extends AbstractActivity {
   /**
    * The story associated with the activity.
    */
   story: StorySummary;
-};
+}
 
-export type StorySearchItem = AbstractSearchItem & {
+export interface StorySearchItem extends AbstractSearchItem {
   /**
    * The story.
    */
   story: StorySummary;
-};
+}
 
 export interface StorySummary {
-  /**
-   * The LID of the story.
-   */
-  id: string;
-
-  /**
-   * The name of the story.
-   */
-  name: string;
-
   /**
    * The member who published the story.
    */
   author: MemberSummary;
-
-  /**
-   * The external URL linked to by the story (if applicable).
-   */
-  url: string;
-
-  /**
-   * The publication name for the story (if applicable).
-   */
-  source: string;
-
-  /**
-   * The URL of the story's video (if applicable).
-   */
-  videoUrl: string;
 
   /**
    * The story body formatted as HTML. The text is a preview extract, and may be truncated if it's
@@ -4461,11 +4435,34 @@ export interface StorySummary {
   bodyTruncated: boolean;
 
   /**
-   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
-   *
-   * @example 1997-08-29T07:14:00Z
+   * The LID of the story.
    */
-  whenUpdated: string;
+  id: string;
+
+  /**
+   * The story's hero image, in multiple resolutions.
+   */
+  image: Image;
+
+  /**
+   * The name of the story.
+   */
+  name: string;
+
+  /**
+   * The publication name for the story (if applicable).
+   */
+  source: string;
+
+  /**
+   * The external URL linked to by the story (if applicable).
+   */
+  url: string;
+
+  /**
+   * The URL of the story's video (if applicable).
+   */
+  videoUrl: string;
 
   /**
    * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
@@ -4475,18 +4472,14 @@ export interface StorySummary {
   whenCreated: string;
 
   /**
-   * The story's hero image, in multiple resolutions.
+   * ISO 8601 format with UTC timezone, i.e. `YYYY-MM-DDThh:mm:ssZ`
+   *
+   * @example 1997-08-29T07:14:00Z
    */
-  image: Image;
+  whenUpdated: string;
 }
 
 export interface Tag {
-  /**
-   * @deprecated Use `displayTag` instead.
-   * @see Tag.displayTag
-   */
-  tag: string;
-
   /**
    * The tag code.
    */
@@ -4496,14 +4489,20 @@ export interface Tag {
    * The tag text as entered by the tagger.
    */
   displayTag: string;
+
+  /**
+   * @deprecated Use `displayTag` instead.
+   * @see Tag.displayTag
+   */
+  tag: string;
 }
 
-export type TagSearchItem = AbstractSearchItem & {
+export interface TagSearchItem extends AbstractSearchItem {
   /**
    * The tag.
    */
   tag: Tag;
-};
+}
 
 export interface TagsResponse {
   /**
@@ -4542,10 +4541,10 @@ export interface UsernameCheckResponse {
   result: 'Available' | 'Invalid' | 'NotAvailable' | 'TooLong' | 'TooShort';
 }
 
-export type WatchlistActivity = AbstractActivity & {
+export interface WatchlistActivity extends AbstractActivity {
   /**
    * The film associated with the activity. Includes a MemberFilmRelationship for the member who
    * added the activity.
    */
   film: FilmSummary;
-};
+}

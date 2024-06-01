@@ -46,7 +46,7 @@ export default class Client {
         return Promise.reject(new MissingAccessTokenError());
       }
 
-      return request<{ status: 200; res: defs.LoginTokenResponse } | { status: 400 } | { status: 401 }>({
+      return request<{ status: 200; data: defs.LoginTokenResponse } | { status: 400 } | { status: 401 }>({
         method: 'get',
         path: '/auth/get-login-token',
         auth: this.credentials,
