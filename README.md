@@ -15,7 +15,7 @@
 
 ---
 
-- [Installation](https://api.readme.dev/docs/installation)
+- [Installation](#install)
 - [Usage](#usage)
   - [User Authentication](#user-authentication)
 - [Available APIs](#apis)
