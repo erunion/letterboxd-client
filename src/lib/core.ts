@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as crypto from 'crypto';
-
-import { v4 as uuidv4 } from 'uuid';
+import crypto from 'crypto';
 
 export const BASE_URL = 'https://api.letterboxd.com/api/v0';
 
@@ -13,6 +11,7 @@ export interface Auth {
 
 export interface APIResponse {
   data?: any;
+  reason?: string;
   status: number;
 }
 
@@ -37,7 +36,7 @@ function buildParams(
 ) {
   const fullParams = params;
   fullParams.apikey = auth.apiKey;
-  fullParams.nonce = uuidv4();
+  fullParams.nonce = crypto.randomUUID();
   fullParams.timestamp = Math.floor(Date.now() / 1000);
 
   const sigBase = [
