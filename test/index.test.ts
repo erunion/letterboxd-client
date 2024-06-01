@@ -1,12 +1,9 @@
-import chai, { assert, expect } from 'chai';
 import fetchMock from 'fetch-mock';
+import { beforeEach, afterEach, describe, it, expect } from 'vitest';
 
 import Client from '../src';
 import { BASE_URL } from '../src/lib/core';
-
-import chaiPlugins from './helpers/chai-plugins';
-
-chai.use(chaiPlugins);
+import { MissingAccessTokenError } from '../src/lib/errors';
 
 interface MockedResponse {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,8 +15,8 @@ const apiKey = 'example-api-key';
 const apiSecret = 'example-api-secret';
 const accessToken = 'example-access-token';
 
-describe('letterboxd-client', function () {
-  beforeEach(function () {
+describe('letterboxd-client', () => {
+  beforeEach(() => {
     fetchMock.mock(
       {
         url: `begin:${BASE_URL}`,
@@ -37,43 +34,38 @@ describe('letterboxd-client', function () {
     );
   });
 
-  afterEach(function () {
+  afterEach(() => {
     fetchMock.restore();
   });
 
-  describe('#auth', function () {
-    describe('#requestAuthToken', function () {
-      it('should request an auth token', async function () {
+  describe('.auth', () => {
+    describe('.requestAuthToken()', () => {
+      it('should request an auth token', async () => {
         const client = new Client(apiKey, apiSecret);
         const { status, data }: MockedResponse = await client.auth.requestAuthToken('user', 'hunter1');
 
-        expect(status).to.be.a('number');
-        expect(data.body).to.equal('grant_type=password&username=user&password=hunter1');
-        expect(data.headers).to.have.header('content-type', 'application/x-www-form-urlencoded');
-        expect(data.headers).not.to.have.property('authorization');
+        expect(status).toBe(200);
+        expect(data.body).toBe('grant_type=password&username=user&password=hunter1');
+        expect(data.headers).toHaveProperty('content-type', 'application/x-www-form-urlencoded');
+        expect(data.headers).not.toHaveProperty('authorization');
 
         const url = new URL(data.url);
         const params = Object.fromEntries(url.searchParams.entries());
 
-        expect(url.pathname).to.equal('/api/v0/auth/token');
-        expect(params).to.have.property('apikey', apiKey);
-        expect(params)
-          .to.have.property('nonce')
-          .and.match(/([a-z0-9-]+)/);
-
-        expect(params)
-          .to.have.property('signature')
-          .and.match(/([a-z0-9]+)/);
-
-        expect(params).to.have.property('timestamp');
-        expect(parseInt(params.timestamp, 10)).to.match(/\d{10}/);
+        expect(url.pathname).toBe('/api/v0/auth/token');
+        expect(params).toStrictEqual({
+          apikey: apiKey,
+          nonce: expect.stringMatching(/([a-z0-9-]+)/),
+          signature: expect.stringMatching(/([a-z0-9]+)/),
+          timestamp: expect.stringMatching(/\d{10}/),
+        });
       });
     });
   });
 
-  describe('#film', function () {
-    describe('#all', function () {
-      it('should access a list of films', async function () {
+  describe('.film', () => {
+    describe('.all()', () => {
+      it('should access a list of films', async () => {
         const client = new Client(apiKey, apiSecret);
         const { status, data }: MockedResponse = await client.film.all({
           perPage: 1,
@@ -81,70 +73,52 @@ describe('letterboxd-client', function () {
           sort: 'FilmPopularityThisWeek',
         });
 
-        expect(status).to.be.a('number');
-        expect(data.body).to.be.undefined;
-        expect(data.headers).not.to.have.property('authorization');
+        expect(status).toBe(200);
+        expect(data.body).toBeUndefined();
+        expect(data.headers).not.toHaveProperty('authorization');
 
         const url = new URL(data.url);
         const params = Object.fromEntries(url.searchParams.entries());
 
-        expect(url.pathname).to.equal('/api/v0/films');
-        expect(params).to.have.property('perPage', '1');
-        expect(params).to.have.property('decade', '1960');
-        expect(params).to.have.property('sort', 'FilmPopularityThisWeek');
-        expect(params).to.have.property('apikey', apiKey);
-        expect(params)
-          .to.have.property('nonce')
-          .and.match(/([a-z0-9-]+)/);
-
-        expect(params)
-          .to.have.property('signature')
-          .and.match(/([a-z0-9]+)/);
-
-        expect(params).to.have.property('timestamp');
-        expect(parseInt(params.timestamp, 10)).to.match(/\d{10}/);
+        expect(url.pathname).toBe('/api/v0/films');
+        expect(params).toStrictEqual({
+          perPage: '1',
+          decade: '1960',
+          sort: 'FilmPopularityThisWeek',
+          apikey: apiKey,
+          nonce: expect.stringMatching(/([a-z0-9-]+)/),
+          signature: expect.stringMatching(/([a-z0-9]+)/),
+          timestamp: expect.stringMatching(/\d{10}/),
+        });
       });
     });
   });
 
-  describe('#me', function () {
-    describe('#get', function () {
-      it('should throw an error if an access token has not been set up on the client', async function () {
+  describe('.me', () => {
+    describe('.get()', () => {
+      it('should throw an error if an access token has not been set up on the client', async () => {
         const client = new Client(apiKey, apiSecret);
-
-        await client.me
-          .get()
-          .then(() => {
-            assert.fail('A MissingAccessTokenError exception should have been thrown.');
-          })
-          .catch(err => {
-            expect(err.name).to.equal('MissingAccessTokenError', err.message);
-          });
+        await expect(client.me.get()).rejects.toThrow(MissingAccessTokenError);
       });
 
-      it('should retrieve my user', async function () {
+      it('should retrieve my user', async () => {
         const client = new Client(apiKey, apiSecret, accessToken);
         const { status, data }: MockedResponse = await client.me.get();
 
-        expect(status).to.be.a('number');
-        expect(data.body).to.be.undefined;
-        expect(data.headers).to.have.header('authorization', `Bearer ${accessToken}`);
+        expect(status).toBe(200);
+        expect(data.body).toBeUndefined();
+        expect(data.headers).toHaveProperty('authorization', `Bearer ${accessToken}`);
 
         const url = new URL(data.url);
         const params = Object.fromEntries(url.searchParams.entries());
 
-        expect(url.pathname).to.equal('/api/v0/me');
-        expect(params).to.have.property('apikey', apiKey);
-        expect(params)
-          .to.have.property('nonce')
-          .and.match(/([a-z0-9-]+)/);
-
-        expect(params)
-          .to.have.property('signature')
-          .and.match(/([a-z0-9]+)/);
-
-        expect(params).to.have.property('timestamp');
-        expect(parseInt(params.timestamp, 10)).to.match(/\d{10}/);
+        expect(url.pathname).toBe('/api/v0/me');
+        expect(params).toStrictEqual({
+          apikey: apiKey,
+          nonce: expect.stringMatching(/([a-z0-9-]+)/),
+          signature: expect.stringMatching(/([a-z0-9]+)/),
+          timestamp: expect.stringMatching(/\d{10}/),
+        });
       });
     });
   });
