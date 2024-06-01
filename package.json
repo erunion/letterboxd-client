@@ -24,14 +24,14 @@
   "scripts": {
     "build": "tsc",
     "lint": "npm run lint:types && npm run lint:js && npm run prettier",
-    "lint:js": "eslint . --ext .js,.ts",
+    "lint:js": "eslint . --ext .js,.ts --ignore-path ./.gitignore",
     "lint:types": "tsc --noEmit",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
     "pretest": "npm run lint",
     "prettier": "prettier --check .",
     "prettier:write": "prettier --check --write .",
-    "test": "mocha \"test/**/*.test.ts\""
+    "test": "vitest run --coverage"
   },
   "dependencies": {
     "@types/uuid": "^9.0.8",
@@ -40,18 +40,13 @@
   },
   "devDependencies": {
     "@readme/eslint-config": "^14.0.0",
-    "@types/caseless": "^0.12.5",
-    "@types/chai": "^4.3.16",
-    "@types/mocha": "^10.0.6",
     "@types/node": "^20.13.0",
-    "caseless": "^0.12.0",
-    "chai": "^4.3.7",
+    "@vitest/coverage-v8": "^1.6.0",
     "eslint": "^8.57.0",
     "fetch-mock": "^9.11.0",
-    "mocha": "^10.4.0",
     "prettier": "^3.2.5",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
   },
   "prettier": "@readme/eslint-config/prettier"
 }
