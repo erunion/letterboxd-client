@@ -2,11 +2,25 @@
   "name": "letterboxd-client",
   "version": "1.0.1",
   "description": "An unofficial Letterboxd API client.",
+  "license": "MIT",
+  "author": "Jon Ursenbach <jon@ursenba.ch>",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "engines": {
     "node": ">=14"
   },
+  "files": [],
+  "keywords": [
+    "letterboxd"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erunion/letterboxd-client.git"
+  },
+  "bugs": {
+    "url": "https://github.com/erunion/letterboxd-client/issues"
+  },
+  "homepage": "https://github.com/erunion/letterboxd-client#readme",
   "scripts": {
     "build": "tsc",
     "lint": "eslint . --ext .js,.ts",
@@ -19,15 +33,6 @@
     "prettier:write": "prettier --list-different --write \"./**/**.{md,js,ts}\"",
     "test": "mocha \"test/**/*.test.ts\""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Dashron/letterboxd-client.git"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Dashron/letterboxd-client/issues"
-  },
-  "homepage": "https://github.com/Dashron/letterboxd-client#readme",
   "dependencies": {
     "@types/uuid": "^9.0.0",
     "isomorphic-fetch": "^3.0.0",
@@ -48,8 +53,5 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.0.3"
   },
-  "prettier": "@readme/eslint-config/prettier",
-  "keywords": [
-    "letterboxd"
-  ]
+  "prettier": "@readme/eslint-config/prettier"
 }

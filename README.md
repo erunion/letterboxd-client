@@ -10,7 +10,7 @@
   <a href="https://npm.im/letterboxd-client"><img src="https://img.shields.io/npm/v/letterboxd-client.svg?style=for-the-badge" alt="NPM Version"></a>
   <a href="https://npm.im/letterboxd-client"><img src="https://img.shields.io/node/v/letterboxd-client.svg?style=for-the-badge" alt="Node Version"></a>
   <a href="https://npm.im/letterboxd-client"><img src="https://img.shields.io/npm/l/letterboxd-client.svg?style=for-the-badge" alt="MIT License"></a>
-  <a href="https://github.com/dashron/letterboxd-client"><img src="https://img.shields.io/github/workflow/status/dashron/letterboxd-client/CI.svg?style=for-the-badge" alt="Build status"></a>
+  <a href="https://github.com/erunion/letterboxd-client"><img src="https://img.shields.io/github/workflow/status/erunion/letterboxd-client/CI.svg?style=for-the-badge" alt="Build status"></a>
 </p>
 
 ---
