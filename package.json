@@ -34,13 +34,12 @@
     "test": "vitest run --coverage"
   },
   "dependencies": {
-    "@types/uuid": "^9.0.8",
-    "isomorphic-fetch": "^3.0.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@readme/eslint-config": "^14.0.0",
     "@types/node": "^20.13.0",
+    "@types/uuid": "^9.0.8",
     "@vitest/coverage-v8": "^1.6.0",
     "eslint": "^8.57.0",
     "fetch-mock": "^9.11.0",
