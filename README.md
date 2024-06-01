@@ -51,8 +51,8 @@ const apiSecret = 'your letterboxd api secret';
 const client = new Client(apiKey, apiSecret);
 const { status, data } = await client.film.get('ljDs');
 
-console.log(data.name) // RRR
-console.log(data.tagline) // Rise Roar Revolt
+console.log(data.name); // RRR
+console.log(data.tagline); // Rise Roar Revolt
 ```
 
 ### User Authentication
@@ -71,7 +71,7 @@ If successful you will receive back an `AccessToken` response that will contain 
 >
 > For all documentation on parameters or responses see the TypeScript types that we export to the package or consult <a href="https://api-docs.letterboxd.com/">https://api-docs.letterboxd.com/</a> for the endpoint you're using.
 
-<sub>* Requires an authenticated Letterboxd user access token.</sub>
+<sub>\* Requires an authenticated Letterboxd user access token.</sub>
 
 ### Auth
 

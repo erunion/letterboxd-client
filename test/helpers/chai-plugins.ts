@@ -8,7 +8,7 @@ declare global {
       /**
        * Assert that a `Headers` object contains a given header matching a specific value.
        */
-      header: (header: string, expected: string | RegExp) => void;
+      header: (header: string, expected: RegExp | string) => void;
     }
   }
 }

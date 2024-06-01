@@ -82,13 +82,12 @@ export default class Client {
       if (this.credentials.accessToken) {
         return Promise.reject(
           new Error(
-            'You cannot retrieve tokens on a client that has already been configured with a token. Create a new client instance without providing any `accessToken` parameter to the constructor.'
-          )
+            'You cannot retrieve tokens on a client that has already been configured with a token. Create a new client instance without providing any `accessToken` parameter to the constructor.',
+          ),
         );
       }
 
       return request<
-        | { status: 200; data: defs.AccessToken }
         | {
             status: 400;
             data: defs.OAuthError;
@@ -99,6 +98,7 @@ export default class Client {
             data: { message: string; type: string };
             reason: 'An invalid API key or computed signature was supplied.';
           }
+        | { status: 200; data: defs.AccessToken }
       >({
         method: 'post',
         path: '/auth/token',
@@ -156,12 +156,12 @@ export default class Client {
       }
 
       return request<
-        | { status: 200; data: defs.CommentUpdateResponse }
         | {
             status: 401;
             data: never;
             reason: 'There is no authenticated member, or the authenticated member does not own the resource';
           }
+        | { status: 200; data: defs.CommentUpdateResponse }
         | { status: 404; data: never; reason: 'No comment matches the specified ID' }
       >({
         method: 'patch',
@@ -327,32 +327,32 @@ export default class Client {
          * Specify one or more values to limit the list of films accordingly.
          */
         where?:
-          | 'Released'
-          | 'NotReleased'
-          | 'InWatchlist'
-          | 'NotInWatchlist'
-          | 'Logged'
-          | 'NotLogged'
-          | 'Rewatched'
-          | 'NotRewatched,'
-          | 'Reviewed'
-          | 'NotReviewed'
-          | 'Owned'
-          | 'NotOwned'
           | 'Customised'
-          | 'NotCustomised'
-          | 'Rated'
-          | 'NotRated'
-          | 'Liked'
-          | 'NotLiked'
-          | 'WatchedFromWatchlist'
-          | 'Watched'
-          | 'NotWatched'
           | 'FeatureLength'
-          | 'NotFeatureLength'
           | 'Fiction'
           | 'Film'
-          | 'TV';
+          | 'InWatchlist'
+          | 'Liked'
+          | 'Logged'
+          | 'NotCustomised'
+          | 'NotFeatureLength'
+          | 'NotInWatchlist'
+          | 'NotLiked'
+          | 'NotLogged'
+          | 'NotOwned'
+          | 'NotRated'
+          | 'NotReleased'
+          | 'NotReviewed'
+          | 'NotRewatched,'
+          | 'NotWatched'
+          | 'Owned'
+          | 'Rated'
+          | 'Released'
+          | 'Reviewed'
+          | 'Rewatched'
+          | 'TV'
+          | 'Watched'
+          | 'WatchedFromWatchlist';
 
         /**
          * Specify the LID of a member to limit the returned films according to the value set in
@@ -368,16 +368,16 @@ export default class Client {
          * @see params.member
          */
         memberRelationship?:
+          | 'Favorited'
           | 'Ignore'
-          | 'Watched'
-          | 'NotWatched'
-          | 'Liked'
-          | 'NotLiked'
-          | 'Rated'
-          | 'NotRated'
           | 'InWatchlist'
+          | 'Liked'
           | 'NotInWatchlist'
-          | 'Favorited';
+          | 'NotLiked'
+          | 'NotRated'
+          | 'NotWatched'
+          | 'Rated'
+          | 'Watched';
 
         /**
          * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
@@ -386,7 +386,7 @@ export default class Client {
          *
          * @see params.member
          */
-        includeFriends?: 'None' | 'All' | 'Only';
+        includeFriends?: 'All' | 'None' | 'Only';
 
         /**
          * @deprecated Use `tagCode` instead.
@@ -414,7 +414,7 @@ export default class Client {
          *
          * @see params.tagger
          */
-        includeTaggerFriends?: 'None' | 'All' | 'Only';
+        includeTaggerFriends?: 'All' | 'None' | 'Only';
 
         /**
          * The order in which the films should be returned. Defaults to `FilmPopularity`, which is
@@ -430,46 +430,46 @@ export default class Client {
          * DEPRECATED The `Rating*` options are deprecated in favor of `AverageRating*`.
          */
         sort?:
-          | 'Billing'
-          | 'FilmName'
-          | 'ReleaseDateLatestFirst'
-          | 'ReleaseDateEarliestFirst'
           | 'AuthenticatedMemberRatingHighToLow'
           | 'AuthenticatedMemberRatingLowToHigh'
-          | 'MemberRatingHighToLow'
-          | 'MemberRatingLowToHigh'
           | 'AverageRatingHighToLow'
           | 'AverageRatingLowToHigh'
+          | 'Billing'
+          | 'FilmDurationLongestFirst'
+          | 'FilmDurationShortestFirst'
+          | 'FilmName'
+          | 'FilmPopularity'
+          | 'FilmPopularityThisMonth'
+          | 'FilmPopularityThisWeek'
+          | 'FilmPopularityThisYear'
+          | 'MemberRatingHighToLow'
+          | 'MemberRatingLowToHigh'
           | 'RatingHighToLow'
           | 'RatingLowToHigh'
-          | 'FilmDurationShortestFirst'
-          | 'FilmDurationLongestFirst'
-          | 'FilmPopularity'
-          | 'FilmPopularityThisWeek'
-          | 'FilmPopularityThisMonth'
-          | 'FilmPopularityThisYear';
+          | 'ReleaseDateEarliestFirst'
+          | 'ReleaseDateLatestFirst';
 
         /**
          * The type of contribution.
          */
         type?:
-          | 'Director'
-          | 'CoDirector'
           | 'Actor'
-          | 'Producer'
-          | 'Writer'
-          | 'Editor'
-          | 'Cinematography'
-          | 'ProductionDesign'
           | 'ArtDirection'
-          | 'SetDecoration'
-          | 'VisualEffects'
+          | 'Cinematography'
+          | 'CoDirector'
           | 'Composer'
-          | 'Sound'
           | 'Costumes'
+          | 'Director'
+          | 'Editor'
           | 'MakeUp'
-          | 'Studio';
-      }
+          | 'Producer'
+          | 'ProductionDesign'
+          | 'SetDecoration'
+          | 'Sound'
+          | 'Studio'
+          | 'VisualEffects'
+          | 'Writer';
+      },
     ) => {
       return request<
         | { status: 200; data: defs.FilmContributionsResponse }
@@ -581,32 +581,32 @@ export default class Client {
          * Specify one or more values to limit the list of films accordingly.
          */
         where?:
-          | 'Released'
-          | 'NotReleased'
-          | 'InWatchlist'
-          | 'NotInWatchlist'
-          | 'Logged'
-          | 'NotLogged'
-          | 'Rewatched'
-          | 'NotRewatched'
-          | 'Reviewed'
-          | 'NotReviewed'
-          | 'Owned'
-          | 'NotOwned'
           | 'Customised'
-          | 'NotCustomised'
-          | 'Rated'
-          | 'NotRated'
-          | 'Liked'
-          | 'NotLiked'
-          | 'WatchedFromWatchlist'
-          | 'Watched'
-          | 'NotWatched'
           | 'FeatureLength'
-          | 'NotFeatureLength'
           | 'Fiction'
           | 'Film'
-          | 'TV';
+          | 'InWatchlist'
+          | 'Liked'
+          | 'Logged'
+          | 'NotCustomised'
+          | 'NotFeatureLength'
+          | 'NotInWatchlist'
+          | 'NotLiked'
+          | 'NotLogged'
+          | 'NotOwned'
+          | 'NotRated'
+          | 'NotReleased'
+          | 'NotReviewed'
+          | 'NotRewatched'
+          | 'NotWatched'
+          | 'Owned'
+          | 'Rated'
+          | 'Released'
+          | 'Reviewed'
+          | 'Rewatched'
+          | 'TV'
+          | 'Watched'
+          | 'WatchedFromWatchlist';
 
         /**
          * Specify the LID of a member to limit the returned films according to the value set in
@@ -622,16 +622,16 @@ export default class Client {
          * @see params.member
          */
         memberRelationship?:
+          | 'Favorited'
           | 'Ignore'
-          | 'Watched'
-          | 'NotWatched'
-          | 'Liked'
-          | 'NotLiked'
-          | 'Rated'
-          | 'NotRated'
           | 'InWatchlist'
+          | 'Liked'
           | 'NotInWatchlist'
-          | 'Favorited';
+          | 'NotLiked'
+          | 'NotRated'
+          | 'NotWatched'
+          | 'Rated'
+          | 'Watched';
 
         /**
          * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
@@ -640,7 +640,7 @@ export default class Client {
          *
          * @see params.member
          */
-        includeFriends?: 'None' | 'All' | 'Only';
+        includeFriends?: 'All' | 'None' | 'Only';
 
         /**
          * @deprecated Use `tagCode` instead.
@@ -668,7 +668,7 @@ export default class Client {
          *
          * @see params.tagger
          */
-        includeTaggerFriends?: 'None' | 'All' | 'Only';
+        includeTaggerFriends?: 'All' | 'None' | 'Only';
 
         /**
          * The order in which the films should be returned. Defaults to `FilmPopularity`, which is
@@ -682,26 +682,26 @@ export default class Client {
          * when specifying a single member (i.e. `IncludeFriends=None`).
          */
         sort?:
-          | 'FilmName'
-          | 'ReleaseDateLatestFirst'
-          | 'ReleaseDateEarliestFirst'
           | 'AuthenticatedMemberRatingHighToLow'
           | 'AuthenticatedMemberRatingLowToHigh'
-          | 'MemberRatingHighToLow'
-          | 'MemberRatingLowToHigh'
           | 'AverageRatingHighToLow'
           | 'AverageRatingLowToHigh'
-          | 'FilmDurationShortestFirst'
           | 'FilmDurationLongestFirst'
+          | 'FilmDurationShortestFirst'
+          | 'FilmName'
           | 'FilmPopularity'
-          | 'FilmPopularityThisWeek'
           | 'FilmPopularityThisMonth'
+          | 'FilmPopularityThisWeek'
           | 'FilmPopularityThisYear'
           | 'FilmPopularityWithFriends'
-          | 'FilmPopularityWithFriendsThisWeek'
           | 'FilmPopularityWithFriendsThisMonth'
-          | 'FilmPopularityWithFriendsThisYear';
-      }
+          | 'FilmPopularityWithFriendsThisWeek'
+          | 'FilmPopularityWithFriendsThisYear'
+          | 'MemberRatingHighToLow'
+          | 'MemberRatingLowToHigh'
+          | 'ReleaseDateEarliestFirst'
+          | 'ReleaseDateLatestFirst';
+      },
     ) => {
       return request<
         | { status: 200; data: defs.FilmCollection }
@@ -823,32 +823,32 @@ export default class Client {
        * Specify one or more values to limit the list of films accordingly.
        */
       where?:
-        | 'Released'
-        | 'NotReleased'
-        | 'InWatchlist'
-        | 'NotInWatchlist'
-        | 'Logged'
-        | 'NotLogged'
-        | 'Rewatched'
-        | 'NotRewatched'
-        | 'Reviewed'
-        | 'NotReviewed'
-        | 'Owned'
-        | 'NotOwned'
         | 'Customised'
-        | 'NotCustomised'
-        | 'Rated'
-        | 'NotRated'
-        | 'Liked'
-        | 'NotLiked'
-        | 'WatchedFromWatchlist'
-        | 'Watched'
-        | 'NotWatched'
         | 'FeatureLength'
-        | 'NotFeatureLength'
         | 'Fiction'
         | 'Film'
-        | 'TV';
+        | 'InWatchlist'
+        | 'Liked'
+        | 'Logged'
+        | 'NotCustomised'
+        | 'NotFeatureLength'
+        | 'NotInWatchlist'
+        | 'NotLiked'
+        | 'NotLogged'
+        | 'NotOwned'
+        | 'NotRated'
+        | 'NotReleased'
+        | 'NotReviewed'
+        | 'NotRewatched'
+        | 'NotWatched'
+        | 'Owned'
+        | 'Rated'
+        | 'Released'
+        | 'Reviewed'
+        | 'Rewatched'
+        | 'TV'
+        | 'Watched'
+        | 'WatchedFromWatchlist';
 
       /**
        * Specify the LID of a member to limit the returned films according to the value set in
@@ -864,16 +864,16 @@ export default class Client {
        * @see params.member
        */
       memberRelationship?:
+        | 'Favorited'
         | 'Ignore'
-        | 'Watched'
-        | 'NotWatched'
-        | 'Liked'
-        | 'NotLiked'
-        | 'Rated'
-        | 'NotRated'
         | 'InWatchlist'
+        | 'Liked'
         | 'NotInWatchlist'
-        | 'Favorited';
+        | 'NotLiked'
+        | 'NotRated'
+        | 'NotWatched'
+        | 'Rated'
+        | 'Watched';
 
       /**
        * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
@@ -882,7 +882,7 @@ export default class Client {
        *
        * @see params.member
        */
-      includeFriends?: 'None' | 'All' | 'Only';
+      includeFriends?: 'All' | 'None' | 'Only';
 
       /**
        * @deprecated Use `tagCode` instead.
@@ -910,7 +910,7 @@ export default class Client {
        *
        * @see params.tagger
        */
-      includeTaggerFriends?: 'None' | 'All' | 'Only';
+      includeTaggerFriends?: 'All' | 'None' | 'Only';
 
       /**
        * The order in which the films should be returned. Defaults to `FilmPopularity`, which is an
@@ -929,30 +929,30 @@ export default class Client {
        * DEPRECATED The `Rating*` options are deprecated in favor of `AverageRating*`.
        */
       sort?:
-        | 'FilmName'
-        | 'DateLatestFirst'
-        | 'DateEarliestFirst'
-        | 'ReleaseDateLatestFirst'
-        | 'ReleaseDateEarliestFirst'
         | 'AuthenticatedMemberRatingHighToLow'
         | 'AuthenticatedMemberRatingLowToHigh'
-        | 'MemberRatingHighToLow'
-        | 'MemberRatingLowToHigh'
         | 'AverageRatingHighToLow'
         | 'AverageRatingLowToHigh'
-        | 'RatingHighToLow'
-        | 'RatingLowToHigh'
-        | 'FilmDurationShortestFirst'
-        | 'FilmDurationLongestFirst'
         | 'BestMatch'
+        | 'DateEarliestFirst'
+        | 'DateLatestFirst'
+        | 'FilmDurationLongestFirst'
+        | 'FilmDurationShortestFirst'
+        | 'FilmName'
         | 'FilmPopularity'
-        | 'FilmPopularityThisWeek'
         | 'FilmPopularityThisMonth'
+        | 'FilmPopularityThisWeek'
         | 'FilmPopularityThisYear'
         | 'FilmPopularityWithFriends'
-        | 'FilmPopularityWithFriendsThisWeek'
         | 'FilmPopularityWithFriendsThisMonth'
-        | 'FilmPopularityWithFriendsThisYear';
+        | 'FilmPopularityWithFriendsThisWeek'
+        | 'FilmPopularityWithFriendsThisYear'
+        | 'MemberRatingHighToLow'
+        | 'MemberRatingLowToHigh'
+        | 'RatingHighToLow'
+        | 'RatingLowToHigh'
+        | 'ReleaseDateEarliestFirst'
+        | 'ReleaseDateLatestFirst';
     }) => {
       return request<{ status: 200; data: defs.FilmsResponse }>({
         method: 'get',
@@ -1073,7 +1073,7 @@ export default class Client {
          * the film, when viewed within the context of their profile or content.
          */
         member?: string;
-      }
+      },
     ) => {
       return request<
         { status: 200; data: defs.Film } | { status: 404; data: never; reason: 'No film matches the specified ID' }
@@ -1187,15 +1187,15 @@ export default class Client {
          */
         sort?:
           | 'Date'
-          | 'Name'
           | 'MemberPopularity'
-          | 'MemberPopularityThisWeek'
           | 'MemberPopularityThisMonth'
+          | 'MemberPopularityThisWeek'
           | 'MemberPopularityThisYear'
           | 'MemberPopularityWithFriends'
-          | 'MemberPopularityWithFriendsThisWeek'
           | 'MemberPopularityWithFriendsThisMonth'
-          | 'MemberPopularityWithFriendsThisYear';
+          | 'MemberPopularityWithFriendsThisWeek'
+          | 'MemberPopularityWithFriendsThisYear'
+          | 'Name';
 
         /**
          * Specify the LID of a member to return members who follow or are followed by that member.
@@ -1209,7 +1209,7 @@ export default class Client {
          *
          * @see params.member
          */
-        memberRelationship?: 'IsFollowing' | 'IsFollowedBy';
+        memberRelationship?: 'IsFollowedBy' | 'IsFollowing';
 
         /**
          * Must be used in conjunction with `film`. Defaults to `Watched`, which returns the list of
@@ -1217,17 +1217,17 @@ export default class Client {
          * members accordingly.
          */
         filmRelationship?:
+          | 'Favorited'
           | 'Ignore'
-          | 'Watched'
-          | 'NotWatched'
-          | 'Liked'
-          | 'NotLiked'
-          | 'Rated'
-          | 'NotRated'
           | 'InWatchlist'
+          | 'Liked'
           | 'NotInWatchlist'
-          | 'Favorited';
-      }
+          | 'NotLiked'
+          | 'NotRated'
+          | 'NotWatched'
+          | 'Rated'
+          | 'Watched';
+      },
     ) => {
       return request<
         | { status: 200; data: defs.MemberFilmRelationshipsResponse }
@@ -1311,19 +1311,19 @@ export default class Client {
        */
       sort?:
         | 'Date'
-        | 'WhenPublishedLatestFirst'
-        | 'WhenPublishedEarliestFirst'
-        | 'WhenCreatedLatestFirst'
-        | 'WhenCreatedEarliestFirst'
         | 'ListName'
         | 'ListPopularity'
-        | 'ListPopularityThisWeek'
         | 'ListPopularityThisMonth'
+        | 'ListPopularityThisWeek'
         | 'ListPopularityThisYear'
         | 'ListPopularityWithFriends'
-        | 'ListPopularityWithFriendsThisWeek'
         | 'ListPopularityWithFriendsThisMonth'
-        | 'ListPopularityWithFriendsThisYear';
+        | 'ListPopularityWithFriendsThisWeek'
+        | 'ListPopularityWithFriendsThisYear'
+        | 'WhenCreatedEarliestFirst'
+        | 'WhenCreatedLatestFirst'
+        | 'WhenPublishedEarliestFirst'
+        | 'WhenPublishedLatestFirst';
 
       /**
        * Specify the LID of a film to return lists that include that film.
@@ -1361,7 +1361,7 @@ export default class Client {
        *
        * @see params.tagger
        */
-      includeTaggerFriends?: 'None' | 'All' | 'Only';
+      includeTaggerFriends?: 'All' | 'None' | 'Only';
 
       /**
        * Specify the LID of a member to return lists that are owned or liked by the member (or
@@ -1375,7 +1375,7 @@ export default class Client {
        *
        * @see params.member
        */
-      memberRelationship?: 'Owner' | 'Liked';
+      memberRelationship?: 'Liked' | 'Owner';
 
       /**
        * Must be used in conjunction with `member`. Defaults to `None`, which only returns lists
@@ -1384,7 +1384,7 @@ export default class Client {
        *
        * @see params.member
        */
-      includeFriends?: 'None' | 'All' | 'Only';
+      includeFriends?: 'All' | 'None' | 'Only';
 
       /**
        * Specify `Clean` to return lists that do not contain profane language. Specify `Published`
@@ -1392,7 +1392,7 @@ export default class Client {
        * members other than the authenticated member are never returned. Specify NotPublished to
        * return the authenticated member's lists that have not been made public.
        */
-      where?: 'Clean' | 'Published' | 'NotPublished';
+      where?: 'Clean' | 'NotPublished' | 'Published';
 
       /**
        * Specify `NoDuplicateMembers` to limit the list to only the first list for each member.
@@ -1409,13 +1409,13 @@ export default class Client {
       filmsOfNote?: string[];
     }) => {
       return request<
-        | { status: 200; data: defs.ListsResponse }
-        | { status: 400; data: never; reason: 'Bad request' }
         | {
             status: 403;
             data: never;
             reason: 'There is no authenticated member, or the authenticated member does not own the resource (when requesting where=NotPublished)';
           }
+        | { status: 200; data: defs.ListsResponse }
+        | { status: 400; data: never; reason: 'Bad request' }
         | { status: 404; data: never; reason: 'No film, member, tag or list matches the specified ID.' }
       >({
         method: 'get',
@@ -1522,13 +1522,13 @@ export default class Client {
       }
 
       return request<
-        | { status: 200; data: defs.ListUpdateResponse }
-        | { status: 400; data: never; reason: 'Bad request' }
         | {
             status: 401;
             data: never;
             reason: 'There is no authenticated member, or the authenticated member does not own the resource';
           }
+        | { status: 200; data: defs.ListUpdateResponse }
+        | { status: 400; data: never; reason: 'Bad request' }
         | { status: 404; data: never; reason: 'No list matches the specified ID' }
       >({
         method: 'patch',
@@ -1598,7 +1598,7 @@ export default class Client {
          * Use this to discover any comments that were deleted.
          */
         includeDeletions?: boolean;
-      }
+      },
     ) => {
       return request<
         | { status: 200; data: defs.ListCommentsResponse }
@@ -1747,32 +1747,32 @@ export default class Client {
          * Specify one or more values to limit the list of films accordingly.
          */
         where?:
-          | 'Released'
-          | 'NotReleased'
-          | 'InWatchlist'
-          | 'NotInWatchlist'
-          | 'Logged'
-          | 'NotLogged'
-          | 'Rewatched'
-          | 'NotRewatched'
-          | 'Reviewed'
-          | 'NotReviewed'
-          | 'Owned'
-          | 'NotOwned'
           | 'Customised'
-          | 'NotCustomised'
-          | 'Rated'
-          | 'NotRated'
-          | 'Liked'
-          | 'NotLiked'
-          | 'WatchedFromWatchlist'
-          | 'Watched'
-          | 'NotWatched'
           | 'FeatureLength'
-          | 'NotFeatureLength'
           | 'Fiction'
           | 'Film'
-          | 'TV';
+          | 'InWatchlist'
+          | 'Liked'
+          | 'Logged'
+          | 'NotCustomised'
+          | 'NotFeatureLength'
+          | 'NotInWatchlist'
+          | 'NotLiked'
+          | 'NotLogged'
+          | 'NotOwned'
+          | 'NotRated'
+          | 'NotReleased'
+          | 'NotReviewed'
+          | 'NotRewatched'
+          | 'NotWatched'
+          | 'Owned'
+          | 'Rated'
+          | 'Released'
+          | 'Reviewed'
+          | 'Rewatched'
+          | 'TV'
+          | 'Watched'
+          | 'WatchedFromWatchlist';
 
         /**
          * Specify the LID of a member to limit the returned films according to the value set in
@@ -1788,16 +1788,16 @@ export default class Client {
          * @see params.member
          */
         memberRelationship?:
+          | 'Favorited'
           | 'Ignore'
-          | 'Watched'
-          | 'NotWatched'
-          | 'Liked'
-          | 'NotLiked'
-          | 'Rated'
-          | 'NotRated'
           | 'InWatchlist'
+          | 'Liked'
           | 'NotInWatchlist'
-          | 'Favorited';
+          | 'NotLiked'
+          | 'NotRated'
+          | 'NotWatched'
+          | 'Rated'
+          | 'Watched';
 
         /**
          * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
@@ -1806,7 +1806,7 @@ export default class Client {
          *
          * @see params.member
          */
-        includeFriends?: 'None' | 'All' | 'Only';
+        includeFriends?: 'All' | 'None' | 'Only';
 
         /**
          * @deprecated Use `tagCode` instead.
@@ -1830,7 +1830,7 @@ export default class Client {
          * the member. Use `Only` to filter tags set by the member's friends, and `All` to filter
          * tags set by both the member and their friends.
          */
-        includeTaggerFriends?: 'None' | 'All' | 'Only';
+        includeTaggerFriends?: 'All' | 'None' | 'Only';
 
         /**
          * The order in which the entries should be returned. Defaults to `ListRanking`, which is
@@ -1847,30 +1847,30 @@ export default class Client {
          * The `Rating*` options are deprecated in favor of `AverageRating*`.
          */
         sort?:
-          | 'ListRanking'
-          | 'WhenAddedToList'
-          | 'WhenAddedToListEarliestFirst'
-          | 'Shuffle'
-          | 'FilmName'
-          | 'OwnerRatingHighToLow'
-          | 'OwnerRatingLowToHigh'
           | 'AuthenticatedMemberRatingHighToLow'
           | 'AuthenticatedMemberRatingLowToHigh'
-          | 'MemberRatingHighToLow'
-          | 'MemberRatingLowToHigh'
           | 'AverageRatingHighToLow'
           | 'AverageRatingLowToHigh'
+          | 'FilmDurationLongestFirst'
+          | 'FilmDurationShortestFirst'
+          | 'FilmName'
+          | 'FilmPopularity'
+          | 'FilmPopularityThisMonth'
+          | 'FilmPopularityThisWeek'
+          | 'FilmPopularityThisYear'
+          | 'ListRanking'
+          | 'MemberRatingHighToLow'
+          | 'MemberRatingLowToHigh'
+          | 'OwnerRatingHighToLow'
+          | 'OwnerRatingLowToHigh'
           | 'RatingHighToLow'
           | 'RatingLowToHigh'
-          | 'ReleaseDateLatestFirst'
           | 'ReleaseDateEarliestFirst'
-          | 'FilmDurationShortestFirst'
-          | 'FilmDurationLongestFirst'
-          | 'FilmPopularity'
-          | 'FilmPopularityThisWeek'
-          | 'FilmPopularityThisMonth'
-          | 'FilmPopularityThisYear';
-      }
+          | 'ReleaseDateLatestFirst'
+          | 'Shuffle'
+          | 'WhenAddedToList'
+          | 'WhenAddedToListEarliestFirst';
+      },
     ) => {
       return request<
         | { status: 200; data: defs.ListEntriesResponse }
@@ -1924,12 +1924,12 @@ export default class Client {
       }
 
       return request<
-        | { status: 200; data: defs.ListRelationshipUpdateResponse }
         | {
             status: 401;
             data: never;
             reason: 'There is no authenticated member, or the authenticated member does not own the resource';
           }
+        | { status: 200; data: defs.ListRelationshipUpdateResponse }
         | { status: 404; data: never; reason: 'No list matches the specified ID' }
       >({
         method: 'patch',
@@ -2032,42 +2032,42 @@ export default class Client {
        * DEPRECATED The `Rating*` options are deprecated in favor of `EntryRating*`.
        */
       sort?:
-        | 'WhenAdded'
-        | 'Date'
-        | 'DiaryCount'
-        | 'ReviewCount'
-        | 'WhenLiked'
-        | 'EntryRatingHighToLow'
-        | 'EntryRatingLowToHigh'
-        | 'RatingHighToLow'
-        | 'RatingLowToHigh'
         | 'AuthenticatedMemberRatingHighToLow'
         | 'AuthenticatedMemberRatingLowToHigh'
-        | 'MemberRatingHighToLow'
-        | 'MemberRatingLowToHigh'
         | 'AverageRatingHighToLow'
         | 'AverageRatingLowToHigh'
-        | 'ReleaseDateLatestFirst'
-        | 'ReleaseDateEarliestFirst'
-        | 'FilmName'
-        | 'FilmDurationShortestFirst'
+        | 'Date'
+        | 'DiaryCount'
+        | 'EntryRatingHighToLow'
+        | 'EntryRatingLowToHigh'
         | 'FilmDurationLongestFirst'
-        | 'ReviewPopularity'
-        | 'ReviewPopularityThisWeek'
-        | 'ReviewPopularityThisMonth'
-        | 'ReviewPopularityThisYear'
-        | 'ReviewPopularityWithFriends'
-        | 'ReviewPopularityWithFriendsThisWeek'
-        | 'ReviewPopularityWithFriendsThisMonth'
-        | 'ReviewPopularityWithFriendsThisYear'
+        | 'FilmDurationShortestFirst'
+        | 'FilmName'
         | 'FilmPopularity'
-        | 'FilmPopularityThisWeek'
         | 'FilmPopularityThisMonth'
+        | 'FilmPopularityThisWeek'
         | 'FilmPopularityThisYear'
         | 'FilmPopularityWithFriends'
-        | 'FilmPopularityWithFriendsThisWeek'
         | 'FilmPopularityWithFriendsThisMonth'
-        | 'FilmPopularityWithFriendsThisYear';
+        | 'FilmPopularityWithFriendsThisWeek'
+        | 'FilmPopularityWithFriendsThisYear'
+        | 'MemberRatingHighToLow'
+        | 'MemberRatingLowToHigh'
+        | 'RatingHighToLow'
+        | 'RatingLowToHigh'
+        | 'ReleaseDateEarliestFirst'
+        | 'ReleaseDateLatestFirst'
+        | 'ReviewCount'
+        | 'ReviewPopularity'
+        | 'ReviewPopularityThisMonth'
+        | 'ReviewPopularityThisWeek'
+        | 'ReviewPopularityThisYear'
+        | 'ReviewPopularityWithFriends'
+        | 'ReviewPopularityWithFriendsThisMonth'
+        | 'ReviewPopularityWithFriendsThisWeek'
+        | 'ReviewPopularityWithFriendsThisYear'
+        | 'WhenAdded'
+        | 'WhenLiked';
 
       /**
        * Specify the LID of a film to return log entries for that film. Must not be included if the
@@ -2089,7 +2089,7 @@ export default class Client {
        *
        * @see params.member
        */
-      memberRelationship?: 'Ignore' | 'Owner' | 'Liked';
+      memberRelationship?: 'Ignore' | 'Liked' | 'Owner';
 
       /**
        * Must be used in conjunction with `member`. Specify the type of relationship to limit the
@@ -2099,16 +2099,16 @@ export default class Client {
        * @see params.member
        */
       filmMemberRelationship?:
+        | 'Favorited'
         | 'Ignore'
-        | 'Watched'
-        | 'NotWatched'
-        | 'Liked'
-        | 'NotLiked'
-        | 'Rated'
-        | 'NotRated'
         | 'InWatchlist'
+        | 'Liked'
         | 'NotInWatchlist'
-        | 'Favorited';
+        | 'NotLiked'
+        | 'NotRated'
+        | 'NotWatched'
+        | 'Rated'
+        | 'Watched';
 
       /**
        * Must be used in conjunction with `member`. Defaults to `None`, which only returns log
@@ -2118,7 +2118,7 @@ export default class Client {
        *
        * @see params.member
        */
-      includeFriends?: 'None' | 'All' | 'Only';
+      includeFriends?: 'All' | 'None' | 'Only';
 
       /**
        * If set, limits the returned log entries to those with date that falls during the specified
@@ -2230,7 +2230,7 @@ export default class Client {
        *
        * @see params.tagger
        */
-      includeTaggerFriends?: 'None' | 'All' | 'Only';
+      includeTaggerFriends?: 'All' | 'None' | 'Only';
 
       /**
        * Specify the ID of a supported service to limit films to those available from that service.
@@ -2264,35 +2264,35 @@ export default class Client {
        *    tv shows.
        */
       where?:
-        | 'HasDiaryDate'
-        | 'HasReview'
         | 'Clean'
-        | 'NoSpoilers'
-        | 'Released'
-        | 'NotReleased'
-        | 'FeatureLength'
-        | 'NotFeatureLength'
-        | 'InWatchlist'
-        | 'NotInWatchlist'
-        | 'Watched'
-        | 'NotWatched'
-        | 'Rated'
-        | 'NotRated'
-        | 'Logged'
-        | 'NotLogged'
-        | 'Rewatched'
-        | 'NotRewatched'
-        | 'Reviewed'
-        | 'NotReviewed'
-        | 'Owned'
-        | 'NotOwned'
         | 'Customised'
-        | 'NotCustomised'
-        | 'Liked'
-        | 'NotLiked'
+        | 'FeatureLength'
         | 'Fiction'
         | 'Film'
-        | 'TV';
+        | 'HasDiaryDate'
+        | 'HasReview'
+        | 'InWatchlist'
+        | 'Liked'
+        | 'Logged'
+        | 'NoSpoilers'
+        | 'NotCustomised'
+        | 'NotFeatureLength'
+        | 'NotInWatchlist'
+        | 'NotLiked'
+        | 'NotLogged'
+        | 'NotOwned'
+        | 'NotRated'
+        | 'NotReleased'
+        | 'NotReviewed'
+        | 'NotRewatched'
+        | 'NotWatched'
+        | 'Owned'
+        | 'Rated'
+        | 'Released'
+        | 'Reviewed'
+        | 'Rewatched'
+        | 'TV'
+        | 'Watched';
 
       /**
        * Specify `NoDuplicateMembers` to return only the first log entry for each member. If `film`
@@ -2378,13 +2378,13 @@ export default class Client {
       }
 
       return request<
-        | { status: 200; data: defs.ReviewUpdateResponse }
-        | { status: 400; data: never; reason: 'Bad request' }
         | {
             status: 401;
             data: never;
             reason: 'There is no authenticated member, or the authenticated member does not own the resource';
           }
+        | { status: 200; data: defs.ReviewUpdateResponse }
+        | { status: 400; data: never; reason: 'Bad request' }
         | { status: 404; data: never; reason: 'No log entry matches the specified ID' }
       >({
         method: 'patch',
@@ -2454,7 +2454,7 @@ export default class Client {
          * Use this to discover any comments that were deleted.
          */
         includeDeletions?: boolean;
-      }
+      },
     ) => {
       return request<
         | { status: 200; data: defs.ReviewCommentsResponse }
@@ -2538,13 +2538,13 @@ export default class Client {
       }
 
       return request<
-        | { status: 200; data: defs.ReviewRelationshipUpdateResponse }
-        | { status: 401; data: never; reason: 'There is no authenticated member' }
         | {
             status: 403;
             data: never;
             reason: 'The authenticated member is not authorized to like or subscribe to this review';
           }
+        | { status: 200; data: defs.ReviewRelationshipUpdateResponse }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
         | { status: 404; data: never; reason: 'No log entry matches the specified ID' }
       >({
         method: 'patch',
@@ -2738,8 +2738,6 @@ export default class Client {
       }
 
       return request<
-        | { status: 204; data: never; reason: 'Success (the email was dispatched if it matched an existing account)' }
-        | { status: 401; data: never; reason: 'There is no authenticated member' }
         | {
             status: 403;
             data: never;
@@ -2750,6 +2748,8 @@ export default class Client {
             data: never;
             reason: "Too many validation requests have been made (the email is probably in the member's spam or junk folder)";
           }
+        | { status: 204; data: never; reason: 'Success (the email was dispatched if it matched an existing account)' }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
       >({
         method: 'post',
         path: '/me/validation-request',
@@ -2801,15 +2801,15 @@ export default class Client {
        */
       sort?:
         | 'Date'
-        | 'Name'
         | 'MemberPopularity'
-        | 'MemberPopularityThisWeek'
         | 'MemberPopularityThisMonth'
+        | 'MemberPopularityThisWeek'
         | 'MemberPopularityThisYear'
         | 'MemberPopularityWithFriends'
-        | 'MemberPopularityWithFriendsThisWeek'
         | 'MemberPopularityWithFriendsThisMonth'
-        | 'MemberPopularityWithFriendsThisYear';
+        | 'MemberPopularityWithFriendsThisWeek'
+        | 'MemberPopularityWithFriendsThisYear'
+        | 'Name';
 
       /**
        * Specify the LID of a member to return members who follow or are followed by that member.
@@ -2823,7 +2823,7 @@ export default class Client {
        *
        * @see params.member
        */
-      memberRelationship?: 'IsFollowing' | 'IsFollowedBy';
+      memberRelationship?: 'IsFollowedBy' | 'IsFollowing';
 
       /**
        * Specify the LID of a film to return members who have interacted with that film.
@@ -2839,16 +2839,16 @@ export default class Client {
        * @see params.film
        */
       filmRelationship?:
+        | 'Favorited'
         | 'Ignore'
-        | 'Watched'
-        | 'NotWatched'
-        | 'Liked'
-        | 'NotLiked'
-        | 'Rated'
-        | 'NotRated'
         | 'InWatchlist'
+        | 'Liked'
         | 'NotInWatchlist'
-        | 'Favorited';
+        | 'NotLiked'
+        | 'NotRated'
+        | 'NotWatched'
+        | 'Rated'
+        | 'Watched';
 
       /**
        * Specify the LID of a list to return members who like that list.
@@ -2912,12 +2912,12 @@ export default class Client {
      */
     get: (id: string) => {
       return request<
-        | { status: 200; data: defs.Member }
         | {
             status: 404;
             data: never;
             reason: 'No member matches the specified ID, or the member has opted out of appearing in the API';
           }
+        | { status: 200; data: defs.Member }
       >({
         method: 'get',
         path: `/member/${id}`,
@@ -2962,21 +2962,21 @@ export default class Client {
          * These defaults mimic those shown on the website.
          */
         include?:
-          | 'ReviewActivity'
-          | 'ReviewCommentActivity'
-          | 'ReviewLikeActivity'
+          | 'DiaryEntryActivity'
+          | 'FilmLikeActivity'
+          | 'FilmRatingActivity'
+          | 'FilmWatchActivity'
+          | 'FollowActivity'
+          | 'InvitationAcceptedActivity'
           | 'ListActivity'
           | 'ListCommentActivity'
           | 'ListLikeActivity'
-          | 'StoryActivity'
-          | 'DiaryEntryActivity'
-          | 'FilmRatingActivity'
-          | 'FilmWatchActivity'
-          | 'FilmLikeActivity'
-          | 'WatchlistActivity'
-          | 'FollowActivity'
           | 'RegistrationActivity'
-          | 'InvitationAcceptedActivity';
+          | 'ReviewActivity'
+          | 'ReviewCommentActivity'
+          | 'ReviewLikeActivity'
+          | 'StoryActivity'
+          | 'WatchlistActivity';
 
         /**
          * *Only supported for paying members.*
@@ -2985,21 +2985,21 @@ export default class Client {
          * @see params.include
          */
         exclude?:
-          | 'ReviewActivity'
-          | 'ReviewCommentActivity'
-          | 'ReviewLikeActivity'
+          | 'DiaryEntryActivity'
+          | 'FilmLikeActivity'
+          | 'FilmRatingActivity'
+          | 'FilmWatchActivity'
+          | 'FollowActivity'
+          | 'InvitationAcceptedActivity'
           | 'ListActivity'
           | 'ListCommentActivity'
           | 'ListLikeActivity'
-          | 'StoryActivity'
-          | 'DiaryEntryActivity'
-          | 'FilmRatingActivity'
-          | 'FilmWatchActivity'
-          | 'FilmLikeActivity'
-          | 'WatchlistActivity'
-          | 'FollowActivity'
           | 'RegistrationActivity'
-          | 'InvitationAcceptedActivity';
+          | 'ReviewActivity'
+          | 'ReviewCommentActivity'
+          | 'ReviewLikeActivity'
+          | 'StoryActivity'
+          | 'WatchlistActivity';
 
         /**
          * Use `where` to reduce the subset of activity to be returned. If `where` is not set, all
@@ -3013,21 +3013,21 @@ export default class Client {
          * will receive activity related to the member's content from members outside their network
          * (e.g. comments and likes on the member's lists and reviews).
          */
-        where?: 'OwnActivity' | 'NotOwnActivity' | 'IncomingActivity' | 'NotIncomingActivity' | 'NetworkActivity';
+        where?: 'IncomingActivity' | 'NetworkActivity' | 'NotIncomingActivity' | 'NotOwnActivity' | 'OwnActivity';
 
         /**
          * Whether to include activity related to adult content. Default to `false`.
          */
         adult?: boolean;
-      }
+      },
     ) => {
       return request<
-        | { status: 200; data: defs.ActivityResponse }
         | {
             status: 404;
             data: never;
             reason: 'No member matches the specified ID, or the member has opted out of appearing in the API';
           }
+        | { status: 200; data: defs.ActivityResponse }
       >({
         method: 'get',
         path: `/member/${id}/activity`,
@@ -3054,15 +3054,15 @@ export default class Client {
          * An empty `input` will match all tags.
          */
         input?: string;
-      }
+      },
     ) => {
       return request<
-        | { status: 200; data: defs.MemberTagsResponse }
         | {
             status: 404;
             data: never;
             reason: 'No member matches the specified ID, or the member has opted out of appearing in the API';
           }
+        | { status: 200; data: defs.MemberTagsResponse }
       >({
         method: 'get',
         path: `/member/${id}/list-tags-2`,
@@ -3089,15 +3089,15 @@ export default class Client {
          * An empty `input` will match all tags.
          */
         input: string;
-      }
+      },
     ) => {
       return request<
-        | { status: 200; data: defs.MemberTagsResponse }
         | {
             status: 404;
             data: never;
             reason: 'No member matches the specified ID, or the member has opted out of appearing in the API';
           }
+        | { status: 200; data: defs.MemberTagsResponse }
       >({
         method: 'get',
         path: `/member/${id}/log-entry-tags`,
@@ -3121,13 +3121,13 @@ export default class Client {
       }
 
       return request<
-        | { status: 200; data: defs.MemberRelationship }
-        | { status: 401; data: never; reason: 'There is no authenticated member' }
         | {
             status: 404;
             data: never;
             reason: 'No member matches the specified ID, or the member has opted out of appearing in the API';
           }
+        | { status: 200; data: defs.MemberRelationship }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
       >({
         method: 'get',
         path: `/member/${id}/me`,
@@ -3151,13 +3151,13 @@ export default class Client {
       }
 
       return request<
-        | { status: 200; data: defs.MemberRelationshipUpdateResponse }
-        | { status: 401; data: never; reason: 'There is no authenticated member' }
         | {
             status: 404;
             data: never;
             reason: 'No member matches the specified ID, or the member has opted out of appearing in the API';
           }
+        | { status: 200; data: defs.MemberRelationshipUpdateResponse }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
       >({
         method: 'patch',
         path: `/member/${id}/me`,
@@ -3182,13 +3182,13 @@ export default class Client {
       }
 
       return request<
-        | { status: 204; data: never }
-        | { status: 401; data: never; reason: 'There is no authenticated member' }
         | {
             status: 404;
             data: never;
             reason: 'No member matches the specified ID, or the member has opted out of appearing in the API';
           }
+        | { status: 204; data: never }
+        | { status: 401; data: never; reason: 'There is no authenticated member' }
       >({
         method: 'post',
         path: `/member/${id}/report`,
@@ -3205,12 +3205,12 @@ export default class Client {
      */
     statistics: (id: string) => {
       return request<
-        | { status: 200; data: defs.MemberStatistics }
         | {
             status: 404;
             data: never;
             reason: 'No member matches the specified ID, or the member has opted out of appearing in the API';
           }
+        | { status: 200; data: defs.MemberStatistics }
       >({
         method: 'get',
         path: `/member/${id}/statistics`,
@@ -3334,32 +3334,32 @@ export default class Client {
          * Specify one or more values to limit the list of films accordingly.
          */
         where?:
-          | 'Released'
-          | 'NotReleased'
-          | 'InWatchlist'
-          | 'NotInWatchlist'
-          | 'Logged'
-          | 'NotLogged'
-          | 'Rewatched'
-          | 'NotRewatched'
-          | 'Reviewed'
-          | 'NotReviewed'
-          | 'Owned'
-          | 'NotOwned'
           | 'Customised'
-          | 'NotCustomised'
-          | 'Rated'
-          | 'NotRated'
-          | 'Liked'
-          | 'NotLiked'
-          | 'WatchedFromWatchlist'
-          | 'Watched'
-          | 'NotWatched'
           | 'FeatureLength'
-          | 'NotFeatureLength'
           | 'Fiction'
           | 'Film'
-          | 'TV';
+          | 'InWatchlist'
+          | 'Liked'
+          | 'Logged'
+          | 'NotCustomised'
+          | 'NotFeatureLength'
+          | 'NotInWatchlist'
+          | 'NotLiked'
+          | 'NotLogged'
+          | 'NotOwned'
+          | 'NotRated'
+          | 'NotReleased'
+          | 'NotReviewed'
+          | 'NotRewatched'
+          | 'NotWatched'
+          | 'Owned'
+          | 'Rated'
+          | 'Released'
+          | 'Reviewed'
+          | 'Rewatched'
+          | 'TV'
+          | 'Watched'
+          | 'WatchedFromWatchlist';
 
         /**
          * Specify the LID of a member to limit the returned films according to the value set in
@@ -3375,16 +3375,16 @@ export default class Client {
          * @see parmas.member
          */
         memberRelationship?:
+          | 'Favorited'
           | 'Ignore'
-          | 'Watched'
-          | 'NotWatched'
-          | 'Liked'
-          | 'NotLiked'
-          | 'Rated'
-          | 'NotRated'
           | 'InWatchlist'
+          | 'Liked'
           | 'NotInWatchlist'
-          | 'Favorited';
+          | 'NotLiked'
+          | 'NotRated'
+          | 'NotWatched'
+          | 'Rated'
+          | 'Watched';
 
         /**
          * Must be used in conjunction with `member`. Defaults to `None`, which only returns films
@@ -3393,7 +3393,7 @@ export default class Client {
          *
          * @see params.member
          */
-        includeFriends?: 'None' | 'All' | 'Only';
+        includeFriends?: 'All' | 'None' | 'Only';
 
         /**
          * @deprecated Use `tagCode` instead.
@@ -3421,7 +3421,7 @@ export default class Client {
          *
          * @see params.tagger
          */
-        includeTaggerFriends?: 'None' | 'All' | 'Only';
+        includeTaggerFriends?: 'All' | 'None' | 'Only';
 
         /**
          * The order in which the entries should be returned. Defaults to `Added`, which is the
@@ -3439,38 +3439,38 @@ export default class Client {
          */
         sort?:
           | 'Added'
-          | 'DateLatestFirst'
-          | 'DateEarliestFirst'
-          | 'Shuffle'
-          | 'FilmName'
-          | 'OwnerRatingHighToLow'
-          | 'OwnerRatingLowToHigh'
           | 'AuthenticatedMemberRatingHighToLow'
           | 'AuthenticatedMemberRatingLowToHigh'
-          | 'MemberRatingHighToLow'
-          | 'MemberRatingLowToHigh'
           | 'AverageRatingHighToLow'
           | 'AverageRatingLowToHigh'
-          | 'ReleaseDateLatestFirst'
-          | 'ReleaseDateEarliestFirst'
-          | 'FilmDurationShortestFirst'
+          | 'DateEarliestFirst'
+          | 'DateLatestFirst'
           | 'FilmDurationLongestFirst'
+          | 'FilmDurationShortestFirst'
+          | 'FilmName'
           | 'FilmPopularity'
+          | 'FilmPopularityThisMonth'
+          | 'FilmPopularityThisWeek'
+          | 'FilmPopularityThisYear'
+          | 'MemberRatingHighToLow'
+          | 'MemberRatingLowToHigh'
+          | 'OwnerRatingHighToLow'
+          | 'OwnerRatingLowToHigh'
           | 'RatingHighToLow'
           | 'RatingLowToHigh'
-          | 'FilmPopularityThisWeek'
-          | 'FilmPopularityThisMonth'
-          | 'FilmPopularityThisYear';
-      }
+          | 'ReleaseDateEarliestFirst'
+          | 'ReleaseDateLatestFirst'
+          | 'Shuffle';
+      },
     ) => {
       return request<
-        | { status: 200; data: defs.FilmsResponse }
-        | { status: 403; data: never; reason: "The specified member's watchlist is private" }
         | {
             status: 404;
             data: never;
             reason: 'No member matches the specified ID, or the member has opted out of appearing in the API';
           }
+        | { status: 200; data: defs.FilmsResponse }
+        | { status: 403; data: never; reason: "The specified member's watchlist is private" }
       >({
         method: 'get',
         path: `/member/${id}/watchlist`,
@@ -3528,43 +3528,43 @@ export default class Client {
      * The type of search to perform. Defaults to `FullText`, which performs a standard search
      * considering text in all fields. `Autocomplete` only searches primary fields.
      */
-    searchMethod?: 'FullText' | 'Autocomplete' | 'NamesAndKeywords';
+    searchMethod?: 'Autocomplete' | 'FullText' | 'NamesAndKeywords';
 
     /**
      * The types of results to search for. Default to all SearchResultTypes.
      */
     include?: (
+      | 'ArticleSearchItem'
       | 'ContributorSearchItem'
       | 'FilmSearchItem'
       | 'ListSearchItem'
       | 'MemberSearchItem'
-      | 'ReviewSearchItem'
-      | 'TagSearchItem'
-      | 'StorySearchItem'
-      | 'ArticleSearchItem'
       | 'PodcastSearchItem'
+      | 'ReviewSearchItem'
+      | 'StorySearchItem'
+      | 'TagSearchItem'
     )[];
 
     /**
      * The type of contributor to search for. Implies `include=ContributorSearchItem`.
      */
     contributionType?:
-      | 'Director'
-      | 'CoDirector'
       | 'Actor'
-      | 'Producer'
-      | 'Writer'
-      | 'Editor'
-      | 'Cinematography'
-      | 'ProductionDesign'
       | 'ArtDirection'
-      | 'SetDecoration'
-      | 'VisualEffects'
+      | 'Cinematography'
+      | 'CoDirector'
       | 'Composer'
-      | 'Sound'
       | 'Costumes'
+      | 'Director'
+      | 'Editor'
       | 'MakeUp'
-      | 'Studio';
+      | 'Producer'
+      | 'ProductionDesign'
+      | 'SetDecoration'
+      | 'Sound'
+      | 'Studio'
+      | 'VisualEffects'
+      | 'Writer';
 
     /**
      * Whether to include adult content in search results. Default to `false`.
@@ -3603,13 +3603,13 @@ export default class Client {
        * created/updated first.
        */
       sort?:
-        | 'WhenUpdatedLatestFirst'
-        | 'WhenUpdatedEarliestFirst'
-        | 'WhenPublishedLatestFirst'
-        | 'WhenPublishedEarliestFirst'
-        | 'WhenCreatedLatestFirst'
+        | 'StoryTitle'
         | 'WhenCreatedEarliestFirst'
-        | 'StoryTitle';
+        | 'WhenCreatedLatestFirst'
+        | 'WhenPublishedEarliestFirst'
+        | 'WhenPublishedLatestFirst'
+        | 'WhenUpdatedEarliestFirst'
+        | 'WhenUpdatedLatestFirst';
 
       /**
        * Specify the LID of a member to return stories that are owned by the member.
@@ -3622,7 +3622,7 @@ export default class Client {
        * Specify `NotPublished` to return the authenticated member's stories that have not been made
        * public.
        */
-      where?: ('Published' | 'NotPublished')[];
+      where?: ('NotPublished' | 'Published')[];
     }) => {
       return request<
         | { status: 200; data: defs.StoriesResponse }

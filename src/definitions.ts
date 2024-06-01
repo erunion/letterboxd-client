@@ -116,15 +116,15 @@ export interface AbstractSearchItem {
    * The type of the search result.
    */
   type:
+    | ArticleSearchItem
     | ContributorSearchItem
     | FilmSearchItem
     | ListSearchItem
     | MemberSearchItem
+    | PodcastSearchItem
     | ReviewSearchItem
-    | TagSearchItem
     | StorySearchItem
-    | ArticleSearchItem
-    | PodcastSearchItem;
+    | TagSearchItem;
 
   /**
    * A relevancy value that can be used to order results.
@@ -234,12 +234,12 @@ export interface CommentUpdateMessage {
    * The error message code.
    */
   code:
-    | 'MissingComment'
-    | 'CommentOnContentYouBlocked'
-    | 'CommentOnBlockedContent'
     | 'CommentBan'
     | 'CommentEditWindowExpired'
-    | 'CommentTooLong';
+    | 'CommentOnBlockedContent'
+    | 'CommentOnContentYouBlocked'
+    | 'CommentTooLong'
+    | 'MissingComment';
 
   /**
    * The error message text in human-readable form.
@@ -273,22 +273,22 @@ export interface ContributionStatistics {
    *  The type of contribution.
    */
   type:
-    | 'Director'
-    | 'CoDirector'
     | 'Actor'
-    | 'Producer'
-    | 'Writer'
-    | 'Editor'
-    | 'Cinematography'
-    | 'ProductionDesign'
     | 'ArtDirection'
-    | 'SetDecoration'
-    | 'VisualEffects'
+    | 'Cinematography'
+    | 'CoDirector'
     | 'Composer'
-    | 'Sound'
     | 'Costumes'
+    | 'Director'
+    | 'Editor'
     | 'MakeUp'
-    | 'Studio';
+    | 'Producer'
+    | 'ProductionDesign'
+    | 'SetDecoration'
+    | 'Sound'
+    | 'Studio'
+    | 'VisualEffects'
+    | 'Writer';
 
   /**
    * The number of films for this contribution type.
@@ -423,7 +423,7 @@ export interface DisableAccountRequest {
   /**
    * The disable account mode - defaults to 'Disable' if not specified.
    */
-  mode?: 'Disable' | 'Delete';
+  mode?: 'Delete' | 'Disable';
 }
 
 export interface Film {
@@ -598,7 +598,7 @@ export interface FilmAvailability {
    * @deprecated Use `displayName` instead.
    * @see FilmAvailability.displayName
    */
-  service: 'Amazon' | 'AmazonVideo' | 'AmazonPrime' | 'iTunes' | 'Netflix';
+  service: 'Amazon' | 'AmazonPrime' | 'AmazonVideo' | 'iTunes' | 'Netflix';
 
   /**
    * The name of the service.
@@ -615,6 +615,8 @@ export interface FilmAvailability {
    */
   country:
     | 'AIA'
+    | 'ALB'
+    | 'AND'
     | 'ARE'
     | 'ARG'
     | 'ARM'
@@ -627,6 +629,7 @@ export interface FilmAvailability {
     | 'BGR'
     | 'BHR'
     | 'BHS'
+    | 'BIH'
     | 'BLR'
     | 'BLZ'
     | 'BMU'
@@ -639,6 +642,7 @@ export interface FilmAvailability {
     | 'CHE'
     | 'CHL'
     | 'CHN'
+    | 'CIV'
     | 'COL'
     | 'CPV'
     | 'CRI'
@@ -649,6 +653,7 @@ export interface FilmAvailability {
     | 'DMA'
     | 'DNK'
     | 'DOM'
+    | 'DZA'
     | 'ECU'
     | 'EGY'
     | 'ESP'
@@ -658,12 +663,16 @@ export interface FilmAvailability {
     | 'FRA'
     | 'FSM'
     | 'GBR'
+    | 'GGY'
     | 'GHA'
+    | 'GIB'
     | 'GMB'
     | 'GNB'
+    | 'GNQ'
     | 'GRC'
     | 'GRD'
     | 'GTM'
+    | 'GUF'
     | 'HKG'
     | 'HND'
     | 'HRV'
@@ -671,9 +680,11 @@ export interface FilmAvailability {
     | 'IDN'
     | 'IND'
     | 'IRL'
+    | 'IRQ'
+    | 'ISL'
     | 'ISR'
     | 'ITA'
-    | 'ISL'
+    | 'JAM'
     | 'JOR'
     | 'JPN'
     | 'KAZ'
@@ -682,13 +693,19 @@ export interface FilmAvailability {
     | 'KHM'
     | 'KNA'
     | 'KOR'
+    | 'KWT'
     | 'LAO'
     | 'LBN'
+    | 'LBY'
+    | 'LCA'
+    | 'LIE'
     | 'LKA'
     | 'LTU'
     | 'LUX'
     | 'LVA'
     | 'MAC'
+    | 'MAR'
+    | 'MCO'
     | 'MDA'
     | 'MEX'
     | 'MLT'
@@ -705,6 +722,7 @@ export interface FilmAvailability {
     | 'NPL'
     | 'NZL'
     | 'OMN'
+    | 'PAK'
     | 'PAN'
     | 'PER'
     | 'PHL'
@@ -712,61 +730,43 @@ export interface FilmAvailability {
     | 'POL'
     | 'PRT'
     | 'PRY'
+    | 'PYF'
     | 'QAT'
     | 'ROU'
     | 'RUS'
     | 'SAU'
+    | 'SEN'
     | 'SGP'
     | 'SLV'
+    | 'SMR'
+    | 'SRB'
     | 'SVK'
     | 'SVN'
     | 'SWE'
     | 'SWZ'
+    | 'SYC'
+    | 'TCA'
     | 'THA'
     | 'TJK'
     | 'TKM'
     | 'TTO'
+    | 'TUN'
     | 'TUR'
     | 'TWN'
+    | 'TZA'
     | 'UGA'
     | 'UKR'
+    | 'URY'
     | 'USA'
     | 'UZB'
+    | 'VAT'
     | 'VEN'
     | 'VGB'
     | 'VNM'
-    | 'ZAF'
-    | 'ZWE'
-    | 'GUF'
     | 'YEM'
-    | 'KWT'
-    | 'LBY'
-    | 'MAR'
-    | 'DZA'
-    | 'TUN'
-    | 'GIB'
-    | 'SMR'
-    | 'MCO'
-    | 'LIE'
-    | 'URY'
-    | 'JAM'
-    | 'CIV'
-    | 'GNQ'
-    | 'GGY'
-    | 'SRB'
-    | 'PAK'
-    | 'PYF'
-    | 'LCA'
-    | 'SYC'
-    | 'IRQ'
-    | 'TCA'
+    | 'ZAF'
     | 'ZMB'
-    | 'SEN'
-    | 'TZA'
-    | 'AND'
-    | 'ALB'
-    | 'BIH'
-    | 'VAT';
+    | 'ZWE';
 
   /**
    * The unique ID (if any) for the film on this service.
@@ -825,22 +825,22 @@ export interface FilmContribution {
    * The type of contribution.
    */
   type:
-    | 'Director'
-    | 'CoDirector'
     | 'Actor'
-    | 'Producer'
-    | 'Writer'
-    | 'Editor'
-    | 'Cinematography'
-    | 'ProductionDesign'
     | 'ArtDirection'
-    | 'SetDecoration'
-    | 'VisualEffects'
+    | 'Cinematography'
+    | 'CoDirector'
     | 'Composer'
-    | 'Sound'
     | 'Costumes'
+    | 'Director'
+    | 'Editor'
     | 'MakeUp'
-    | 'Studio';
+    | 'Producer'
+    | 'ProductionDesign'
+    | 'SetDecoration'
+    | 'Sound'
+    | 'Studio'
+    | 'VisualEffects'
+    | 'Writer';
 
   /**
    * The film.
@@ -858,22 +858,22 @@ export interface FilmContributions {
    * The type of contribution.
    */
   type:
-    | 'Director'
-    | 'CoDirector'
     | 'Actor'
-    | 'Producer'
-    | 'Writer'
-    | 'Editor'
-    | 'Cinematography'
-    | 'ProductionDesign'
     | 'ArtDirection'
-    | 'SetDecoration'
-    | 'VisualEffects'
+    | 'Cinematography'
+    | 'CoDirector'
     | 'Composer'
-    | 'Sound'
     | 'Costumes'
+    | 'Director'
+    | 'Editor'
     | 'MakeUp'
-    | 'Studio';
+    | 'Producer'
+    | 'ProductionDesign'
+    | 'SetDecoration'
+    | 'Sound'
+    | 'Studio'
+    | 'VisualEffects'
+    | 'Writer';
 
   /**
    * The list of contributors of the specified type for the film.
@@ -920,22 +920,22 @@ export interface FilmContributorMetadata {
    * The type of contribution.
    */
   type:
-    | 'Director'
-    | 'CoDirector'
     | 'Actor'
-    | 'Producer'
-    | 'Writer'
-    | 'Editor'
-    | 'Cinematography'
-    | 'ProductionDesign'
     | 'ArtDirection'
-    | 'SetDecoration'
-    | 'VisualEffects'
+    | 'Cinematography'
+    | 'CoDirector'
     | 'Composer'
-    | 'Sound'
     | 'Costumes'
+    | 'Director'
+    | 'Editor'
     | 'MakeUp'
-    | 'Studio';
+    | 'Producer'
+    | 'ProductionDesign'
+    | 'SetDecoration'
+    | 'Sound'
+    | 'Studio'
+    | 'VisualEffects'
+    | 'Writer';
 
   /**
    * The details for this contribution type.
@@ -948,22 +948,22 @@ export interface FilmContributorRelationship {
    * The type of contribution.
    */
   type:
-    | 'Director'
-    | 'CoDirector'
     | 'Actor'
-    | 'Producer'
-    | 'Writer'
-    | 'Editor'
-    | 'Cinematography'
-    | 'ProductionDesign'
     | 'ArtDirection'
-    | 'SetDecoration'
-    | 'VisualEffects'
+    | 'Cinematography'
+    | 'CoDirector'
     | 'Composer'
-    | 'Sound'
     | 'Costumes'
+    | 'Director'
+    | 'Editor'
     | 'MakeUp'
-    | 'Studio';
+    | 'Producer'
+    | 'ProductionDesign'
+    | 'SetDecoration'
+    | 'Sound'
+    | 'Studio'
+    | 'VisualEffects'
+    | 'Writer';
 
   /**
    * The relationship the member has with the (filtered) films.
@@ -1476,16 +1476,16 @@ export interface Link {
    * Denotes which site the link is for.
    */
   type:
-    | 'letterboxd'
-    | 'tmdb'
-    | 'imdb'
-    | 'gwi'
-    | 'justwatch'
     | 'facebook'
+    | 'gwi'
+    | 'imdb'
     | 'instagram'
+    | 'justwatch'
+    | 'letterboxd'
+    | 'ticket'
+    | 'tmdb'
     | 'twitter'
-    | 'youtube'
-    | 'ticket';
+    | 'youtube';
 
   /**
    * The object ID for the linked entity on the destination site.
@@ -1794,16 +1794,16 @@ export interface ListCreateMessage {
    * The error message code.
    */
   code:
-    | 'ListNameIsBlank'
-    | 'UnknownFilmCode'
-    | 'InvalidRatingValue'
+    | 'CannotSharePrivateList'
+    | 'CloneSourceNotFound'
     | 'DuplicateRank'
     | 'EmptyPublicList'
-    | 'CloneSourceNotFound'
-    | 'SharingServiceNotAuthorized'
-    | 'CannotSharePrivateList'
+    | 'InvalidRatingValue'
     | 'ListDescriptionIsTooLong'
-    | 'ListEntryNotesTooLong';
+    | 'ListEntryNotesTooLong'
+    | 'ListNameIsBlank'
+    | 'SharingServiceNotAuthorized'
+    | 'UnknownFilmCode';
 
   /**
    * The error message text in human-readable form.
@@ -1987,7 +1987,7 @@ export interface ListRelationship {
    * indicate to the member how their subscription state will be affected if/when they post a
    * comment.
    */
-  subscriptionState: 'Subscribed' | 'NotSubscribed' | 'Unsubscribed';
+  subscriptionState: 'NotSubscribed' | 'Subscribed' | 'Unsubscribed';
 
   /**
    * The authenticated member's state with respect to posting comments to the list.
@@ -2032,9 +2032,9 @@ export interface ListRelationshipUpdateMessage {
     | 'LikeBlockedContent'
     | 'LikeOwnList'
     | 'LikeRateLimit'
-    | 'SubscribeWhenOptedOut'
+    | 'SubscribeToBlockedContent'
     | 'SubscribeToContentYouBlocked'
-    | 'SubscribeToBlockedContent';
+    | 'SubscribeWhenOptedOut';
 
   /**
    * The error message text in human-readable form.
@@ -2213,14 +2213,14 @@ export interface ListUpdateEntry {
   action?:
     | 'ADD'
     | 'DELETE'
-    | 'UPDATE'
+    | 'SORT_AVR_RATING_HIGHEST'
+    | 'SORT_AVR_RATING_LOWEST'
     | 'SORT_NAME'
-    | 'SORT_RELEASE_NEWEST'
-    | 'SORT_RELEASE_OLDEST'
     | 'SORT_RATING_HIGHEST'
     | 'SORT_RATING_LOWEST'
-    | 'SORT_AVR_RATING_HIGHEST'
-    | 'SORT_AVR_RATING_LOWEST';
+    | 'SORT_RELEASE_NEWEST'
+    | 'SORT_RELEASE_OLDEST'
+    | 'UPDATE';
 
   /**
    * The entry position (numbered from 0) to update or delete. Required for UPDATE and DELETE
@@ -2246,15 +2246,15 @@ export interface ListUpdateMessage {
    * The error message code.
    */
   code:
-    | 'ListNameIsBlank'
-    | 'UnknownFilmCode'
-    | 'InvalidRatingValue'
+    | 'CannotSharePrivateList'
     | 'DuplicateRank'
     | 'EmptyPublicList'
-    | 'SharingServiceNotAuthorized'
-    | 'CannotSharePrivateList'
+    | 'InvalidRatingValue'
     | 'ListDescriptionIsTooLong'
-    | 'ListEntryNotesTooLong';
+    | 'ListEntryNotesTooLong'
+    | 'ListNameIsBlank'
+    | 'SharingServiceNotAuthorized'
+    | 'UnknownFilmCode';
 
   /**
    * The error message text in human-readable form.
@@ -2563,11 +2563,11 @@ export interface LogEntryUpdateMessage {
    * The error message code.
    */
   code:
-    | 'InvalidRatingValue'
     | 'InvalidDiaryDate'
-    | 'ReviewWithNoText'
+    | 'InvalidRatingValue'
+    | 'LogEntryWithNoReviewOrDiaryDetails'
     | 'ReviewIsTooLong'
-    | 'LogEntryWithNoReviewOrDiaryDetails';
+    | 'ReviewWithNoText';
 
   /**
    * The error message text in human-readable form.
@@ -2709,7 +2709,7 @@ export interface Member {
   /**
    * The member's account type.
    */
-  memberStatus: 'Crew' | 'Alum' | 'Hq' | 'Patron' | 'Pro' | 'Member';
+  memberStatus: 'Alum' | 'Crew' | 'Hq' | 'Member' | 'Patron' | 'Pro';
 
   /**
    * `true` if ads should not be shown on the member's content.
@@ -2807,16 +2807,16 @@ export interface Member {
    * The member's organisation type. Only returned for HQ members.
    */
   orgType:
-    | 'Society'
+    | 'Association'
     | 'Educator'
     | 'Exhibitor'
     | 'Festival'
-    | 'Single_Film'
     | 'Genre'
-    | 'Association'
     | 'Media_Publisher'
-    | 'Product_Platform'
     | 'Podcast'
+    | 'Product_Platform'
+    | 'Single_Film'
+    | 'Society'
     | 'Streamer'
     | 'Studio';
 
@@ -3058,12 +3058,12 @@ export interface MemberAccount {
    * The member's poster mode determing whether or not they see custom posters. Supported options
    * are `All`, `Yours` or `None`.
    */
-  posterMode: 'All' | 'Yours' | 'None';
+  posterMode: 'All' | 'None' | 'Yours';
 
   /**
    * The list of acceptable values that may be used for poster mode for this account
    */
-  posterModeOptions: 'All' | 'Yours' | 'None';
+  posterModeOptions: 'All' | 'None' | 'Yours';
 
   /**
    * The member's default policy determing who can post comments to their content. Supported
@@ -3173,7 +3173,7 @@ export interface MemberRelationshipUpdateMessage {
   /**
    * The error message code.
    */
-  code: 'BlockYourself' | 'FollowYourself' | 'FollowRateLimit' | 'FollowBlockedMember' | 'FollowMemberYouBlocked';
+  code: 'BlockYourself' | 'FollowBlockedMember' | 'FollowMemberYouBlocked' | 'FollowRateLimit' | 'FollowYourself';
 
   /**
    * The error message text in human-readable form.
@@ -3225,13 +3225,13 @@ export interface MemberSettingsUpdateMessage {
    * The error message code.
    */
   code:
-    | 'IncorrectCurrentPassword'
-    | 'BlankPassword'
-    | 'InvalidPassword'
-    | 'InvalidEmailAddress'
-    | 'EmailAddressInUse'
-    | 'InvalidFavoriteFilm'
     | 'BioTooLong'
+    | 'BlankPassword'
+    | 'EmailAddressInUse'
+    | 'IncorrectCurrentPassword'
+    | 'InvalidEmailAddress'
+    | 'InvalidFavoriteFilm'
+    | 'InvalidPassword'
     | 'InvalidPronounOption';
 
   /**
@@ -3588,7 +3588,7 @@ export interface MemberSummary {
   /**
    * The member's account type.
    */
-  memberStatus: 'Crew' | 'Alum' | 'Hq' | 'Patron' | 'Pro' | 'Member';
+  memberStatus: 'Alum' | 'Crew' | 'Hq' | 'Member' | 'Patron' | 'Pro';
 
   /**
    * `true` if ads should not be shown on the member's content.
@@ -3896,7 +3896,7 @@ export interface ReportCommentRequest {
   /**
    * The reason why the comment was reported.
    */
-  reason: 'Abuse' | 'Spoilers' | 'Spam' | 'Plagiarism' | 'Other';
+  reason: 'Abuse' | 'Other' | 'Plagiarism' | 'Spam' | 'Spoilers';
 
   /**
    * An optional, explanatory message to accompany the report. Required if the `reason` is
@@ -3922,7 +3922,7 @@ export interface ReportListRequest {
   /**
    * The reason why the list was reported.
    */
-  reason: 'Abuse' | 'Spoilers' | 'Spam' | 'Plagiarism' | 'Other';
+  reason: 'Abuse' | 'Other' | 'Plagiarism' | 'Spam' | 'Spoilers';
 
   /**
    * An optional, explanatory message to accompany the report. Required if the `reason` is
@@ -3940,12 +3940,12 @@ export interface ReportMemberRequest {
     | 'HatefulAccount'
     | 'ManipulativeAccount'
     | 'OffensiveAccount'
+    | 'Other'
     | 'ParodyAccount'
     | 'PiracyAccount'
     | 'PlagiaristAccount'
     | 'SolicitousAccount'
-    | 'SpamAccount'
-    | 'Other';
+    | 'SpamAccount';
 
   /**
    * An optional, explanatory message to accompany the report. Required if the `reason` is `Other`.
@@ -3957,7 +3957,7 @@ export interface ReportReviewRequest {
   /**
    * The reason why the review was reported.
    */
-  reason: 'Abuse' | 'Spoilers' | 'Spam' | 'Plagiarism' | 'Other';
+  reason: 'Abuse' | 'Other' | 'Plagiarism' | 'Spam' | 'Spoilers';
 
   /**
    * An optional, explanatory message to accompany the report. Required if the `reason` is
@@ -4165,7 +4165,7 @@ export interface ReviewRelationship {
    * indicate to the member how their subscription state will be affected if/when they post a
    * comment.
    */
-  subscriptionState: 'Subscribed' | 'NotSubscribed' | 'Unsubscribed';
+  subscriptionState: 'NotSubscribed' | 'Subscribed' | 'Unsubscribed';
 
   /**
    * The authenticated member's state with respect to adding comments for this review.
@@ -4208,13 +4208,13 @@ export interface ReviewRelationshipUpdateMessage {
    */
   code:
     | 'LikeBlockedContent'
+    | 'LikeLogEntryWithoutReview'
     | 'LikeOwnReview'
     | 'LikeRateLimit'
     | 'LikeRemovedReview'
-    | 'LikeLogEntryWithoutReview'
-    | 'SubscribeWhenOptedOut'
+    | 'SubscribeToBlockedContent'
     | 'SubscribeToContentYouBlocked'
-    | 'SubscribeToBlockedContent';
+    | 'SubscribeWhenOptedOut';
 
   /**
    * The error message text in human-readable form.
@@ -4539,7 +4539,7 @@ export interface UsernameCheckResponse {
    * be between 2 and 15 characters long and may only contain upper or lowercase letters, numbers
    * or the underscore (`_`) character.
    */
-  result: 'Available' | 'NotAvailable' | 'TooShort' | 'TooLong' | 'Invalid';
+  result: 'Available' | 'Invalid' | 'NotAvailable' | 'TooLong' | 'TooShort';
 }
 
 export type WatchlistActivity = AbstractActivity & {
