@@ -3,5 +3,6 @@
   "root": true,
   "rules": {
     "class-methods-use-this": "off",
+    "unicorn/prefer-node-protocol": "error",
   },
 }

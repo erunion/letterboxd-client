@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import crypto from 'crypto';
-
 export const BASE_URL = 'https://api.letterboxd.com/api/v0';
 
 export interface Auth {
@@ -10,8 +8,8 @@ export interface Auth {
 }
 
 export interface APIResponse {
-  data?: any;
-  reason?: string;
+  data: any;
+  reason: string;
   status: number;
 }
 
@@ -27,30 +25,7 @@ function buildUrl(url: string, params?: Record<string, any>) {
   return urlObj.toString();
 }
 
-function buildParams(
-  auth: Auth,
-  method: string,
-  url: string,
-  body?: Record<string, any>,
-  params: Record<string, any> = {},
-) {
-  const fullParams = params;
-  fullParams.apikey = auth.apiKey;
-  fullParams.nonce = crypto.randomUUID();
-  fullParams.timestamp = Math.floor(Date.now() / 1000);
-
-  const sigBase = [
-    method.toUpperCase(),
-    buildUrl(url, fullParams),
-    body ? (body instanceof URLSearchParams ? body.toString() : JSON.stringify(body)) : '',
-  ].join('\u0000');
-
-  fullParams.signature = crypto.createHmac('sha256', auth.apiSecret).update(sigBase).digest('hex').toLowerCase();
-
-  return fullParams;
-}
-
-export function request<T extends APIResponse>(opts: {
+export async function request<T extends APIResponse>(opts: {
   auth?: Auth;
   body?: Record<string, any>;
   headers?: Record<string, string>;
@@ -68,8 +43,7 @@ export function request<T extends APIResponse>(opts: {
     });
   }
 
-  const params = buildParams(opts.auth, opts.method, opts.path, form || opts.body, opts.params);
-  const url = buildUrl(opts.path, params);
+  const url = buildUrl(opts.path, opts.params);
 
   return fetch(url, {
     method: opts.method,
@@ -80,7 +54,7 @@ export function request<T extends APIResponse>(opts: {
     },
   }).then(async res => {
     // This mess allows us to easily handle `res.json()`, and falling back to `res.text()` if our
-    // JSON response isn't actually JSON, without having to clone the response.
+    // JSON response isn't actually JSON without having to clone the response.
     const buffer = await (await res.arrayBuffer().then(Buffer.from)).toString();
 
     let data;

@@ -63,12 +63,11 @@ To authenticate a user you will need their Letterboxd credentials (`username` + 
 const { status, data } = await client.auth.requestAuthToken(username, password);
 ```
 
-If successful you will receive back an `AccessToken` response that will contain the users `acessToken` that you can then pass back into the main `Client` instance in order to authenticate all API requests as that user.
+If successful you will receive back an `AccessToken` response that will contain the users `accessToken` that you can then pass back into the main `Client` instance in order to authenticate all API requests as that user.
 
 ## Available APIs
 
-> **Note**
->
+> [!NOTE]
 > For all documentation on parameters or responses see the TypeScript types that we export to the package or consult <a href="https://api-docs.letterboxd.com/">https://api-docs.letterboxd.com/</a> for the endpoint you're using.
 
 <sub>\* Requires an authenticated Letterboxd user access token.</sub>
