@@ -57,13 +57,62 @@ console.log(data.tagline); // Rise Roar Revolt
 
 ### User Authentication
 
-To authenticate a user you will need their Letterboxd credentials (`username` + `password`), which you will supply to `client.auth.requestAuthToken` like so:
+#### Authorization Code + PKCE (recommended)
+
+```ts
+import crypto from 'node:crypto';
+import Client from 'letterboxd-client';
+
+const client = new Client(apiKey, apiSecret);
+const pkce = client.auth.createPkcePair();
+const state = crypto.randomUUID();
+
+const authorizeUrl = client.auth.buildAuthorizationUrl({
+  redirectUri: 'http://localhost:4173/callback',
+  scope: ['read', 'write'],
+  state,
+  codeChallenge: pkce.codeChallenge,
+});
+
+console.log('Open your browser and approve access:', authorizeUrl);
+
+// After the provider redirects back to your redirect URI:
+const { data: token } = await client.auth.exchangeAuthorizationCode({
+  code,
+  codeVerifier: pkce.codeVerifier,
+  redirectUri: 'http://localhost:4173/callback',
+});
+
+const authedClient = new Client(apiKey, apiSecret, token.access_token);
+
+// Later on, refresh the token if needed:
+const refreshed = await authedClient.auth.refreshAccessToken(token.refresh_token);
+```
+
+> **Tip:** Run `npm run demo` to start an interactive browser walkthrough of the complete OAuth flow.
+
+#### Password Grant (legacy)
+
+You can still exchange a member’s username/password directly (not recommended for production apps):
 
 ```js
 const { status, data } = await client.auth.requestAuthToken(username, password);
 ```
 
-If successful you will receive back an `AccessToken` response that will contain the users `acessToken` that you can then pass back into the main `Client` instance in order to authenticate all API requests as that user.
+If successful you will receive back an `AccessToken` response that will contain the users `accessToken` that you can then pass back into the main `Client` instance in order to authenticate all API requests as that user.
+
+### OAuth Demo
+
+```
+npm run demo
+```
+
+This will build the SDK, boot a lightweight Node server on [http://localhost:4173](http://localhost:4173), and serve a static page that:
+
+- Generates PKCE pairs in the browser
+- Redirects you through Letterboxd’s OAuth consent screen
+- Exchanges the resulting code for a token via the SDK
+- Lets you refresh tokens and copy the response payload
 
 ## Available APIs
 

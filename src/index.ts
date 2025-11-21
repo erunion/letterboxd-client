@@ -4,6 +4,23 @@ import type { Auth } from './lib/core';
 
 import { request } from './lib/core';
 import { MissingAccessTokenError } from './lib/errors';
+import { buildAuthorizationUrl, createPkcePair } from './lib/oauth';
+
+interface AuthorizationUrlRequest {
+  authorizationEndpoint?: string;
+  codeChallenge: string;
+  codeChallengeMethod?: 'plain' | 'S256';
+  redirectUri: string;
+  responseType?: 'code';
+  scope?: string[];
+  state?: string;
+}
+
+interface AuthorizationCodeExchangeRequest {
+  code: string;
+  codeVerifier: string;
+  redirectUri: string;
+}
 
 export default class Client {
   private credentials: Auth = {};
@@ -18,6 +35,29 @@ export default class Client {
   }
 
   public auth = {
+    /**
+     * Generate a PKCE verifier/challenge pair for the OAuth authorization code flow.
+     */
+    createPkcePair: (length?: number) => {
+      return createPkcePair(length);
+    },
+
+    /**
+     * Build an authorization URL that can be presented to a user to authorize your application.
+     */
+    buildAuthorizationUrl: (params: AuthorizationUrlRequest) => {
+      return buildAuthorizationUrl({
+        baseUrl: params.authorizationEndpoint,
+        clientId: this.credentials.apiKey,
+        codeChallenge: params.codeChallenge,
+        codeChallengeMethod: params.codeChallengeMethod,
+        redirectUri: params.redirectUri,
+        responseType: params.responseType,
+        scope: params.scope,
+        state: params.state,
+      });
+    },
+
     /**
      * Request a link via email to reset the password for a member's account.
      *
@@ -107,6 +147,78 @@ export default class Client {
           grant_type: 'password',
           username,
           password,
+        },
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+    },
+
+    /**
+     * Exchange an authorization code for an access token.
+     *
+     * @see {@link https://api-docs.letterboxd.com/#path--auth-token}
+     */
+    exchangeAuthorizationCode: ({ code, codeVerifier, redirectUri }: AuthorizationCodeExchangeRequest) => {
+      return request<
+        | {
+            status: 400;
+            data: defs.OAuthError;
+            reason: 'The authorization code is invalid or expired';
+          }
+        | {
+            status: 401;
+            data: { message: string; type: string };
+            reason: 'An invalid API key or computed signature was supplied.';
+          }
+        | { status: 200; data: defs.AccessToken }
+      >({
+        method: 'post',
+        path: '/auth/token',
+        auth: this.credentials,
+        body: {
+          grant_type: 'authorization_code',
+          code,
+          code_verifier: codeVerifier,
+          redirect_uri: redirectUri,
+        },
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+    },
+
+    /**
+     * Refresh an existing access token.
+     *
+     * @see {@link https://api-docs.letterboxd.com/#path--auth-token}
+     */
+    refreshAccessToken: (refreshToken: string) => {
+      if (!refreshToken) {
+        return Promise.reject(new Error('A refresh token is required to request a new access token.'));
+      }
+
+      return request<
+        | {
+            status: 400;
+            data: defs.OAuthError;
+            reason: 'The refresh token is invalid or expired';
+          }
+        | {
+            status: 401;
+            data: { message: string; type: string };
+            reason: 'An invalid API key or computed signature was supplied.';
+          }
+        | { status: 200; data: defs.AccessToken }
+      >({
+        method: 'post',
+        path: '/auth/token',
+        auth: this.credentials,
+        body: {
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken,
         },
         headers: {
           Accept: 'application/json',

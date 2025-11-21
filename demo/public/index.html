@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Letterboxd OAuth Demo</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Letterboxd OAuth Demo</h1>
+        <p>Walk through the full authorization-code + PKCE flow and copy the resulting API token.</p>
+      </header>
+
+      <section>
+        <h2>1. Configure</h2>
+        <form id="oauth-form">
+          <label>
+            API Key
+            <input type="text" name="apiKey" autocomplete="off" required />
+          </label>
+
+          <label>
+            API Secret
+            <input type="password" name="apiSecret" autocomplete="off" required />
+          </label>
+
+          <label>
+            Redirect URI
+            <input type="url" name="redirectUri" placeholder="http://localhost:4173" required />
+          </label>
+
+          <label>
+            Authorization Endpoint
+            <input type="url" name="authorizeUrl" value="https://letterboxd.com/oauth/authorize" required />
+          </label>
+
+          <label>
+            Scope (space separated)
+            <input type="text" name="scope" placeholder="read write" />
+          </label>
+
+          <div class="actions">
+            <button type="submit">Start OAuth Flow</button>
+          </div>
+        </form>
+        <p class="hint">
+          Heads up: credentials live only in this tab (sessionStorage) and are cleared when you close it.
+        </p>
+      </section>
+
+      <section id="status-panel">
+        <h2>2. Status</h2>
+        <div id="status-log"></div>
+      </section>
+
+      <section id="token-panel" hidden>
+        <h2>3. Token</h2>
+        <textarea id="token-output" readonly rows="10"></textarea>
+        <div class="actions">
+          <button id="refresh-token" type="button">Refresh Access Token</button>
+          <button id="clear-session" type="button">Clear Session</button>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

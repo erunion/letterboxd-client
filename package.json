@@ -31,11 +31,12 @@
     "pretest": "npm run lint",
     "prettier": "prettier --check .",
     "prettier:write": "prettier --check --write .",
-    "test": "vitest run --coverage"
+    "test": "vitest run --coverage",
+    "demo": "npm run build && node demo/server.js"
   },
   "devDependencies": {
     "@readme/eslint-config": "^14.0.0",
-    "@types/node": "^20.13.0",
+    "@types/node": "^20.19.25",
     "@vitest/coverage-v8": "^1.6.0",
     "eslint": "^8.57.0",
     "fetch-mock": "^9.11.0",
