@@ -91,6 +91,30 @@ describe('letterboxd-client', () => {
           timestamp: expect.stringMatching(/\d{10}/),
         });
       });
+
+      it('should access films with OAuth token without signature', async () => {
+        const client = new Client(apiKey, apiSecret, accessToken);
+        const { status, data }: MockedResponse = await client.film.all({
+          perPage: 1,
+          decade: 1960,
+          sort: 'FilmPopularityThisWeek',
+        });
+
+        expect(status).toBe(200);
+        expect(data.body).toBeUndefined();
+        expect(data.headers).toHaveProperty('authorization', `Bearer ${accessToken}`);
+
+        const url = new URL(data.url);
+        const params = Object.fromEntries(url.searchParams.entries());
+
+        expect(url.pathname).toBe('/api/v0/films');
+        // OAuth requests should NOT include signature parameters
+        expect(params).toStrictEqual({
+          perPage: '1',
+          decade: '1960',
+          sort: 'FilmPopularityThisWeek',
+        });
+      });
     });
   });
 
@@ -101,7 +125,7 @@ describe('letterboxd-client', () => {
         await expect(client.me.get()).rejects.toThrow(MissingAccessTokenError);
       });
 
-      it('should retrieve my user', async () => {
+      it('should retrieve my user using OAuth token without signature', async () => {
         const client = new Client(apiKey, apiSecret, accessToken);
         const { status, data }: MockedResponse = await client.me.get();
 
@@ -113,12 +137,8 @@ describe('letterboxd-client', () => {
         const params = Object.fromEntries(url.searchParams.entries());
 
         expect(url.pathname).toBe('/api/v0/me');
-        expect(params).toStrictEqual({
-          apikey: apiKey,
-          nonce: expect.stringMatching(/([a-z0-9-]+)/),
-          signature: expect.stringMatching(/([a-z0-9]+)/),
-          timestamp: expect.stringMatching(/\d{10}/),
-        });
+        // OAuth requests should NOT include signature parameters
+        expect(params).toStrictEqual({});
       });
     });
   });
