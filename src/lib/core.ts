@@ -78,9 +78,15 @@ export function request<T extends APIResponse>(opts: {
   // 1. Requests without an access token
   // 2. The /auth/token endpoint (OAuth token request)
   const isTokenRequest = opts.path === '/auth/token';
-  const useSignature = !opts.auth?.accessToken || isTokenRequest;
+  const hasAccessToken = opts.auth?.accessToken;
+  const useSignature = !hasAccessToken || isTokenRequest;
 
-  const params = buildParams(opts.auth, opts.method, opts.path, form || opts.body, opts.params, useSignature);
+  // Ensure auth is provided when signature is required
+  if (useSignature && !opts.auth) {
+    throw new Error('Authentication credentials are required');
+  }
+
+  const params = buildParams(opts.auth!, opts.method, opts.path, form || opts.body, opts.params, useSignature);
   const url = buildUrl(opts.path, params);
 
   return fetch(url, {
@@ -88,7 +94,7 @@ export function request<T extends APIResponse>(opts: {
     body: form || (opts.body ? JSON.stringify(opts.body) : undefined),
     headers: {
       ...opts.headers,
-      ...(opts.auth?.accessToken ? { Authorization: `Bearer ${opts.auth.accessToken}` } : {}),
+      ...(hasAccessToken ? { Authorization: `Bearer ${opts.auth!.accessToken}` } : {}),
     },
   }).then(async res => {
     // This mess allows us to easily handle `res.json()`, and falling back to `res.text()` if our
