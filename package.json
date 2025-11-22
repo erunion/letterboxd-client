@@ -23,6 +23,7 @@
   "homepage": "https://github.com/erunion/letterboxd-client#readme",
   "scripts": {
     "build": "tsc",
+    "dev": "npm run build && node demo/server.js",
     "format": "prettier --check --write . && biome check --write",
     "lint": "npm run lint:types && npm run lint:js && npm run prettier",
     "lint:js": "biome check",

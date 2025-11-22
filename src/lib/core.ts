@@ -33,19 +33,23 @@ function buildParams(
   url: string,
   body?: Record<string, any>,
   params: Record<string, any> = {},
+  useSignature: boolean = true,
 ) {
   const fullParams = params;
-  fullParams.apikey = auth.apiKey;
-  fullParams.nonce = crypto.randomUUID();
-  fullParams.timestamp = Math.floor(Date.now() / 1000);
 
-  const sigBase = [
-    method.toUpperCase(),
-    buildUrl(url, fullParams),
-    body ? (body instanceof URLSearchParams ? body.toString() : JSON.stringify(body)) : '',
-  ].join('\u0000');
+  if (useSignature) {
+    fullParams.apikey = auth.apiKey;
+    fullParams.nonce = crypto.randomUUID();
+    fullParams.timestamp = Math.floor(Date.now() / 1000);
 
-  fullParams.signature = crypto.createHmac('sha256', auth.apiSecret).update(sigBase).digest('hex').toLowerCase();
+    const sigBase = [
+      method.toUpperCase(),
+      buildUrl(url, fullParams),
+      body ? (body instanceof URLSearchParams ? body.toString() : JSON.stringify(body)) : '',
+    ].join('\u0000');
+
+    fullParams.signature = crypto.createHmac('sha256', auth.apiSecret).update(sigBase).digest('hex').toLowerCase();
+  }
 
   return fullParams;
 }
@@ -68,7 +72,10 @@ export function request<T extends APIResponse>(opts: {
     });
   }
 
-  const params = buildParams(opts.auth, opts.method, opts.path, form || opts.body, opts.params);
+  const isTokenRequest = opts.path === '/auth/token';
+  const useSignature = !opts.auth?.accessToken || isTokenRequest;
+
+  const params = buildParams(opts.auth, opts.method, opts.path, form || opts.body, opts.params, useSignature);
   const url = buildUrl(opts.path, params);
 
   return fetch(url, {
@@ -76,7 +83,7 @@ export function request<T extends APIResponse>(opts: {
     body: form || (opts.body ? JSON.stringify(opts.body) : undefined),
     headers: {
       ...opts.headers,
-      ...(opts.auth.accessToken ? { Authorization: `Bearer ${opts.auth.accessToken}` } : {}),
+      ...(opts.auth?.accessToken ? { Authorization: `Bearer ${opts.auth.accessToken}` } : {}),
     },
   }).then(async res => {
     // This mess allows us to easily handle `res.json()`, and falling back to `res.text()` if our

@@ -10,6 +10,7 @@
       // Biome's `vcs.useIgnoreFile` config should be able to pick these up but it doesn't.
       "!coverage",
       "!dist",
+      "!debug.ts",
     ],
   },
   "linter": {
@@ -32,4 +33,16 @@
       },
     },
   },
+  "overrides": [
+    {
+      "includes": ["demo/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off",
+          },
+        },
+      },
+    },
+  ],
 }
