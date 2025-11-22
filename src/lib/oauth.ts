@@ -1,6 +1,6 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
-export const LETTERBOXD_OAUTH_AUTHORIZE_URL = 'https://letterboxd.com/oauth/authorize';
+export const LETTERBOXD_OAUTH_AUTHORIZE_URL = 'https://api.letterboxd.com/api/v0/auth/authorize';
 
 export type CodeChallengeMethod = 'plain' | 'S256';
 

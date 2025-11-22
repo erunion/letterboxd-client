@@ -1,23 +1,13 @@
-/* eslint-disable @typescript-eslint/no-var-requires, global-require, import/extensions */
+import fs from 'node:fs/promises';
+import http from 'node:http';
+import path from 'node:path';
 
-const fs = require('node:fs/promises');
-const http = require('node:http');
-const path = require('node:path');
+import Client from '../dist/index.js';
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 const DEMO_PORT = Number(process.env.DEMO_PORT || 4173);
 const PUBLIC_DIR = path.join(__dirname, 'public');
-
-let Client;
-try {
-  const exported = require('../dist/index.js');
-  Client = exported.default || exported;
-} catch (err) {
-  // eslint-disable-next-line no-console
-  console.error('Unable to load the built client. Please run `npm run build` before starting the demo server.');
-  // eslint-disable-next-line no-console
-  console.error(err);
-  process.exit(1);
-}
 
 const MIME_TYPES = {
   '.css': 'text/css; charset=utf-8',
@@ -131,10 +121,9 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  serveStaticAsset(url.pathname, res);
+  await serveStaticAsset(url.pathname, res);
 });
 
 server.listen(DEMO_PORT, () => {
-  // eslint-disable-next-line no-console
   console.log(`OAuth demo ready on http://localhost:${DEMO_PORT}`);
 });

@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 import fetchMock from 'fetch-mock';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';

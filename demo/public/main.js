@@ -2,7 +2,7 @@
 
 const SESSION_KEY = 'letterboxd-oauth-demo/session';
 const PREF_KEY = 'letterboxd-oauth-demo/prefs';
-const DEFAULT_AUTHORIZE_URL = 'https://letterboxd.com/oauth/authorize';
+const DEFAULT_AUTHORIZE_URL = 'https://api.letterboxd.com/api/v0/auth/authorize';
 
 const form = document.getElementById('oauth-form');
 const statusLog = document.getElementById('status-log');
