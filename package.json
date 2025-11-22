@@ -23,25 +23,25 @@
   "homepage": "https://github.com/erunion/letterboxd-client#readme",
   "scripts": {
     "build": "tsc",
+    "format": "prettier --check --write . && biome check --write",
     "lint": "npm run lint:types && npm run lint:js && npm run prettier",
-    "lint:js": "eslint . --ext .js,.ts --ignore-path ./.gitignore",
+    "lint:js": "biome check",
     "lint:types": "tsc --noEmit",
     "prebuild": "rm -rf dist/",
     "prepack": "npm run build",
     "pretest": "npm run lint",
     "prettier": "prettier --check .",
-    "prettier:write": "prettier --check --write .",
     "test": "vitest run --coverage"
   },
   "devDependencies": {
-    "@readme/eslint-config": "^14.0.0",
-    "@types/node": "^20.13.0",
-    "@vitest/coverage-v8": "^1.6.0",
-    "eslint": "^8.57.0",
+    "@biomejs/biome": "^2.3.7",
+    "@readme/standards": "^2.4.0",
+    "@types/node": "^24.10.1",
+    "@vitest/coverage-v8": "^4.0.13",
     "fetch-mock": "^9.11.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5",
-    "vitest": "^1.6.0"
+    "vitest": "^4.0.13"
   },
-  "prettier": "@readme/eslint-config/prettier"
+  "prettier": "@readme/standards/prettier"
 }

@@ -1,12 +1,12 @@
 import fetchMock from 'fetch-mock';
-import { beforeEach, afterEach, describe, it, expect } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import Client from '../src';
 import { BASE_URL } from '../src/lib/core';
 import { MissingAccessTokenError } from '../src/lib/errors';
 
 interface MockedResponse {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: We don't know what this is.
   data: Record<string, any>;
   status: number;
 }

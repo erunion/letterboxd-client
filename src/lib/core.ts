@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import crypto from 'crypto';
+/** biome-ignore-all lint/suspicious/noExplicitAny: We don't know what we're getting back from the API */
+import crypto from 'node:crypto';
 
 export const BASE_URL = 'https://api.letterboxd.com/api/v0';
 
@@ -81,20 +81,16 @@ export function request<T extends APIResponse>(opts: {
   }).then(async res => {
     // This mess allows us to easily handle `res.json()`, and falling back to `res.text()` if our
     // JSON response isn't actually JSON, without having to clone the response.
-    const buffer = await (await res.arrayBuffer().then(Buffer.from)).toString();
+    const buffer = (await res.arrayBuffer().then(Buffer.from)).toString();
 
-    let data;
+    let data: any;
     try {
       data = JSON.parse(buffer);
-    } catch (err) {
+    } catch {
       data = buffer;
     }
 
-    const response = {
-      res,
-      status: res.status,
-      data,
-    } as T & { res: Response };
+    const response = { res, status: res.status, data } as T & { res: Response };
 
     return response;
   });

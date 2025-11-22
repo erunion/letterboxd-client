@@ -1,5 +1,5 @@
 .github/
 coverage/
 test/
-.eslint*
+biome.jsonc
 .prettier*
