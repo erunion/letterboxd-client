@@ -1,0 +1,10 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": { "source.fixAll": "explicit" },
+  "editor.formatOnSave": true,
+
+  // Explicitly disable ESLint to avoid conflicts with Biome.
+  "biome.enabled": true,
+  "eslint.enable": false,
+  "prettier.enable": true
+}
